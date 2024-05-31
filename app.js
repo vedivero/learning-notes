@@ -6,8 +6,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 //CORS Error
 const cors = require('cors')
+
+const indexRouter = require("./routes/index")
 //create app using express
 const app = express();
+
+
 
 //애플리케이션 설정 및 비밀 정보를 관리
 require('dotenv').config()
@@ -16,6 +20,10 @@ app.use(cors());
 //HTML 폼 데이터 파싱하여 req.body 객체로 만듦
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+//"api"URL로 요청되면, indexRouter로 연결
+app.use("/api", indexRouter)
+
 //DB URL
 const mongoURI = process.env.LOCAL_DB_ADDRESS;
 
