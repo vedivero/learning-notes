@@ -9,7 +9,7 @@ console.log("BACKEND_PROXY URL : ", BACKEND_PROXY);
 
 
 const api = axios.create({
-  baseURL: LOCAL_BACKEND,
+  baseURL: BACKEND_PROXY,
   headers: {
     "Content-Type": "application/json",
     authorization: `Bearer ${sessionStorage.getItem("token")}`,
