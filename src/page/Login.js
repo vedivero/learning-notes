@@ -17,15 +17,18 @@ const Login = () => {
   const loginWithEmail = (event) => {
     event.preventDefault();
     //이메일,패스워드를 가지고 백엔드로 보내기
+    dispatch(userActions.loginWithEmail({ email, password }));
   };
 
   const handleGoogleLogin = async (googleData) => {
     // 구글로 로그인 하기
   };
 
+  //이미 로그인 한 유저가 다시 login처리가 되지 않기 위해 밖으로 뺌
   if (user) {
     navigate("/");
   }
+
   return (
     <>
       <Container className="login-area">
