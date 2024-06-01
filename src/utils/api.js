@@ -10,7 +10,7 @@ console.log("${process.env.REACT_APP_BACKEND_PROXY} URL : ", `${process.env.REAC
 
 
 const api = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND_PROXY}`,
+  baseURL: BACKEND_PROXY,
   headers: {
     "Content-Type": "application/json",
     authorization: `Bearer ${sessionStorage.getItem("token")}`,
