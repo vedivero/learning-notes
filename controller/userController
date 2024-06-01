@@ -12,6 +12,7 @@ userController.createUser = async (req, res) => {
 		let { email, password, name, level } = req.body;
 		//가입여부 DB 체크
 		const user = await User.findOne({ email });
+		console.log("■■■ user",user)
 		//이미 가입된 유저정보가 존재하는 경우
 		if (user) {
 			throw new Error("This user is already registered");
