@@ -28,6 +28,7 @@ app.use("/api", indexRouter)
 //const mongoURI = process.env.LOCAL_DB_ADDRESS; //Local
 const mongoURI = process.env.PROD_DB_ADDRESS; //Production
 
+console.log("now on DB connection URL : ", mongoURI);
 
 //Mongoose를 사용하여 MongoDB에 연결
 mongoose.connect(mongoURI, { useNewUrlParser: true })
