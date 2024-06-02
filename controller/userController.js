@@ -12,7 +12,7 @@ userController.createUser = async (req, res) => {
 		let { email, password, name, level } = req.body;
 		//가입여부 DB 체크
 		const user = await User.findOne({ email });
-		console.log("■■■ user",user)
+		console.log("■■■ user", user)
 		//이미 가입된 유저정보가 존재하는 경우
 		if (user) {
 			throw new Error("This user is already registered");
@@ -33,5 +33,24 @@ userController.createUser = async (req, res) => {
 		res.status(400).json({ status: "Fail - create user", error: error.message })
 	}
 }
+
+
+//토큰 값으로 회원정보 조회
+userController.getUser = async (req, res) => {
+
+	try {
+		//authController.authenticate에서 전달된 userId값 저장
+		const { userId } = req;
+		const user = await User.findById(userId);
+		if (user) {
+			res.status(200).json({ status: "회원 정보 조회 성공", user });
+		}
+		throw new Error("토큰 정보가 올바르지 않습니다.");
+	} catch (error) {
+		res.status(400).json({ status: "회원 정보 조회 실패", error: error.message });
+	}
+
+};
+
 
 module.exports = userController;
