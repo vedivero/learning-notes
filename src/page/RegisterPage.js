@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { userActions } from "../action/userAction";
 import "../style/register.style.css";
+
 const RegisterPage = () => {
+
   const dispatch = useDispatch();
 
   //회원가입 입력 폼 객체화, 사용자가 입력한 값 읽어오기
@@ -61,6 +63,10 @@ const RegisterPage = () => {
     }
 
   };
+
+  useEffect(() => {
+    dispatch(userActions.clearError());
+  }, [dispatch]);
 
   return (
     <Container className="register-area">
