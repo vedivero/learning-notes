@@ -32,9 +32,11 @@ const Login = () => {
   };
 
   //이미 로그인 한 유저가 다시 login처리가 되지 않기 위해 밖으로 뺌
-  if (user) {
-    navigate("/");
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   return (
     <>

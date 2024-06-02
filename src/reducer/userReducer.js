@@ -27,7 +27,6 @@ function userReducer(state = initialState, action) {
     case types.LOGIN_WITH_TOKEN_FAIL:
       return { ...state, loading: false };
 
-
     case types.CLEAR_ERROR_MESSAGE:
       return { ...state, error: "" };
 
