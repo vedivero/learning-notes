@@ -65,7 +65,7 @@ const registerUser =
         }
 
       } catch (error) {
-        dispatch({ type: types.REGISTER_USER_FAIL, payload: error.message });
+        dispatch({ type: types.REGISTER_USER_FAIL, payload: error.error });
       }
     };
 

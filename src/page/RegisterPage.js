@@ -23,6 +23,12 @@ const RegisterPage = () => {
   const [policyError, setPolicyError] = useState(false);
   const error = useSelector((state) => state.user.error);
 
+  useEffect(() => {
+    return () => {
+      dispatch(userActions.clearError());
+    };
+  }, [dispatch]);
+
   const register = (event) => {
     event.preventDefault();
 
@@ -64,9 +70,6 @@ const RegisterPage = () => {
 
   };
 
-  useEffect(() => {
-    dispatch(userActions.clearError());
-  }, [dispatch]);
 
   return (
     <Container className="register-area">
