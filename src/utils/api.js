@@ -7,8 +7,6 @@ const BACKEND_PROXY = process.env.REACT_APP_BACKEND_PROXY;
 console.log("PROD_BACKEND URL : ", PROD_BACKEND);
 console.log("BACKEND_PROXY URL : ", BACKEND_PROXY);
 
-
-
 const api = axios.create({
   baseURL: BACKEND_PROXY,
   //baseURL: LOCAL_BACKEND,

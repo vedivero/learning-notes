@@ -4,9 +4,17 @@ import { commonUiActions } from "./commonUiAction";
 
 const loginWithToken = () => async (dispatch) => {
   try {
-
+    dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
+    //call api
+    const response = await api.get("/user/me");
+    if (response.status !== 200) throw new Error(response.error);
+    console.log("response : ", response)
+    dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
   } catch (error) {
-
+    //토큰이 만료되거나, 잘못됐거나
+    dispatch({ type: types.LOGIN_WITH_TOKEN_FAIL, payload: error });
+    //로그인 상태가 아니기 때문에, 토큰 삭제
+    dispatch(logout());
   }
 };
 
@@ -30,7 +38,10 @@ const loginWithEmail = ({ email, password }) => async (dispatch) => {
 
 
 const logout = () => async (dispatch) => {
-
+  //user 정보 지우기
+  dispatch({ type: types.LOGOUT });
+  //세션 스토리지의 토근 지우기
+  sessionStorage.removeItem("token");
 };
 
 const loginWithGoogle = (token) => async (dispatch) => {
