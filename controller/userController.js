@@ -15,7 +15,7 @@ userController.createUser = async (req, res) => {
 		console.log("■ user : ", user)
 		//이미 가입된 유저정보가 존재하는 경우
 		if (user) {
-			throw new Error("This user is already registered");
+			throw new Error("이미 존재하는 Email 입니다.");
 		}
 
 		//패스워드 암호화

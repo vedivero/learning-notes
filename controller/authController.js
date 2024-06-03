@@ -36,12 +36,14 @@ authController.authenticate = async (req, res, next) => {
 		//header에서 token값 가져오기
 		const tokenString = req.headers.authorization;
 		console.log("tokenString : ", tokenString);
-		if (!tokenString) throw new Error("토큰 정보를 찾을 수 없습니다.");
+		if (!tokenString) throw new Error("Can not find token String");
 
 		const token = tokenString.replace("Bearer ", "");
+		console.log("replace token : ", token);
 		//토큰이 유효하다면, 토큰의 `payload`를 반환
 		jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
-			if (error) throw new Error("토큰이 없거나 올바르지 않습니다.");
+			if (error) throw new Error("Can not find token");
+			console.log("req.userId : ", req.userId);
 			req.userId = payload._id;
 		});
 		next();
@@ -49,5 +51,21 @@ authController.authenticate = async (req, res, next) => {
 		res.status(400).json({ status: "토큰 조회 실패", error: error.message });
 	}
 }
+
+
+//
+authController.checkAdminPermission = async (req, res, next) => {
+
+	try {
+		const { userId } = req;
+		const user = await User.findById(userId);
+		if (user.level !== "admin") throw new Error("This is not administrative.");
+		next();
+	} catch (error) {
+		res.status(400).json({ status: "checkAdminPermission FAIL", error: error.message });
+	}
+
+}
+
 
 module.exports = authController;
