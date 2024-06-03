@@ -39,49 +39,61 @@ const Login = () => {
   }, [user, navigate]);
 
   return (
-    <>
-      <Container className="login-area">
-        {error && (
-          <div className="error-message">
-            <Alert variant="danger">{error}</Alert>
-          </div>
-        )}
-        <Form className="login-form" onSubmit={loginWithEmail}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>이메일 아이디</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              required
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </Form.Group>
+    <Container className="login-area">
+      {error && (
+        <div className="error-message">
+          <Alert variant="danger">{error}</Alert>
+        </div>
+      )}
+      <Form className="login-form" onSubmit={loginWithEmail}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>이메일 아이디</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="이메일을 입력하세요"
+            required
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>비밀번호</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              required
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </Form.Group>
-          <div className="display-space-between login-button-area">
-            <Button variant="danger" type="submit">
-              Login
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>비밀번호</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            required
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </Form.Group>
+
+        {/* <div className="display-space-between login-button-area">
+          <Button variant="primary" type="submit">
+            로그인
+          </Button>
+          <div>
+            계정이 없으신가요? <Link to="/register">회원가입 하기</Link>
+          </div>
+        </div> */}
+
+        <div className="display-space-between login-button-area">
+          <Button variant="dark" type="submit">
+            로그인
+          </Button>
+          <Link to="/register">
+            <Button variant="dark">
+              회원가입
             </Button>
-            <div>
-              아직 계정이 없으세요?<Link to="/register">회원가입 하기</Link>{" "}
-            </div>
-          </div>
+          </Link>
+        </div>
 
-          <div className="text-align-center mt-2">
-            <p>-외부 계정으로 로그인하기-</p>
-            <div className="display-center"></div>
+        <div className="text-align-center mt-2">
+          <p>- 외부 계정으로 로그인하기 -</p>
+          <div className="display-center">
+            {/* 구글 로그인 버튼 등을 여기에 추가하세요 */}
           </div>
-        </Form>
-      </Container>
-    </>
+        </div>
+      </Form>
+    </Container>
   );
 };
 

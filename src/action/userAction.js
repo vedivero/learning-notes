@@ -7,9 +7,10 @@ const loginWithToken = () => async (dispatch) => {
     dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
     //call api
     const response = await api.get("/user/me");
-    if (response.status !== 200) throw new Error(response.error);
     console.log("response : ", response)
-    dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
+    if (response.status === 200) {
+      dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
+    }
   } catch (error) {
     //토큰이 만료되거나, 잘못됐거나
     dispatch({ type: types.LOGIN_WITH_TOKEN_FAIL, payload: error });
@@ -26,9 +27,6 @@ const loginWithEmail = ({ email, password }) => async (dispatch) => {
     if (response.status === 200) {
       sessionStorage.setItem("token", response.data.token);
       dispatch({ type: types.LOGIN_SUCCESS, payload: response.data });
-    }
-    else {
-      throw new Error(response.error);
     }
   } catch (error) {
     console.log("error.message : ", error.error)
