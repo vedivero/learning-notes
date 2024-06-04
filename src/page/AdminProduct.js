@@ -49,7 +49,9 @@ const AdminProduct = () => {
 
   const handleClickNewItem = () => {
     //new 모드로 설정하고
+    setMode("new");
     // 다이얼로그 열어주기
+    setShowDialog(true);
   };
 
   const handlePageClick = ({ selected }) => {
@@ -68,7 +70,7 @@ const AdminProduct = () => {
           />
         </div>
         <Button className="mt-2 mb-2" onClick={handleClickNewItem}>
-          Add New Item +
+          새로운 상품 등록
         </Button>
 
         <ProductTable
