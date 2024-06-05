@@ -21,33 +21,47 @@ const InitialFormData = {
 
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
+  console.log("setShowDialog 1 : ", setShowDialog)
+
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const { error } = useSelector((state) => state.product);
-  // const [formData, setFormData] = useState(
-  //   mode === "new" ? { ...InitialFormData } : selectedProduct
-  // );
+
   const [formData, setFormData] = useState(
-    mode === "new" ? { ...InitialFormData } : { ...InitialFormData, ...selectedProduct }
+    mode === "new" ? { ...InitialFormData } : selectedProduct
   );
 
   const [stock, setStock] = useState([]);
   const dispatch = useDispatch();
   const [stockError, setStockError] = useState(false);
 
+  console.log("setShowDialog 2 : ", setShowDialog)
   console.log("stock : ", stock)
 
   const handleClose = () => {
     //모든걸 초기화시키고;
+    setFormData({ ...InitialFormData });
+    setStock([]);
     // 다이얼로그 닫아주기
+    setShowDialog(false);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("formData : ", formData)
     //재고를 입력했는지 확인, 아니면 에러
+    if (stock.length === 0) return setStockError(true);
     // 재고를 배열에서 객체로 바꿔주기
-    // [['M',2]] 에서 {M:2}로
+    const totalStock = stock.reduce((total, item) => {
+      return { ...total, [item[0]]: parseInt(item[1]) }
+    }, {});
+    console.log("handleSubmit formData : ", totalStock);
+    // [['M',2]] 에서 {M:2}로 
     if (mode === "new") {
       //새 상품 만들기
+      dispatch(productActions.createProduct({ ...formData, stock: totalStock }));
+      //상품 생성이 완료되면 dialog를 비활성화
+      setShowDialog(false);
+
     } else {
       // 상품 수정하기
     }
@@ -86,6 +100,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   };
 
   const onHandleCategory = (event) => {
+    //카테고리가 이미 추가되어 있으면 제거
     if (formData.category.includes(event.target.value)) {
       const newCategory = formData.category.filter(
         (item) => item !== event.target.value
@@ -95,6 +110,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         category: [...newCategory],
       });
     } else {
+      //추가
       setFormData({
         ...formData,
         category: [...formData.category, event.target.value],
@@ -104,6 +120,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   const uploadImage = (url) => {
     //이미지 업로드
+    setFormData({ ...formData, image: url });
+    console.log("uploadImage : ", setFormData);
   };
 
   useEffect(() => {
@@ -169,7 +187,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         <Form.Group className="mb-3" controlId="stock">
           <Form.Label className="mr-1">Stock</Form.Label>
           {stockError && (
-            <span className="error-message">재고를 추가해주세요</span>
+            <span className="error-message">재고 수량을 추가해 주세요.</span>
           )}
           <Button size="sm" onClick={addStock}>
             Add +
@@ -236,7 +254,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             src={formData.image}
             className="upload-image mt-2"
             alt="uploadedimage"
-          ></img>
+          />
         </Form.Group>
 
         <Row className="mb-3">

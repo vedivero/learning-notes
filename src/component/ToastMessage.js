@@ -11,10 +11,17 @@ const ToastMessage = () => {
     if (toastMessage) {
       const { message, status } = toastMessage;
       if (message !== "" && status !== "") {
-        toast[status](message, { theme: "colored" });
+        // 유효한 상태값인지 확인
+        const validStatuses = ["success", "error", "info", "warn"];
+        if (validStatuses.includes(status)) {
+          toast[status](message, { theme: "colored" });
+        } else {
+          console.error(`Invalid toast status: ${status}`);
+        }
       }
     }
   }, [toastMessage]);
+
   return (
     <ToastContainer
       position="top-center"

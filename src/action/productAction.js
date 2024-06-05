@@ -1,15 +1,30 @@
 import api from "../utils/api";
 import * as types from "../constants/product.constants";
-import { toast } from "react-toastify";
+//import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
-const getProductList = (query) => async (dispatch) => {};
-const getProductDetail = (id) => async (dispatch) => {};
+const getProductList = (query) => async (dispatch) => { };
+const getProductDetail = (id) => async (dispatch) => { };
 
-const createProduct = (formData) => async (dispatch) => {};
-const deleteProduct = (id) => async (dispatch) => {};
+const createProduct = (formData) => async (dispatch) => {
 
-const editProduct = (formData, id) => async (dispatch) => {};
+  try {
+    dispatch({ type: types.PRODUCT_CREATE_REQUEST });
+    ///product를 호출하고, 생성할 데이터 formData를 전송
+    const response = await api.post("/product", formData);
+    console.log("/product response : ", response);
+    dispatch({ type: types.PRODUCT_CREATE_SUCCESS });
+    dispatch(commonUiActions.showToastMessage("상품이 등록되었습니다.", "success"));
+  } catch (error) {
+    dispatch({ type: types.PRODUCT_CREATE_FAIL, payload: error.error });
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+  }
+
+};
+
+const deleteProduct = (id) => async (dispatch) => { };
+
+const editProduct = (formData, id) => async (dispatch) => { };
 
 export const productActions = {
   getProductList,
