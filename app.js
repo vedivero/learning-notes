@@ -25,8 +25,8 @@ app.use(bodyParser.json());
 app.use("/api", indexRouter)
 
 //DB URL
-//const mongoURI = process.env.LOCAL_DB_ADDRESS; //Local
-const mongoURI = process.env.PROD_DB_ADDRESS; //Production
+const mongoURI = process.env.LOCAL_DB_ADDRESS; //Local
+//const mongoURI = process.env.PROD_DB_ADDRESS; //Production
 
 console.log("now on DB connection URL : ", mongoURI);
 

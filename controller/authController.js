@@ -59,6 +59,8 @@ authController.checkAdminPermission = async (req, res, next) => {
 	try {
 		const { userId } = req;
 		const user = await User.findById(userId);
+		console.log("■ { userId } : ", { userId });
+		console.log("■ user : ", user);
 		if (user.level !== "admin") throw new Error("This is not administrative.");
 		next();
 	} catch (error) {
