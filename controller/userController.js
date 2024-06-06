@@ -30,7 +30,7 @@ userController.createUser = async (req, res) => {
 		return res.status(200).json({ status: "Success regist user" });
 
 	} catch (error) {
-		res.status(400).json({ status: "Fail - create user", error: error.message })
+		return res.status(400).json({ status: "Fail - create user", error: error.message })
 	}
 }
 
@@ -44,11 +44,11 @@ userController.getUser = async (req, res) => {
 		const user = await User.findById(userId);
 		console.log("■ User.findById : ", user);
 		if (user) {
-			res.status(200).json({ status: "회원 정보 조회 성공", user });
+			return res.status(200).json({ status: "회원 정보 조회 성공", user });
 		}
 		throw new Error("토큰 정보가 올바르지 않습니다.");
 	} catch (error) {
-		res.status(400).json({ status: "회원 정보 조회 실패", error: error.message });
+		return res.status(400).json({ status: "회원 정보 조회 실패", error: error.message });
 	}
 
 };
