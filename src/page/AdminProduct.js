@@ -37,12 +37,23 @@ const AdminProduct = () => {
 
   //상품리스트 가져오기 (url쿼리 맞춰서)
   useEffect(() => {
-    dispatch(productActions.getProductList());
-  }, [])
+    dispatch(productActions.getProductList({ ...searchQuery }));
+  }, [query])
 
 
-  //검색어나 페이지가 바뀌면 url바꿔주기 (검색어또는 페이지가 바뀜 => url 바꿔줌=> url쿼리 읽어옴=> 이 쿼리값 맞춰서  상품리스트 가져오기)
+  //검색 searchbox에서
   useEffect(() => {
+    if (searchQuery.name === "") {
+      delete searchQuery.name;
+    }
+    console.log("searchQuery : ", searchQuery);
+    //검색어에 해당되는 값이 있을 경우
+    const params = new URLSearchParams(searchQuery);
+    //convert to String
+    const query = params.toString();
+
+    console.log("query : ", query);
+    navigate("?" + query);
   }, [searchQuery]);
 
   const deleteItem = (id) => {
@@ -61,8 +72,11 @@ const AdminProduct = () => {
     setShowDialog(true);
   };
 
+  //쿼리에 페이지값 바꿔주기
   const handlePageClick = ({ selected }) => {
-    //  쿼리에 페이지값 바꿔주기
+    //searchbox에서 검색 실행 시, searchQuery객체 업데이트(ex) {name:jacket})
+    //searchQuery객체의 item으로 url생성하여 호출 &name=jacket
+    //URL 파라미터를 사용하여 Query실행
   };
 
   return (
