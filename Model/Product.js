@@ -15,11 +15,13 @@ const productSchema = Schema({
 
 //조회되는 정보 정제(불필요한 정보 제거)
 productSchema.methods.toJSON = function () {
-	const obj = tihs._doc
+	const obj = this._doc
 	delete obj.password
 	delete obj.__v
 	delete obj.updatedAt
 	delete obj.createdAt
+
+	console.log("obj : ", obj);
 	return obj
 }
 

@@ -23,5 +23,18 @@ productContoller.createProduct = async (req, res) => {
 	}
 };
 
+//상품 조회
+productContoller.getProducts = async (req, res) => {
+
+	try {
+		//전체 상품 조회
+		const product = await Product.find({})
+		//조회한 결과를 보내주기
+		res.status(200).json({ status: "Success get Products", data: product });
+	} catch (error) {
+		res.status(400).json({ status: "Fail get Products", error: error.message });
+	}
+
+}
 
 module.exports = productContoller
