@@ -3,7 +3,20 @@ import * as types from "../constants/product.constants";
 //import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
-const getProductList = (query) => async (dispatch) => { };
+//상품 가져오기
+const getProductList = (query) => async (dispatch) => {
+  try {
+    dispatch({ type: types.PRODUCT_GET_REQUEST });
+    const response = await api.get("/product");
+    dispatch({ type: types.PRODUCT_GET_SUCCESS, payload: response.data.data });
+    console.log("response data : ", response.data.data);
+  } catch (error) {
+    dispatch({ type: types.PRODUCT_GET_FAIL, payload: error });
+  }
+};
+
+
+
 const getProductDetail = (id) => async (dispatch) => { };
 
 const createProduct = (formData) => async (dispatch) => {

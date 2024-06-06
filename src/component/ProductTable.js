@@ -3,6 +3,13 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { currencyFormat } from "../utils/number";
 const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
+
+  console.log("Draw ProductTable ");
+  console.log("data : ", data);
+  console.log("data.length : ", data.length);
+  console.log("data.data : ", data.data);
+  console.log("data.length : ", data.length);
+
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
