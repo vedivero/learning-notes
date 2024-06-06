@@ -26,12 +26,12 @@ const AdminProduct = () => {
   //상품 목록의 컬럼
   const tableHeader = [
     "#",
-    "Sku",
-    "Name",
-    "Price",
-    "Stock",
-    "Image",
-    "Status",
+    "상품번호",
+    "상품이름",
+    "가격",
+    "재고",
+    "이미지",
+    "상태",
     "",
   ];
 
