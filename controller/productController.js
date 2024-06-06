@@ -27,10 +27,14 @@ productContoller.createProduct = async (req, res) => {
 productContoller.getProducts = async (req, res) => {
 
 	try {
-		//전체 상품 조회
-		const product = await Product.find({})
+		const { page, name } = req.query;
+		//검색 키워드
+		const cond = name ? { name: { $regex: name, $options: 'i' } } : {};
+		let query = Product.find(cond);
+		//exec실행 시점 정의
+		const productList = await query.exec();
 		//조회한 결과를 보내주기
-		res.status(200).json({ status: "Success get Products", data: product });
+		res.status(200).json({ status: "Success get Products", data: productList });
 	} catch (error) {
 		res.status(400).json({ status: "Fail get Products", error: error.message });
 	}
