@@ -12,7 +12,7 @@ import ProductTable from "../component/ProductTable";
 
 const AdminProduct = () => {
   const navigate = useNavigate();
-  const { productList } = useSelector(state => state.product);
+  const { productList, totalPageNum } = useSelector(state => state.product);
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
   const [showDialog, setShowDialog] = useState(false);
@@ -74,6 +74,9 @@ const AdminProduct = () => {
 
   //쿼리에 페이지값 바꿔주기
   const handlePageClick = ({ selected }) => {
+
+    setSearchQuery({ ...searchQuery, page: selected + 1 });
+
     //searchbox에서 검색 실행 시, searchQuery객체 업데이트(ex) {name:jacket})
     //searchQuery객체의 item으로 url생성하여 호출 &name=jacket
     //URL 파라미터를 사용하여 Query실행
@@ -105,8 +108,8 @@ const AdminProduct = () => {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={100}
-          forcePage={2} // 1페이지면 2임 여긴 한개씩 +1 해야함
+          pageCount={totalPageNum} //전체 페이지
+          forcePage={searchQuery.page - 1} // 1페이지 = 2 (페이지 +1)
           previousLabel="< previous"
           renderOnZeroPageCount={null}
           pageClassName="page-item"
