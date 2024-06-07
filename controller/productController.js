@@ -1,5 +1,5 @@
 const Product = require("../Model/Product");
-const PAGE_SIZE = 1
+const PAGE_SIZE = 4
 const productContoller = {}
 
 
