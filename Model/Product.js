@@ -20,9 +20,7 @@ productSchema.methods.toJSON = function () {
 	delete obj.__v
 	delete obj.updatedAt
 	delete obj.createdAt
-
-	console.log("obj : ", obj);
-	return obj
+	return obj;
 }
 
 //'Product'라는 이름의 모델을 생성하여 MongoDB 컬렉션과 매핑

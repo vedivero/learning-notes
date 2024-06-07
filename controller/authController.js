@@ -10,17 +10,12 @@ authController.loginWithEmail = async (req, res) => {
 
 	try {
 		const { email, password } = req.body;
-		console.log("req : ", req);
-
 		let user = await User.findOne({ email });
-		console.log("user : ", user);
 		if (user) {
 			const isMatch = await bcrypt.compare(password, user.password);
-			console.log("isMatch : ", isMatch);
 			if (isMatch) {
 				//토큰 생성
 				const token = await user.generateToken();
-				console.log("token : ", token);
 				return res.status(200).json({ status: "Login success", user, token });
 			}
 		}
@@ -35,15 +30,11 @@ authController.authenticate = async (req, res, next) => {
 	try {
 		//header에서 token값 가져오기
 		const tokenString = req.headers.authorization;
-		console.log("tokenString : ", tokenString);
 		if (!tokenString) throw new Error("Can not find token String");
-
 		const token = tokenString.replace("Bearer ", "");
-		console.log("replace token : ", token);
 		//토큰이 유효하다면, 토큰의 `payload`를 반환
 		jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
 			if (error) throw new Error("Can not find token");
-			console.log("req.userId : ", req.userId);
 			req.userId = payload._id;
 		});
 		next();
@@ -59,8 +50,6 @@ authController.checkAdminPermission = async (req, res, next) => {
 	try {
 		const { userId } = req;
 		const user = await User.findById(userId);
-		console.log("■ { userId } : ", { userId });
-		console.log("■ user : ", user);
 		if (user.level !== "admin") throw new Error("This is not administrative.");
 		next();
 	} catch (error) {
