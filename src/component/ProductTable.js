@@ -34,16 +34,15 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
                 </th>
                 <th>{item.status}</th>
                 <th style={{ minWidth: "100px" }}>
+                  <Button className="mr-1" size="sm" onClick={() => openEditForm(item)}>
+                    수정하기
+                  </Button>
                   <Button
                     size="sm"
                     variant="danger"
                     onClick={() => deleteItem(item._id)}
-                    className="mr-1"
                   >
-                    -
-                  </Button>
-                  <Button size="sm" onClick={() => openEditForm(item)}>
-                    Edit
+                    삭제
                   </Button>
                 </th>
               </tr>

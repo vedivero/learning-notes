@@ -16,10 +16,11 @@ const AdminProduct = () => {
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
   const [showDialog, setShowDialog] = useState(false);
+  //검색 조건들을 저장하는 객체
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     name: query.get("name") || "",
-  }); //검색 조건들을 저장하는 객체
+  });
 
   const [mode, setMode] = useState("new");
 
@@ -62,7 +63,10 @@ const AdminProduct = () => {
 
   const openEditForm = (product) => {
     //edit모드로 설정하고
+    setMode("edit");
     // 아이템 수정다이얼로그 열어주기
+    dispatch({ type: types.SET_SELECTED_PRODUCT, payload: product });
+    setShowDialog(true);
   };
 
   const handleClickNewItem = () => {
