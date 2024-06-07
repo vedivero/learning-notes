@@ -50,4 +50,23 @@ productContoller.getProducts = async (req, res) => {
 
 }
 
+//상품 수정
+productContoller.updateProduct = async (req, res) => {
+
+	try {
+		//id값 저장
+		const productId = req.params.id;
+		const { sky, name, size, image, price, description, category, stock, status } = req.body;
+		const product = Product.findByIdAndUpdate(
+			{ _id: productId },
+			{ sky, name, size, image, price, description, category, stock, status }
+		);
+		res.status(200).json({ status: "Success - Update Product " }, data: product);
+	} catch (error) {
+		res.status(400).json({ status: "Fail - Update Product" }, error: error.message);
+	}
+
+}
+
+
 module.exports = productContoller

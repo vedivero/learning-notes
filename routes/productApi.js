@@ -12,8 +12,15 @@ router.post(
 	productContoller.createProduct
 );
 
-
+//상품 정보 조회
 router.get("/", productContoller.getProducts);
 
+//상품 정보 수정
+router.put(
+	"/:id",
+	authController.authenticate,
+	authController.checkAdminPermission,
+	productContoller.updateProduct
+)
 
 module.exports = router;
