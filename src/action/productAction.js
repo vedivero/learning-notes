@@ -14,7 +14,9 @@ const getProductList = (query) => async (dispatch) => {
     console.log("getProductList response data : ", response.data.data);
     dispatch({ type: types.PRODUCT_GET_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: types.PRODUCT_GET_FAIL, payload: error });
+    //dispatch({ type: types.PRODUCT_GET_FAIL, payload: error });
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_GET_FAIL, payload: errorMessage });
   }
 };
 
@@ -32,8 +34,11 @@ const createProduct = (formData) => async (dispatch) => {
     dispatch({ type: types.PRODUCT_CREATE_SUCCESS });
     dispatch(commonUiActions.showToastMessage("상품이 등록되었습니다.", "success"));
   } catch (error) {
-    dispatch({ type: types.PRODUCT_CREATE_FAIL, payload: error.error });
-    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+    // dispatch({ type: types.PRODUCT_CREATE_FAIL, payload: error.error });
+    // dispatch(commonUiActions.showToastMessage(error.error, "error"));
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_CREATE_FAIL, payload: errorMessage });
+    dispatch(commonUiActions.showToastMessage(errorMessage, "error"));
   }
 
 };

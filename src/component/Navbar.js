@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
+import * as types from "../constants/product.constants";
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
@@ -18,23 +19,25 @@ const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
   const [showSearchBox, setShowSearchBox] = useState(false);
   const menuList = [
-    "여성",
-    "Divided",
-    "남성",
-    "신생아/유아",
-    "아동",
-    "H&M HOME",
-    "Sale",
-    "지속가능성",
+    "추천",
+    "신상",
+    "랭킹",
+    "상품",
+    "세일",
   ];
   let [width, setWidth] = useState(0);
   let navigate = useNavigate();
+
   const onCheckEnter = (event) => {
     if (event.key === "Enter") {
-      if (event.target.value === "") {
+      let searchKeyword = event.target.value;
+      if (searchKeyword === "") {
+        dispatch({ type: types.SET_SEARCH_KEYWORD, payload: "" });
         return navigate("/");
       }
-      navigate(`?name=${event.target.value}`);
+      dispatch({ type: types.SET_SEARCH_KEYWORD, payload: searchKeyword });
+      console.log("searchKeyword : ", searchKeyword);
+      navigate(`?name=${searchKeyword}`);
     }
   };
   const logout = () => {
@@ -49,7 +52,7 @@ const Navbar = ({ user }) => {
               <FontAwesomeIcon className="search-icon" icon={faSearch} />
               <input
                 type="text"
-                placeholder="제품검색"
+                placeholder="제품 검색"
                 onKeyPress={onCheckEnter}
               />
             </div>
@@ -101,9 +104,8 @@ const Navbar = ({ user }) => {
             <div onClick={() => navigate("/cart")} className="nav-icon">
               <FontAwesomeIcon icon={faShoppingBag} />
               {!isMobile && (
-                <span style={{ cursor: "pointer" }}>{`쇼핑백(${
-                  cartItemCount || 0
-                })`}</span>
+                <span style={{ cursor: "pointer" }}>{`쇼핑백(${cartItemCount || 0
+                  })`}</span>
               )}
             </div>
             <div
