@@ -61,9 +61,9 @@ productContoller.updateProduct = async (req, res) => {
 			{ _id: productId },
 			{ sky, name, size, image, price, description, category, stock, status }
 		);
-		res.status(200).json({ status: "Success - Update Product " }, data: product);
+		res.status(200).json({ status: "Success - Update Product ", data: product });
 	} catch (error) {
-		res.status(400).json({ status: "Fail - Update Product" }, error: error.message);
+		res.status(400).json({ status: "Fail - Update Product", error: error.message });
 	}
 
 }
