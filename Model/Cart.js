@@ -10,12 +10,12 @@ const cartSchema = Schema({
 		size: { type: String, required: true },
 		qty: { type: Number, default: 1, required: true }
 	}],
-	image: { type: String, required: true },//image URL
+	// image: { type: String, required: true },//image URL
 }, { timestamps: true })
 
 //조회되는 정보 정제(불필요한 정보 제거)
 cartSchema.methods.toJSON = function () {
-	const obj = tihs._doc
+	const obj = this._doc
 	delete obj.password
 	delete obj.__v
 	delete obj.updatedAt
