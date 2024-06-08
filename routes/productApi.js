@@ -23,4 +23,11 @@ router.put(
 	productContoller.updateProduct
 )
 
+router.delete(
+	"/:id",
+	authController.authenticate,
+	authController.checkAdminPermission,
+	productContoller.deleteProduct
+);
+
 module.exports = router;

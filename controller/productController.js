@@ -29,7 +29,9 @@ productContoller.getProducts = async (req, res) => {
 	try {
 		const { page, name } = req.query;
 		//검색 키워드
-		const cond = name ? { name: { $regex: name, $options: 'i' } } : {};
+		const cond = name ? {
+			name: { $regex: name, $options: 'i' }, isDeleted: false
+		} : { isDeleted: false };
 		let query = Product.find(cond);
 		const response = { status: "success" };
 		if (page) {
@@ -71,5 +73,19 @@ productContoller.updateProduct = async (req, res) => {
 
 }
 
+
+//상품 삭제
+productContoller.deleteProduct = async (req, res) => {
+	try {
+		const productId = req.params.id;
+		const product = await Product.findByIdAndUpdate(
+			{ _id: productId },
+			{ isDeleted: true }
+		);
+		res.status(200).json({ status: "Success - Delete Product" });
+	} catch (error) {
+		res.status(400).json({ status: "Fail - Delete Product", error: error.message });
+	}
+}
 
 module.exports = productContoller
