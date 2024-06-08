@@ -57,8 +57,9 @@ const AdminProduct = () => {
     navigate("?" + query);
   }, [searchQuery]);
 
+  //아이템 삭제하기
   const deleteItem = (id) => {
-    //아이템 삭제하가ㅣ
+    dispatch(productActions.deleteProduct(id));
   };
 
   const openEditForm = (product) => {

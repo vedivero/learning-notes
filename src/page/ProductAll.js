@@ -11,10 +11,7 @@ const ProductAll = () => {
   const { productList, totalPageNum } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const [query, setQuery] = useSearchParams();
-  const error = useSelector((state) => state.product.error);
-  const searchKeyword = useSelector((state) => state.product.searchKeyword);
   const name = query.get("name");//검색 키워드
-  const page = query.get("page");//페이지
 
   // 처음 로딩하면 상품리스트 불러오기
   useEffect(() => {
@@ -39,10 +36,20 @@ const ProductAll = () => {
   return (
     <Container>
       <Row>
-        {productList?.map((product, index) =>
-          <Col key={product._id} className="card" md={3} sm={12}>
-            <ProductCard product={product} />
-          </Col>
+        {productList.length > 0 ? (
+          productList.map((product) => (
+            <Col key={product._id} className="card" md={3} sm={12}>
+              <ProductCard product={product} />
+            </Col>
+          ))
+        ) : (
+          <div className="text-align-center empty-bag">
+            {name === "" ? (
+              <h2>등록된 상품이 없습니다.</h2>
+            ) : (
+              <h2>{name} 와(과) 일치한 상품이 없습니다.</h2>
+            )}
+          </div>
         )}
       </Row>
     </Container>
