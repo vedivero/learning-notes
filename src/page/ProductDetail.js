@@ -9,6 +9,10 @@ import { commonUiActions } from "../action/commonUiAction";
 import { currencyFormat } from "../utils/number";
 import "../style/productDetail.style.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
+
+
 const ProductDetail = () => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
@@ -18,18 +22,33 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [sizeError, setSizeError] = useState(false);
+  const { user } = useSelector((state) => state.user);
+
 
   const pickIsTrue = () => {
     return selectedProduct.choice ? true : false
   }
 
+  //카트에 상품 추가
   const addItemToCart = () => {
-    //사이즈를 아직 선택안했다면 에러
-    // 아직 로그인을 안한유저라면 로그인페이지로
-    // 카트에 아이템 추가하기
+    //사이즈 선택 체크
+    if (size === "") {
+      setSizeError(true);
+      return;
+    }
+    //로그인 여부 체크
+    if (!user) {
+      alert("로그인 후 카트에 추가해 주세요.");
+      navigate("/login");
+    }
+    //카트에 아이템 추가
+    dispatch(cartActions.addToCart({ id, size }));
   };
+
+  //사이즈 추가
   const selectSize = (value) => {
-    // 사이즈 추가하기
+    if (sizeError) setSizeError(false);//에러 메세지 초기화
+    setSize(value);
   };
 
   //카트에러가 있으면 에러메세지 보여주기
@@ -71,24 +90,36 @@ const ProductDetail = () => {
             align="start"
             onSelect={(value) => selectSize(value)}
           >
-            {/* <Dropdown.Toggle
+            <Dropdown.Toggle
               className="size-drop-down"
               variant={sizeError ? "outline-danger" : "outline-dark"}
               id="dropdown-basic"
               align="start"
             >
               {size === "" ? "사이즈 선택" : size.toUpperCase()}
-            </Dropdown.Toggle> */}
+            </Dropdown.Toggle>
 
             <Dropdown.Menu className="size-drop-down">
-              <Dropdown.Item>M</Dropdown.Item>
+              {Object.keys(selectedProduct.stock).length > 0 &&
+                Object.keys(selectedProduct.stock).map((item) =>
+                  selectedProduct.stock[item] > 0 ? (
+                    <Dropdown.Item key={item} eventKey={item}>
+                      {item.toUpperCase()}
+                    </Dropdown.Item>
+                  ) : (
+                    <Dropdown.Item key={item} eventKey={item} disabled={true}>
+                      {item.toUpperCase()}
+                    </Dropdown.Item>
+                  )
+                )}
             </Dropdown.Menu>
           </Dropdown>
-          {/* <div className="warning-message">
+          <div className="warning-message">
             {sizeError && "사이즈를 선택해주세요."}
-          </div> */}
+          </div>
           <Button variant="dark" className="add-button" onClick={addItemToCart}>
-            추가
+            <FontAwesomeIcon icon={faCartArrowDown} style={{ marginRight: "8px" }} />
+            카트에 담기
           </Button>
         </Col>
       </Row>
