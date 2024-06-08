@@ -82,9 +82,22 @@ productContoller.deleteProduct = async (req, res) => {
 			{ _id: productId },
 			{ isDeleted: true }
 		);
-		res.status(200).json({ status: "Success - Delete Product" });
+		return res.status(200).json({ status: "Success - Delete Product" });
 	} catch (error) {
-		res.status(400).json({ status: "Fail - Delete Product", error: error.message });
+		return res.status(400).json({ status: "Fail - Delete Product", error: error.message });
+	}
+}
+
+
+
+productContoller.getProductById = async (req, res) => {
+	try {
+		const productId = req.params.id;
+		const product = await Product.findById(productId);
+		if (!product) throw Error("No item found");
+		return res.status(200).json({ status: "Success - get Production", data: product });
+	} catch (error) {
+		return res.status(400).json({ status: "Fail - get Production", error: error.message });
 	}
 }
 

@@ -14,6 +14,7 @@ router.post(
 
 //상품 정보 조회
 router.get("/", productContoller.getProducts);
+router.get("/:id", productContoller.getProductById);
 
 //상품 정보 수정
 router.put(
