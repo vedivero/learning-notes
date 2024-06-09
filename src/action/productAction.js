@@ -1,6 +1,6 @@
 import api from "../utils/api";
 import * as types from "../constants/product.constants";
-//import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
 //상품 가져오기
@@ -44,6 +44,7 @@ const createProduct = (formData) => async (dispatch) => {
     console.log("/product response : ", response);
     dispatch({ type: types.PRODUCT_CREATE_SUCCESS });
     dispatch(commonUiActions.showToastMessage("상품이 등록되었습니다.", "success"));
+    dispatch(getProductList({ page: 1, name: "" }));
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;
     dispatch({ type: types.PRODUCT_CREATE_FAIL, payload: errorMessage });
@@ -59,6 +60,7 @@ const deleteProduct = (id) => async (dispatch) => {
     const response = await api.delete(`/product/${id}`);
     dispatch({ type: types.PRODUCT_DELETE_SUCCESS });
     dispatch(commonUiActions.showToastMessage("상품이 삭제되었습니다.", "success"));
+    dispatch(getProductList({ page: 1, name: "" }));
   } catch (error) {
     dispatch({ type: types.PRODUCT_DELETE_FAIL, payload: error.error });
     dispatch(commonUiActions.showToastMessage(error.error, "error"));
@@ -74,6 +76,7 @@ const editProduct = (formData, id) => async (dispatch) => {
     console.log("update response : ", response);
     dispatch({ type: types.PRODUCT_EDIT_SUCCESS, payload: response.data.data });
     dispatch(commonUiActions.showToastMessage("상품 정보가 수정되었습니다.", "success"));
+    dispatch(getProductList({ page: 1, name: "" }));
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;
     dispatch({ type: types.PRODUCT_EDIT_FAIL, payload: errorMessage });

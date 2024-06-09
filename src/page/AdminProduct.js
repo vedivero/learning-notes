@@ -60,12 +60,11 @@ const AdminProduct = () => {
   //아이템 삭제하기
   const deleteItem = (id) => {
     dispatch(productActions.deleteProduct(id));
+    dispatch(productActions.getProductList(searchQuery));
   };
 
   const openEditForm = (product) => {
-    //edit모드로 설정하고
     setMode("edit");
-    // 아이템 수정다이얼로그 열어주기
     dispatch({ type: types.SET_SELECTED_PRODUCT, payload: product });
     setShowDialog(true);
   };

@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import SearchBox from "../component/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 import { orderActions } from "../action/orderAction";
+import { productActions } from "../action/productAction";
 import OrderDetailDialog from "../component/OrderDetailDialog";
 import OrderTable from "../component/OrderTable";
 import * as types from "../constants/order.constants";
