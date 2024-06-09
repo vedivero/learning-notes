@@ -1,3 +1,4 @@
+const { populate } = require("dotenv");
 const Cart = require("../Model/Cart");
 const cartController = {}
 
@@ -42,5 +43,28 @@ cartController.addItemToCart = async (req, res) => {
 	}
 }
 
+
+
+//카트 리스트
+cartController.getCart = async (req, res) => {
+	try {
+		const { userId } = req;
+		const cart = await Cart.findOne({ userId }).populate({
+			path: 'items',
+			populate: {
+				path: 'productId',
+				model: "Product"
+			}
+		});
+		console.log("cart : ", cart);
+		return res.status(200).json({ status: "Success Get Cart", data: cart.items });
+	} catch (error) {
+		return res.status(400).json({
+			status: "Fail - Get Cart",
+			error: error,
+			message: error.message
+		});
+	}
+}
 
 module.exports = cartController;

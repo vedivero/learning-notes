@@ -17,9 +17,9 @@ productContoller.createProduct = async (req, res) => {
 		});
 
 		await product.save();
-		res.status(200).json({ status: "Success - create product" });
+		return res.status(200).json({ status: "Success - create product" });
 	} catch (error) {
-		res.status(400).json({ status: "Fail - create product" })
+		return res.status(400).json({ status: "Fail - create product", error: error.message });
 	}
 };
 
@@ -54,8 +54,6 @@ productContoller.getProducts = async (req, res) => {
 
 //상품 수정
 productContoller.updateProduct = async (req, res) => {
-
-
 	try {
 		//id값 저장
 		const productId = req.params.id;
@@ -70,7 +68,6 @@ productContoller.updateProduct = async (req, res) => {
 	} catch (error) {
 		res.status(400).json({ status: "Fail - Update Product", error: error.message });
 	}
-
 }
 
 
