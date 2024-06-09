@@ -56,7 +56,6 @@ cartController.getCart = async (req, res) => {
 				model: "Product"
 			}
 		});
-		console.log("cart : ", cart);
 		return res.status(200).json({ status: "Success Get Cart", data: cart.items });
 	} catch (error) {
 		return res.status(400).json({
@@ -66,5 +65,57 @@ cartController.getCart = async (req, res) => {
 		});
 	}
 }
+
+//카트 상품 삭제
+cartController.deleteCartItem = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { userId } = req;
+		const cart = await Cart.findOne({ userId });
+		cart.items = cart.items.filter((item) => !item._id.equals(id));
+		await cart.save();
+		return res.status(200).json({ status: "Success - Delete Production", cartItemQty: cart.items.length })
+	} catch (error) {
+		return res.status(400).json({ status: "Fail - Delete Production", error: error.message });
+	}
+}
+
+
+//카트 상품 개수 수정
+cartController.editCartItem = async (req, res) => {
+	try {
+		const { userId } = req;
+		const { id } = req.params;
+
+		const { qty } = req.body;
+		const cart = await Cart.findOne({ userId }).populate({
+			path: "items",
+			populate: {
+				path: "productId",
+				model: "Product",
+			},
+		});
+		if (!cart) throw new Error("카트 정보가 없습니다.");
+		const index = cart.items.findIndex((item) => item._id.equals(id));
+		if (index === -1) throw new Error("상품을 찾을 수 없습니다.");
+		cart.items[index].qty = qty;
+		await cart.save();
+		return res.status(200).json({ status: "Success - Edit Cart Items", data: cart.item });
+	} catch (error) {
+		return res.status(400).json({ status: "Fail - Edit Cart Items", error: error.message });
+	}
+}
+
+//카트 수량
+cartController.getCartQty = async (req, res) => {
+	try {
+		const { userId } = req;
+		const cart = await Cart.findOne({ userId });
+		if (!cart) throw new Error("카트 정보가 없습니다.");
+		return res.status(200).json({ status: "Success - getCartQty", qty: cart.items.length });
+	} catch (error) {
+		return res.status(400).json({ status: "Fail - getCartQty", error: error.message });
+	}
+};
 
 module.exports = cartController;
