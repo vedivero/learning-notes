@@ -11,7 +11,8 @@ const createOrder = (payload, navigate) => async (dispatch) => {
     dispatch({ type: types.CREATE_ORDER_SUCCESS, payload: response.data.orderNum });
     console.log("response.data.orderNum, : ", response.data.orderNum);
     dispatch(cartActions.getCartQty());
-    navigate("/payment/success");
+    //navigate("/payment/success");
+    navigate(`/payment/success?orderNum=${response.data.orderNum}`);
   } catch (error) {
     dispatch({ type: types.CREATE_ORDER_FAIL, payload: error.error });
     dispatch(commonUiActions.showToastMessage(error.error, "error"));

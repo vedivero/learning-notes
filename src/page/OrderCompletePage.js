@@ -1,16 +1,18 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../style/paymentPage.style.css";
 
 const OrderCompletePage = () => {
 
-  const { orderNum } = useSelector((state) => state.order);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const orderNum = queryParams.get("orderNum");
 
   console.log("orderNum : ", orderNum)
   //주문 번호가 없는 상태로 이 페이지에 왔다면 다시 메인페이지로 돌아가기
-  if (orderNum === "") {
+  if (orderNum === "" || orderNum === undefined || orderNum === null) {
     return (
       <Container className="confirmation-page">
         <h2>주문 정보가 없습니다.</h2>
