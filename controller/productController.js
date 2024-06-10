@@ -1,10 +1,10 @@
 const Product = require("../Model/Product");
 const PAGE_SIZE = 4
-const productContoller = {}
+const productController = {}
 
 
 //상품 생성
-productContoller.createProduct = async (req, res) => {
+productController.createProduct = async (req, res) => {
 	try {
 		const { sku, name, size,
 			image, category, description,
@@ -24,7 +24,7 @@ productContoller.createProduct = async (req, res) => {
 };
 
 //상품 조회
-productContoller.getProducts = async (req, res) => {
+productController.getProducts = async (req, res) => {
 
 	try {
 		const { page, name } = req.query;
@@ -53,7 +53,7 @@ productContoller.getProducts = async (req, res) => {
 }
 
 //상품 수정
-productContoller.updateProduct = async (req, res) => {
+productController.updateProduct = async (req, res) => {
 	try {
 		//id값 저장
 		const productId = req.params.id;
@@ -70,7 +70,7 @@ productContoller.updateProduct = async (req, res) => {
 
 
 //상품 삭제
-productContoller.deleteProduct = async (req, res) => {
+productController.deleteProduct = async (req, res) => {
 	try {
 		const productId = req.params.id;
 		const product = await Product.findByIdAndUpdate(
@@ -85,7 +85,7 @@ productContoller.deleteProduct = async (req, res) => {
 
 
 
-productContoller.getProductById = async (req, res) => {
+productController.getProductById = async (req, res) => {
 	try {
 		const productId = req.params.id;
 		const product = await Product.findById(productId);
@@ -96,4 +96,43 @@ productContoller.getProductById = async (req, res) => {
 	}
 }
 
-module.exports = productContoller
+
+//주문하려는 상품 재고 조회
+productController.checkStock = async (item) => {
+	//주문하려는 상품 정보 조회
+	const product = await Product.findById(item.productId);
+	//주문하려는 상품 재고 확인
+	if (product.stock[item.size] < item.qty) {
+		return { isVerify: false, message: `${product.name}의 ${item.size}재고가 부족합니다. ` }
+	}
+
+	const newStock = { ...product.stock };//현재 재고 복사
+	newStock[item.size] -= item.qty;//구매 수량만큼 재고 차감
+	product.stock = newStock;//업데이트된 재고 설정
+
+	await product.save();//변경된 재고 저장
+	return { isVerify: true };//재고가 충분하다면 true 반환
+}
+
+
+//전체 재고 체크(재고가 없는 상품 조회)
+productController.checkItemListStock = async (itemList) => {
+	//재고가 있으면 빈 값이 전달
+	const insufficientStockItems = [];
+
+	await Promise.all(
+		//itemList를 하나하나의 재고 체크
+		itemList.map(async (item) => {
+			const stockCheck = await productController.checkStock(item);
+			if (!stockCheck.isVerify) {
+				insufficientStockItems.push({ item, message: stockCheck.message });
+			}
+			return stockCheck;
+		})
+	);
+	return insufficientStockItems;
+}
+
+
+
+module.exports = productController

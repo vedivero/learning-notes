@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 const User = require("./User");
 const Product = require("./Product");
+const Cart = require("./Cart");
 const Schema = mongoose.Schema;
 const orderSchema = Schema(
 	{
-		userId: { type: mongoose.ObjectId, ref: User },
-		status: { type: String, default: "preparing" },
-		totalPrice: { type: Number, required: true, default: 0 },
-		shipTo: { type: Object, required: true },
-		contact: { type: Object, required: true },
-		orderNum: { type: String },
+		userId: { type: mongoose.ObjectId, ref: User },	//ID
+		status: { type: String, default: "preparing" },	//주문상태
+		totalPrice: { type: Number, required: true, default: 0 },	//총 가격
+		shipTo: { type: Object, required: true },	//배송주소
+		contact: { type: Object, required: true },	//연락처
+		orderNum: { type: String },	//주문번호
 		items: [
 			{
 				productId: { type: mongoose.ObjectId, ref: Product },
@@ -30,6 +31,13 @@ orderSchema.methods.toJSON = function () {
 	delete obj.updatedAt;
 	return obj;
 };
+
+//주문 완료된 상품 카트에서 제거
+orderSchema.post("save", async function () {
+	const cart = await Cart.findOne({ userId: this.userId });
+	cart.items = [];
+	await cart.save();
+});
 
 //Order 모델을 모듈의 외부로 내보내어 다른 파일에서 사용할 수 있도록 함
 const Order = mongoose.model("Order", orderSchema);
