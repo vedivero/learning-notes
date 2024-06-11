@@ -3,7 +3,7 @@ import { Container, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
-
+import { GoogleLogin } from '@react-oauth/google';
 import "../style/login.style.css";
 
 const Login = () => {
@@ -21,14 +21,16 @@ const Login = () => {
     };
   }, [dispatch]);
 
+  //이메일,패스워드를 가지고 백엔드로 보내기
   const loginWithEmail = (event) => {
     event.preventDefault();
-    //이메일,패스워드를 가지고 백엔드로 보내기
     dispatch(userActions.loginWithEmail({ email, password }));
   };
 
+  // 구글로 로그인 하기
   const handleGoogleLogin = async (googleData) => {
-    // 구글로 로그인 하기
+    console.log("googleData: ", googleData);
+    dispatch(userActions.loginWithGoogle(googleData.credential));
   };
 
   //이미 로그인 한 유저가 다시 login처리가 되지 않기 위해 밖으로 뺌
@@ -87,9 +89,14 @@ const Login = () => {
         </div>
 
         <div className="text-align-center mt-2">
-          <p>- 외부 계정으로 로그인하기 -</p>
+          {/* <p>- 외부 계정으로 로그인하기 -</p> */}
           <div className="display-center">
-            {/* 구글 로그인 버튼 등을 여기에 추가하세요 */}
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
           </div>
         </div>
       </Form>

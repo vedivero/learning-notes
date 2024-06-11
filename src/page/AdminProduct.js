@@ -81,12 +81,7 @@ const AdminProduct = () => {
 
   //쿼리에 페이지값 바꿔주기
   const handlePageClick = ({ selected }) => {
-
     setSearchQuery({ ...searchQuery, page: selected + 1 });
-
-    //searchbox에서 검색 실행 시, searchQuery객체 업데이트(ex) {name:jacket})
-    //searchQuery객체의 item으로 url생성하여 호출 &name=jacket
-    //URL 파라미터를 사용하여 Query실행
   };
 
   return (

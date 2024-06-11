@@ -34,7 +34,7 @@ const loginWithEmail = ({ email, password }) => async (dispatch) => {
   }
 };
 
-
+//로그 아웃
 const logout = () => async (dispatch) => {
   //user 정보 지우기
   dispatch({ type: types.LOGOUT });
@@ -42,10 +42,20 @@ const logout = () => async (dispatch) => {
   sessionStorage.removeItem("token");
 };
 
+//구글 로그인
 const loginWithGoogle = (token) => async (dispatch) => {
-
+  try {
+    dispatch({ type: types.GOOGLE_LOGIN_REQUEST });
+    const response = await api.post("/auth/google", { token });
+    dispatch({ type: types.GOOGLE_LOGIN_SUCCESS, payload: response.data });
+    sessionStorage.setItem("token", response.data.token);
+  } catch (error) {
+    dispatch({ type: types.GOOGLE_LOGIN_FAIL, payload: error.error });
+    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+  }
 };
 
+//회원 등록
 const registerUser =
   ({ email, name, password }, navigate) =>
     async (dispatch) => {
