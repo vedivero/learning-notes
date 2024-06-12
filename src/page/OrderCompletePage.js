@@ -8,9 +8,8 @@ const OrderCompletePage = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const orderNum = queryParams.get("orderNum");
+  const orderNum = queryParams.get("orderNum") || queryParams.get("orderId");
 
-  console.log("orderNum : ", orderNum)
   //주문 번호가 없는 상태로 이 페이지에 왔다면 다시 메인페이지로 돌아가기
   if (orderNum === "" || orderNum === undefined || orderNum === null) {
     return (

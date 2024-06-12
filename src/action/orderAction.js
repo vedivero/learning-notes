@@ -9,18 +9,16 @@ const createOrder = (payload, navigate) => async (dispatch) => {
     dispatch({ type: types.CREATE_ORDER_REQUEST });
     const response = await api.post("/order", payload);
     dispatch({ type: types.CREATE_ORDER_SUCCESS, payload: response.data.orderNum });
-    console.log("response.data.orderNum, : ", response.data.orderNum);
     dispatch(cartActions.getCartQty());
-    //navigate("/payment/success");
     navigate(`/payment/success?orderNum=${response.data.orderNum}`);
   } catch (error) {
     dispatch({ type: types.CREATE_ORDER_FAIL, payload: error.error });
-    dispatch(commonUiActions.showToastMessage(error.error, "error"));
+    dispatch(commonUiActions.showToastMessage(error.message, "error"));
   }
 
 };
 
-// 비동기 함수 'getOrder'를 반환하는 함수. Redux의 'dispatch' 함수를 사용하여 액션을 디스패치
+//비동기 함수 'getOrder'를 반환하는 함수. Redux의 'dispatch' 함수를 사용하여 액션을 디스패치
 const getOrder = () => async (dispatch) => {
   try {
     // 'GET_ORDER_REQUEST' 타입의 액션을 디스패치하여 주문 요청이 시작되었음을 알림
@@ -38,7 +36,7 @@ const getOrder = () => async (dispatch) => {
 };
 
 
-// 주문 목록을 조회하는 비동기 액션 크리에이터
+//주문 목록을 조회하는 비동기 액션 크리에이터
 const getOrderList = (query) => async (dispatch) => {
   try {
     // 주문 목록 조회 요청 시작 액션 디스패치
@@ -66,7 +64,7 @@ const getOrderList = (query) => async (dispatch) => {
   }
 };
 
-// 주문 상태를 업데이트하는 비동기 액션 크리에이터
+//주문 상태를 업데이트하는 비동기 액션 크리에이터
 const updateOrder = (id, status) => async (dispatch) => {
   try {
     // 주문 상태 업데이트 요청 시작 액션 디스패치

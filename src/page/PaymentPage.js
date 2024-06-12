@@ -1,184 +1,73 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import OrderReceipt from "../component/OrderReceipt";
-import PaymentForm from "../component/PaymentForm";
+import React, { useEffect } from "react";
+import { Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import "../style/paymentPage.style.css";
-import { useSelector, useDispatch } from "react-redux";
 import { orderActions } from "../action/orderAction";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { commonUiActions } from "../action/commonUiAction";
-import { cc_expires_format } from "../utils/number";
 
-const PaymentPage = () => {
+const OrderCompletePageToss = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
+  const queryParams = new URLSearchParams(location.search);
+  const orderNum = queryParams.get("orderNum") || queryParams.get("orderId");
 
-  const [cardValue, setCardValue] = useState({
-    cvc: "",
-    expiry: "",
-    focus: "",
-    name: "",
-    number: "",
-  });
-  const navigate = useNavigate();
-  const [firstLoading, setFirstLoading] = useState(true);
-  const [shipInfo, setShipInfo] = useState({
-    firstName: "",
-    lastName: "",
-    contact: "",
-    address: "",
-    city: "",
-    zip: "",
-  });
+  const firstName = queryParams.get("firstName");
+  const lastName = queryParams.get("lastName");
+  const contact = queryParams.get("contact");
+  const address = queryParams.get("address");
+  const city = queryParams.get("city");
+  const zip = queryParams.get("zip");
+  const totalPrice = parseFloat(queryParams.get("totalPrice"));
+  const cartList = JSON.parse(queryParams.get("cartList"));
 
-  const { cartList, totalPrice } = useSelector(state => state.cart);
+  useEffect(() => {
+    if (!orderNum) {
+      console.log("주문 번호가 없습니다.");
+      return;
+    }
 
-  console.log("shipInfo : ", shipInfo)
-  //맨처음 페이지 로딩할때는 넘어가고  오더번호를 받으면 성공페이지로 넘어가기
-
-  //주문 생성
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const { firstName, lastName, contact, address, city, zip } = shipInfo;
     const data = {
       totalPrice,
       shipTo: { address, city, zip },
       contact: { firstName, lastName, contact },
-      orderList: cartList.map(item => {
-        return {
-          productId: item.productId._id,
-          price: item.productId.price,
-          qty: item.qty,
-          size: item.size
-        };
-      })
+      orderList: cartList
     };
-    dispatch(orderActions.createOrder(data, navigate));
-  };
 
-  const handleFormChange = (event) => {
-    //shipInfo에 값 넣어주기
-    const { name, value } = event.target;
-    setShipInfo({ ...shipInfo, [name]: value });
-  };
+    // 주문 생성
+    dispatch(orderActions.createOrder(data));
+  }, [dispatch, orderNum, firstName, lastName, contact, address, city, zip, totalPrice, cartList]);
 
-  const handlePaymentInfoChange = (event) => {
-    //카드정보 넣어주기
-    const { name, value } = event.target
-    if (name === "expiry") {
-      let newValue = cc_expires_format(value);
-      setCardValue({ ...cardValue, [name]: newValue });
-      return;
-    }
-    setCardValue({ ...cardValue, [name]: value })
-  };
+  // 주문 번호가 없는 상태로 이 페이지에 왔다면 다시 메인페이지로 돌아가기
+  if (!orderNum) {
+    return (
+      <Container className="confirmation-page">
+        <h2>주문 정보가 없습니다.</h2>
+        <div>다시 시도해 주세요.</div>
+        <div className="text-align-center">
+          <Link to={"/"}>메인 페이지 바로가기</Link>
+        </div>
+      </Container>
+    );
+  }
 
-  const handleInputFocus = (e) => {
-    setCardValue({ ...cardValue, focus: e.target.name });
-  };
-
-  //카트에 상품이 없을 경우 결제화면에 접근하지 못하도록
-  if (cartList.length === 0) navigate("/cart");
-
-
-  //카트에 아이템이 없다면 다시 카트페이지로 돌아가기 (결제할 아이템이 없으니 결제페이지로 가면 안됌)
   return (
-    <Container>
-      <Row>
-        <Col lg={7}>
-          <div>
-            <h2 className="mb-2">배송 주소</h2>
-            <div>
-              <Form onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="lastName">
-                    <Form.Label>성</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="lastName"
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="firstName">
-                    <Form.Label>이름</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="firstName"
-                    />
-                  </Form.Group>
-                </Row>
-
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>연락처</Form.Label>
-                  <Form.Control
-                    placeholder="010-xxx-xxxxx"
-                    onChange={handleFormChange}
-                    required
-                    name="contact"
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formGridAddress2">
-                  <Form.Label>주소</Form.Label>
-                  <Form.Control
-                    placeholder="Apartment, studio, or floor"
-                    onChange={handleFormChange}
-                    required
-                    name="address"
-                  />
-                </Form.Group>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control
-                      onChange={handleFormChange}
-                      required
-                      name="city"
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>Zip</Form.Label>
-                    <Form.Control
-                      onChange={handleFormChange}
-                      required
-                      name="zip"
-                    />
-                  </Form.Group>
-                </Row>
-                <div className="mobile-receipt-area">
-                  <OrderReceipt cartList={cartList} totalPrice={totalPrice} />
-                </div>
-                <div>
-                  <h2 className="payment-title">결제 정보</h2>
-                  <PaymentForm
-                    cardValue={cardValue}
-                    handleInputFocus={handleInputFocus}
-                    handlePaymentInfoChange={handlePaymentInfoChange} />
-                </div>
-
-                <Button
-                  variant="dark"
-                  className="payment-button pay-button"
-                  type="submit"
-                >
-                  결제하기
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </Col>
-        <Col lg={5} className="receipt-area">
-          <OrderReceipt cartList={cartList} totalPrice={totalPrice} />
-        </Col>
-      </Row>
+    <Container className="confirmation-page">
+      <img
+        src="/image/greenCheck.png"
+        width={100}
+        className="check-image"
+        alt="greenCheck.png"
+      />
+      <h2>주문이 완료되었습니다.</h2>
+      <div>주문번호 : {orderNum}</div>
+      <div>
+        주문 내역은 내 주문 페이지에서 확인해 주세요.
+        <div className="text-align-center">
+          <Link to={"/account/purchase"}>내 주문 바로가기</Link>
+        </div>
+      </div>
     </Container>
   );
 };
 
-export default PaymentPage;
+export default OrderCompletePageToss;

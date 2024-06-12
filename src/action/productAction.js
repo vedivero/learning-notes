@@ -24,7 +24,6 @@ const getProductDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: types.GET_PRODUCT_DETAIL_REQUEST });
     const response = await api.get(`/product/${id}`);
-    console.log("getProductDetail response : ", response)
     dispatch({
       type: types.GET_PRODUCT_DETAIL_SUCCESS,
       payload: response.data.data
@@ -41,7 +40,6 @@ const createProduct = (formData) => async (dispatch) => {
     dispatch({ type: types.PRODUCT_CREATE_REQUEST });
     ///product를 호출하고, 생성할 데이터 formData를 전송
     const response = await api.post("/product", formData);
-    console.log("/product response : ", response);
     dispatch({ type: types.PRODUCT_CREATE_SUCCESS });
     dispatch(commonUiActions.showToastMessage("상품이 등록되었습니다.", "success"));
     dispatch(getProductList({ page: 1, name: "" }));
@@ -73,7 +71,6 @@ const editProduct = (formData, id) => async (dispatch) => {
   try {
     dispatch({ type: types.PRODUCT_EDIT_REQUEST });
     const response = await api.put(`/product/${id}`, formData);
-    console.log("update response : ", response);
     dispatch({ type: types.PRODUCT_EDIT_SUCCESS, payload: response.data.data });
     dispatch(commonUiActions.showToastMessage("상품 정보가 수정되었습니다.", "success"));
     dispatch(getProductList({ page: 1, name: "" }));

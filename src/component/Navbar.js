@@ -36,7 +36,6 @@ const Navbar = ({ user }) => {
         return navigate("/");
       }
       dispatch({ type: types.SET_SEARCH_KEYWORD, payload: searchKeyword });
-      console.log("searchKeyword : ", searchKeyword);
       navigate(`?name=${searchKeyword}`);
     }
   };

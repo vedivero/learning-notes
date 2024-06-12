@@ -6,7 +6,9 @@ import CartPage from "../page/CartPage";
 import Login from "../page/Login";
 import MyPage from "../page/MyPage";
 import OrderCompletePage from "../page/OrderCompletePage";
+import OrderCompletePageToss from "../page/OrderCompletePageToss";
 import PaymentPage from "../page/PaymentPage";
+import TossPaymentPage from "../page/TossPaymentPage";
 import ProductAll from "../page/ProductAll";
 import ProductDetail from "../page/ProductDetail";
 import RegisterPage from "../page/RegisterPage";
@@ -22,7 +24,9 @@ const AppRouter = () => {
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/tossPayment" element={<TossPaymentPage />} />
         <Route path="/payment/success" element={<OrderCompletePage />} />
+        <Route path="/tossPayment/success" element={<OrderCompletePageToss />} />
         <Route path="/account/purchase" element={<MyPage />} />
       </Route>
       <Route element={<PrivateRoute permissionLevel="admin" />}>

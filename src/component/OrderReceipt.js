@@ -37,7 +37,17 @@ const OrderReceipt = ({ cartList, totalPrice }) => {
           className="payment-button"
           onClick={() => navigate("/payment")}
         >
-          결제 계속하기
+          신용카드 결제
+        </Button>
+      )}
+      {location.pathname.includes("/cart") && cartList.length > 0 && (
+        <Button
+          style={{ backgroundColor: 'blue' }}
+          variant="dark"
+          className="payment-button"
+          onClick={() => navigate("/tossPayment")}
+        >
+          토스 페이먼츠 결제
         </Button>
       )}
 

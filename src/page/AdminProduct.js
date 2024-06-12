@@ -47,13 +47,11 @@ const AdminProduct = () => {
     if (searchQuery.name === "") {
       delete searchQuery.name;
     }
-    console.log("searchQuery : ", searchQuery);
     //검색어에 해당되는 값이 있을 경우
     const params = new URLSearchParams(searchQuery);
     //convert to String
     const query = params.toString();
 
-    console.log("query : ", query);
     navigate("?" + query);
   }, [searchQuery]);
 
