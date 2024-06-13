@@ -38,6 +38,7 @@ const logout = () => async (dispatch) => {
   dispatch({ type: types.LOGOUT });
   //세션 스토리지의 토근 지우기
   sessionStorage.removeItem("token");
+  alert("로그아웃 되었습니다.");
 };
 
 //구글 로그인

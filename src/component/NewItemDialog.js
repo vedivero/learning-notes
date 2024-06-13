@@ -56,7 +56,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       //상품 생성이 완료되면 dialog를 비활성화
       setShowDialog(false);
 
-    } else {
+    } else if (mode === "edit") {
       // 상품 수정하기
       dispatch(productActions.editProduct(
         { ...formData, stock: totalStock },
