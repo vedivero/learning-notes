@@ -3,6 +3,19 @@ import * as types from "../constants/product.constants";
 import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
+// 조회수 기준으로 내림차순 정렬된 상품 목록 가져오기
+const getHottestProductList = () => async (dispatch) => {
+  try {
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_REQUEST });
+    const response = await api.get("/product/hottest");
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_SUCCESS, payload: response.data });
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_FAIL, payload: errorMessage });
+  }
+};
+
+
 //상품 가져오기
 const getProductList = (query) => async (dispatch) => {
   try {
@@ -82,6 +95,15 @@ const editProduct = (formData, id) => async (dispatch) => {
 };
 
 
+// 상품 조회수 증가
+const incrementViewCount = (id) => async (dispatch) => {
+  try {
+    await api.put(`/product/${id}/increment-view`);
+  } catch (error) {
+    console.error("Failed to increment view count:", error);
+  }
+};
+
 
 
 
@@ -91,4 +113,6 @@ export const productActions = {
   deleteProduct,
   editProduct,
   getProductDetail,
+  incrementViewCount,
+  getHottestProductList
 };

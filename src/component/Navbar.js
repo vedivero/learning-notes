@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import {
-  faBars,
-  faBox,
-  faSearch,
-  faShoppingBag,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBox, faSearch, faShoppingBag, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,11 +14,11 @@ const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
   const [showSearchBox, setShowSearchBox] = useState(false);
   const menuList = [
-    "추천",
-    "신상",
-    "랭킹",
-    "상품",
-    "세일",
+    { name: "인기Top10", path: "hottest" },
+    { name: "신상", path: "new" },
+    { name: "랭킹", path: "ranking" },
+    { name: "상품", path: "product" },
+    { name: "세일", path: "sale" },
   ];
   let [width, setWidth] = useState(0);
   let navigate = useNavigate();
@@ -71,15 +66,10 @@ const Navbar = ({ user }) => {
 
         <div className="side-menu-list" id="menu-list">
           {menuList.map((menu, index) => (
-            <button key={index}>{menu}</button>
+            <button key={index} onClick={() => navigate(`/${menu.path}`)}>{menu.name}</button>
           ))}
         </div>
       </div>
-      {user && user.level === "admin" && (
-        <Link to="/admin/product?page=1" className="link-area">
-          Admin page
-        </Link>
-      )}
       <div className="nav-header">
         <div className="burger-menu hide">
           <FontAwesomeIcon icon={faBars} onClick={() => setWidth(250)} />
@@ -112,8 +102,22 @@ const Navbar = ({ user }) => {
               className="nav-icon"
             >
               <FontAwesomeIcon icon={faBox} />
-              {!isMobile && <span style={{ cursor: "pointer" }}>내 주문</span>}
+              {!isMobile && (
+                <span style={{ cursor: "pointer" }}>
+                  내 주문
+                </span>
+              )}
             </div>
+            {user && user.level === "admin" && (
+              <Link
+                to="/admin/product?page=1"
+                className="nav-icon"
+                style={{ color: 'black', textDecoration: 'none' }}
+              >
+                <FontAwesomeIcon icon={faUserTie} />
+                {!isMobile && <span style={{ cursor: "pointer" }}>관리자 페이지</span>}
+              </Link>
+            )}
             {isMobile && (
               <div className="nav-icon" onClick={() => setShowSearchBox(true)}>
                 <FontAwesomeIcon icon={faSearch} />
@@ -132,7 +136,7 @@ const Navbar = ({ user }) => {
         <ul className="menu">
           {menuList.map((menu, index) => (
             <li key={index}>
-              <a href="#">{menu}</a>
+              <Link to={`/${menu.path}`}>{menu.name}</Link>
             </li>
           ))}
         </ul>
