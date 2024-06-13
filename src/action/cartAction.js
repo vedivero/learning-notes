@@ -7,7 +7,6 @@ const addToCart = ({ id, size }) => async (dispatch) => {
   try {
     dispatch({ type: types.ADD_TO_CART_REQUEST });
     const response = await api.post("/cart", { productId: id, size, qty: 1 });
-    console.log("response : ", response);
     dispatch({ type: types.ADD_TO_CART_SUCCESS, payload: response.data.cartItemQty });
     dispatch(commonUiActions.showToastMessage("상품이 카트에 추가되었습니다.", "success"));
   } catch (error) {
@@ -22,7 +21,6 @@ const getCartList = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_CART_LIST_REQUEST });
     const response = await api.get("/cart");
-    console.log("response : ", response);
     dispatch({ type: types.GET_CART_LIST_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: types.GET_CART_LIST_FAIL, error: error });

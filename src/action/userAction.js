@@ -7,7 +7,6 @@ const loginWithToken = () => async (dispatch) => {
     dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
     //call api
     const response = await api.get("/user/me");
-    console.log("response : ", response)
     if (response.status === 200) {
       dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
     }
@@ -29,7 +28,6 @@ const loginWithEmail = ({ email, password }) => async (dispatch) => {
       dispatch({ type: types.LOGIN_SUCCESS, payload: response.data });
     }
   } catch (error) {
-    console.log("error.message : ", error.error)
     dispatch({ type: types.LOGIN_FAIL, payload: error.error });
   }
 };
