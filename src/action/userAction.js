@@ -36,9 +36,14 @@ const loginWithEmail = ({ email, password }) => async (dispatch) => {
 const logout = () => async (dispatch) => {
   //user 정보 지우기
   dispatch({ type: types.LOGOUT });
+  // 세션 스토리지의 토큰 가져오기
+  const token = sessionStorage.getItem("token");
   //세션 스토리지의 토근 지우기
   sessionStorage.removeItem("token");
-  alert("로그아웃 되었습니다.");
+  // 토큰이 존재할 때만 로그아웃 성공 알림창
+  if (token) {
+    alert("로그아웃 되었습니다.");
+  }
 };
 
 //구글 로그인
