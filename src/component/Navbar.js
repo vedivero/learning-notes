@@ -17,7 +17,7 @@ const Navbar = ({ user }) => {
     { name: "전체 상품", path: "product" },
     { name: "신상", path: "new" },
     { name: "인기", path: "hottest" },
-    { name: "세일", path: "sale" },
+    { name: "세일", path: "discounted" },
   ];
   let [width, setWidth] = useState(0);
   let navigate = useNavigate();

@@ -152,6 +152,22 @@ const restoreProductPrice = (id) => async (dispatch) => {
   }
 };
 
+
+// 세일 상품 가져오기
+export const getDiscountedProducts = () => async (dispatch) => {
+  try {
+    console.log("세일 상품 가져오기")
+    dispatch({ type: types.PRODUCT_DISCOUNTED_REQUEST });
+    const response = await api.get("/product/discounted");
+    console.log("response : ", response)
+    dispatch({ type: types.PRODUCT_DISCOUNTED_SUCCESS, payload: response.data });
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_DISCOUNTED_FAIL, payload: errorMessage });
+  }
+};
+
+
 export const productActions = {
   getProductList,
   createProduct,
@@ -162,5 +178,6 @@ export const productActions = {
   getHottestProductList,
   getNewArrivalProductList,
   updateProductDiscount,
-  restoreProductPrice
+  restoreProductPrice,
+  getDiscountedProducts
 };

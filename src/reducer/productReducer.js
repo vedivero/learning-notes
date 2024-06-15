@@ -5,7 +5,9 @@ const initialState = {
   productList: [],
   totalPageNum: 1,
   selectedProduct: null,
-  hottestProductList: []
+  hottestProductList: [],
+  newArrivalProductList: [],
+  discountedProducts: []
 };
 
 function productReducer(state = initialState, action) {
@@ -19,6 +21,7 @@ function productReducer(state = initialState, action) {
     case types.PRODUCT_GET_HOTTEST_REQUEST:
     case types.PRODUCT_GET_NEWARRIVAL_REQUEST:
     case types.PRODUCT_DISCOUNT_UPDATE_REQUEST:
+    case types.PRODUCT_DISCOUNTED_REQUEST:
       return { ...state, loading: true };
 
     case types.PRODUCT_CREATE_SUCCESS:
@@ -39,7 +42,8 @@ function productReducer(state = initialState, action) {
       return { ...state, newArrivalProductList: action.payload, loading: false };
     case types.PRODUCT_DISCOUNT_UPDATE_SUCCESS:
       return { ...state, loading: false, error: "" };
-
+    case types.PRODUCT_DISCOUNTED_SUCCESS:
+      return { ...state, loading: false, discountedProducts: payload.data };
 
     case types.PRODUCT_CREATE_FAIL:
     case types.PRODUCT_GET_FAIL:
@@ -48,6 +52,7 @@ function productReducer(state = initialState, action) {
     case types.PRODUCT_GET_HOTTEST_FAIL:
     case types.PRODUCT_GET_NEWARRIVAL_FAIL:
     case types.PRODUCT_DISCOUNT_UPDATE_FAIL:
+    case types.PRODUCT_DISCOUNTED_FAIL:
       return { ...state, loading: false, error: payload };
 
     case types.SET_SELECTED_PRODUCT:

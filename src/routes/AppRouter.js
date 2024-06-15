@@ -12,6 +12,7 @@ import TossPaymentPage from "../page/TossPaymentPage";
 import ProductAll from "../page/ProductAll";
 import ProductAllHottest from "../page/ProductAllHottest";
 import ProductAllNewArrival from "../page/ProductAllNewArrival";
+import ProductAllDiscounted from '../page/ProductAllDiscounted';
 import ProductDetail from "../page/ProductDetail";
 import RegisterPage from "../page/RegisterPage";
 import PrivateRoute from "./PrivateRoute";
@@ -27,6 +28,7 @@ const AppRouter = () => {
       <Route path="/hottest" element={<ProductAllHottest />} />
       <Route path="/product" element={<ProductAll />} />
       <Route path="/new" element={<ProductAllNewArrival />} />
+      <Route path="/discounted" element={<ProductAllDiscounted />} />
       <Route element={<PrivateRoute permissionLevel="customer" />}>
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment" element={<PaymentPage />} />
