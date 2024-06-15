@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faBox, faSearch, faShoppingBag, faUserTie } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../action/userAction";
 import * as types from "../constants/product.constants";
 
 const Navbar = ({ user }) => {
   const dispatch = useDispatch();
+  const location = useLocation(); // 현재 경로 확인
   const { cartItemCount } = useSelector((state) => state.cart);
   const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
   const [showSearchBox, setShowSearchBox] = useState(false);
   const menuList = [
     { name: "인기Top10", path: "hottest" },
     { name: "신상", path: "new" },
-    { name: "랭킹", path: "ranking" },
+    // { name: "랭킹", path: "ranking" },
     { name: "상품", path: "product" },
     { name: "세일", path: "sale" },
   ];
@@ -37,6 +37,8 @@ const Navbar = ({ user }) => {
   const logout = () => {
     dispatch(userActions.logout());
   };
+  const showSearchBoxOnPage = !["/hottest"].includes(location.pathname); // 특정 경로에서 검색 바 숨김
+
   return (
     <div>
       {showSearchBox && (
@@ -140,7 +142,7 @@ const Navbar = ({ user }) => {
             </li>
           ))}
         </ul>
-        {!isMobile && ( // admin페이지에서 같은 search-box스타일을 쓰고있음 그래서 여기서 서치박스 안보이는것 처리를 해줌
+        {!isMobile && showSearchBoxOnPage && ( // 특정 경로에서 검색 바 숨김
           <div className="search-box landing-search-box ">
             <FontAwesomeIcon icon={faSearch} />
             <input

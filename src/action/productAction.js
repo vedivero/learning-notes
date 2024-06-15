@@ -97,6 +97,7 @@ const editProduct = (formData, id) => async (dispatch) => {
 
 // 상품 조회수 증가
 const incrementViewCount = (id) => async (dispatch) => {
+  console.log("조회수 증가 : ", id)
   try {
     await api.put(`/product/${id}/increment-view`);
   } catch (error) {

@@ -16,6 +16,7 @@ import RegisterPage from "../page/RegisterPage";
 import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
+
   return (
     <Routes>
       <Route path="/" element={<ProductAll />} />

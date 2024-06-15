@@ -2,12 +2,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { currencyFormat } from "../utils/number";
 import "../style/ProductCard.css";
+import { productActions } from "../action/productAction";
+import { useDispatch } from "react-redux";
 
 const ProductCard = ({ product, rank }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // 상품 디테일 페이지로 가기
   const showProduct = (id) => {
+    dispatch(productActions.incrementViewCount(id));
     navigate(`/product/${id}`);
   };
 
