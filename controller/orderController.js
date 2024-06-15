@@ -109,10 +109,10 @@ orderController.getOrderList = async (req, res, next) => {
 		const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
 
 		// 성공 응답 반환
-		return res.status(200).json({ status: "success", data: orderList, totalPageNum });
+		return res.status(200).json({ status: "Success - Get OrderList", data: orderList, totalPageNum });
 	} catch (error) {
 		// 에러 발생 시 실패 응답 반환
-		return res.status(400).json({ status: "fail", error: error.message });
+		return res.status(400).json({ status: "Fail - Get OrderList", error: error.message });
 	}
 };
 
@@ -136,10 +136,10 @@ orderController.updateOrder = async (req, res, next) => {
 		if (!order) throw new Error("Can't find order");
 
 		// 성공 응답 반환
-		return res.status(200).json({ status: "success", data: order });
+		return res.status(200).json({ status: "Success - Update Order", data: order });
 	} catch (error) {
 		// 에러 발생 시 실패 응답 반환
-		return res.status(400).json({ status: "fail", error: error.message });
+		return res.status(400).json({ status: "Fail - Update Order", error: error.message });
 	}
 };
 

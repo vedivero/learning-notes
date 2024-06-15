@@ -8,8 +8,10 @@ const productSchema = Schema({
 	category: { type: Array, required: true },//product category
 	description: { type: String, required: true },//product description
 	price: { type: Number, required: true },
+	originalPrice: { type: Number },
 	stock: { type: Object, required: true },
 	status: { type: String, defualt: "active" },
+	viewCnt: { type: Number },
 	isDeleted: { type: Boolean, default: false }
 }, { timestamps: true })
 

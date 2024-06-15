@@ -8,18 +8,18 @@ productController.createProduct = async (req, res) => {
 	try {
 		const { sku, name, size,
 			image, category, description,
-			price, stock, status } = req.body;
+			price, stock, originalPrice, status } = req.body;
 
 		const product = new Product({
 			sku, name, size,
 			image, category, description,
-			price, stock, status
+			price, stock, originalPrice: price, status, viewCnt: 0
 		});
 
 		await product.save();
 		return res.status(200).json({ status: "Success - create product" });
 	} catch (error) {
-		return res.status(400).json({ status: "Fail - create product", error: error.message });
+		return res.status(500).json({ status: "Fail - create product", error: error.message });
 	}
 };
 
@@ -47,7 +47,7 @@ productController.getProducts = async (req, res) => {
 		//조회한 결과를 보내주기
 		res.status(200).json(response);
 	} catch (error) {
-		res.status(400).json({ status: "Fail get Products", error: error.message });
+		res.status(500).json({ status: "Fail get Products", error: error.message });
 	}
 
 }
@@ -64,7 +64,7 @@ productController.updateProduct = async (req, res) => {
 		);
 		res.status(200).json({ status: "Success - Update Product ", data: product });
 	} catch (error) {
-		res.status(400).json({ status: "Fail - Update Product", error: error.message });
+		res.status(500).json({ status: "Fail - Update Product", error: error.message });
 	}
 }
 
@@ -79,7 +79,7 @@ productController.deleteProduct = async (req, res) => {
 		);
 		return res.status(200).json({ status: "Success - Delete Product" });
 	} catch (error) {
-		return res.status(400).json({ status: "Fail - Delete Product", error: error.message });
+		return res.status(500).json({ status: "Fail - Delete Product", error: error.message });
 	}
 }
 
@@ -92,7 +92,7 @@ productController.getProductById = async (req, res) => {
 		if (!product) throw Error("No item found");
 		return res.status(200).json({ status: "Success - get Production", data: product });
 	} catch (error) {
-		return res.status(400).json({ status: "Fail - get Production", error: error.message });
+		return res.status(500).json({ status: "Fail - get Production", error: error.message });
 	}
 }
 
@@ -134,5 +134,102 @@ productController.checkItemListStock = async (itemList) => {
 }
 
 
+productController.incrementViewCount = async (req, res) => {
+	try {
+		const product = await Product.findByIdAndUpdate(
+			req.params.id,
+			{ $inc: { viewCnt: 1 } },
+			{ new: true }
+		);
+		res.status(200).json(product);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
+
+// 조회수 기준으로 내림차순 정렬된 상품 목록 반환
+productController.getHottestProducts = async (req, res) => {
+	try {
+		const products = await Product.find({ isDeleted: false }).sort({ viewCnt: -1 }).exec();
+		res.status(200).json(products);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
+
+// 상품 할인율 업데이트
+productController.updateProductDiscount = async (req, res) => {
+	try {
+		const productId = req.params.id;
+		const { discount } = req.body;
+
+		if (discount < 0 || discount > 100) {
+			return res.status(400).json({ status: "Fail", error: "Invalid discount value" });
+		}
+
+		const product = await Product.findById(productId);
+		if (!product) {
+			return res.status(404).json({ status: "Fail", error: "Product not found" });
+		}
+
+		if (!product.originalPrice) {
+			product.originalPrice = product.price;
+		}
+
+		product.price = Math.floor((product.originalPrice * (1 - discount / 100)) / 100) * 100;
+		await product.save();
+
+		return res.status(200).json({ status: "Success", data: product });
+	} catch (error) {
+		return res.status(500).json({ status: "Fail", error: error.message });
+	}
+};
+
+// 상품 가격 복구
+productController.restoreProductPrice = async (req, res) => {
+	try {
+		const productId = req.params.id;
+
+		const product = await Product.findById(productId);
+		if (!product) {
+			return res.status(404).json({ status: "Fail", error: "Product not found" });
+		}
+
+		if (product.originalPrice) {
+			if (product.price === product.originalPrice) {
+				return res.status(200).json({ status: "Success", message: "해당 상품은 정상 가격으로 설정되어 있습니다." });
+			}
+			product.price = product.originalPrice;
+			product.originalPrice = 0;
+			await product.save();
+			return res.status(200).json({ status: "Success", message: "상품이 할인 전 가격으로 복구되었습니다." });
+		} else {
+			return res.status(400).json({ status: "Fail", error: "Original price not found" });
+		}
+	} catch (error) {
+		return res.status(500).json({ status: "Fail", error: error.message });
+	}
+};
+
+
+// 특정 설정 기간 내의 등록된 상품 목록 반환
+productController.getNewArrivalProducts = async (req, res) => {
+	try {
+		// const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+		//const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+		//const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
+		const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+		//const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+		const products = await Product.find({
+			isDeleted: false,
+			createdAt: { $gte: oneDayAgo }
+		}).sort({ createdAt: -1 }).exec();
+
+		res.status(200).json(products);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+};
 
 module.exports = productController
