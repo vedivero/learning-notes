@@ -21,7 +21,23 @@ const ProductTable = ({ header, data, deleteItem, openEditForm, openDiscountModa
                 <th>{index}</th>
                 <th>{item.sku}</th>
                 <th style={{ minWidth: "100px" }}>{item.name}</th>
-                <th>{currencyFormat(item.price)}</th>
+                <th>
+                  {item.originalPrice && item.price !== item.originalPrice ? (
+                    <div>
+                      <span style={{ textDecoration: 'line-through', color: 'red' }}>
+                        ₩ {currencyFormat(item.originalPrice)}
+                      </span>
+                      <br />
+                      <span>→ ₩ {currencyFormat(item.price)}</span>
+                      <br />
+                      <span style={{ color: "red" }}>
+                        {((item.originalPrice - item.price) / item.originalPrice * 100).toFixed(0)}% 할인 적용
+                      </span>
+                    </div>
+                  ) : (
+                    currencyFormat(item.price)
+                  )}
+                </th>
                 <th>
                   {Object.keys(item.stock).map((size, index) => (
                     <div key={index}>
@@ -38,7 +54,7 @@ const ProductTable = ({ header, data, deleteItem, openEditForm, openDiscountModa
                     수정하기
                   </Button>
                   <Button className="mr-1" size="sm" variant="success" onClick={() => openDiscountModal(item)}>
-                    할인 설정
+                    세일 설정
                   </Button>
                   <Button
                     size="sm"

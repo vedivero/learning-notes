@@ -35,7 +35,7 @@ const DiscountModal = ({ show, handleClose, applyDiscount, restorePrice }) => {
 			</Modal.Body>
 			<Modal.Footer style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Button variant="success" onClick={handleRestore}>
-					세일 전 가격으로 복구
+					할인 전 가격으로 복구
 				</Button>
 				<div style={{ display: 'flex', gap: '10px' }}>
 					<Button variant="secondary" onClick={handleClose}>

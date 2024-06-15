@@ -130,7 +130,6 @@ const getNewArrivalProductList = () => async (dispatch) => {
   }
 };
 
-
 // 할인율 업데이트
 const updateProductDiscount = (id, discount) => async (dispatch) => {
   try {
@@ -138,14 +137,13 @@ const updateProductDiscount = (id, discount) => async (dispatch) => {
     const response = await api.put(`/product/${id}/discount`, { discount });
     dispatch({ type: types.PRODUCT_DISCOUNT_UPDATE_SUCCESS, payload: response.data });
     dispatch(commonUiActions.showToastMessage("상품 할인이 적용되었습니다.", "success"));
-    dispatch(getProductList({ page: 1, name: "" }));
+    dispatch(getAllProductsForAdmin({ page: 1, name: "" }));
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;
     dispatch({ type: types.PRODUCT_DISCOUNT_UPDATE_FAIL, payload: errorMessage });
     dispatch(commonUiActions.showToastMessage(errorMessage, "error"));
   }
 };
-
 
 // 상품 가격 복구
 const restoreProductPrice = (id) => async (dispatch) => {
@@ -157,7 +155,7 @@ const restoreProductPrice = (id) => async (dispatch) => {
     const message = response.data.message || "상품 가격이 원래대로 복구되었습니다.";
     dispatch(commonUiActions.showToastMessage(message, "success"));
 
-    dispatch(getProductList({ page: 1, name: "" }));
+    dispatch(getAllProductsForAdmin({ page: 1, name: "" }));
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;
     dispatch({ type: types.PRODUCT_RESTORE_PRICE_FAIL, payload: errorMessage });

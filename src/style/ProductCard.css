@@ -15,7 +15,6 @@
 	top: 10px;
 	right: 10px;
 	background-color: rgb(255, 99, 71);
-	/* 새로운 색상 */
 	color: white;
 	padding: 5px 10px;
 	border-radius: 5px;
@@ -38,16 +37,18 @@
 .original-price {
 	text-decoration: line-through;
 	color: red;
+	margin-right: 5px;
 }
 
 .discount-arrow {
-	margin: 0 10px;
+	margin: 0 5px;
 	font-size: 1.5em;
 }
 
 .discounted-price {
 	color: green;
 	font-weight: bold;
+	margin-right: 5px;
 }
 
 .discount-badge {
@@ -55,16 +56,22 @@
 	color: white;
 	padding: 2px 5px;
 	border-radius: 5px;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-left: auto;
-	/* 오른쪽 정렬을 위한 마진 자동 설정 */
+	font-size: 12px;
+	margin-left: 5px;
+	text-align: right;
+	flex-shrink: 0;
+	animation: blink 3s linear infinite;
+}
+
+@keyframes blink {
+	50% {
+		opacity: 0;
+	}
 }
 
 .price-info {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	/* 왼쪽으로 정렬 */
 	width: 100%;
 }
