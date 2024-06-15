@@ -2,8 +2,8 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { currencyFormat } from "../utils/number";
-const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
 
+const ProductTable = ({ header, data, deleteItem, openEditForm, openDiscountModal }) => {
   return (
     <div className="overflow-x">
       <Table striped bordered hover>
@@ -37,6 +37,9 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
                   <Button className="mr-1" size="sm" onClick={() => openEditForm(item)}>
                     수정하기
                   </Button>
+                  <Button className="mr-1" size="sm" variant="warning" onClick={() => openDiscountModal(item)}>
+                    할인 설정
+                  </Button>
                   <Button
                     size="sm"
                     variant="danger"
@@ -55,4 +58,5 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
     </div>
   );
 };
+
 export default ProductTable;

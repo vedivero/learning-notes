@@ -7,8 +7,8 @@ import NewItemDialog from "../component/NewItemDialog";
 import * as types from "../constants/product.constants";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { commonUiActions } from "../action/commonUiAction";
 import ProductTable from "../component/ProductTable";
+import DiscountModal from "../component/DiscountModal";
 
 const AdminProduct = () => {
   const navigate = useNavigate();
@@ -16,7 +16,9 @@ const AdminProduct = () => {
   const [query, setQuery] = useSearchParams();
   const dispatch = useDispatch();
   const [showDialog, setShowDialog] = useState(false);
-  //검색 조건들을 저장하는 객체
+  const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     name: query.get("name") || "",
@@ -24,7 +26,6 @@ const AdminProduct = () => {
 
   const [mode, setMode] = useState("new");
 
-  //상품 목록의 컬럼
   const tableHeader = [
     "#",
     "상품번호",
@@ -36,26 +37,19 @@ const AdminProduct = () => {
     "",
   ];
 
-  //상품리스트 가져오기 (url쿼리 맞춰서)
   useEffect(() => {
     dispatch(productActions.getProductList({ ...searchQuery }));
-  }, [query])
+  }, [query]);
 
-
-  //검색 searchbox에서
   useEffect(() => {
     if (searchQuery.name === "") {
       delete searchQuery.name;
     }
-    //검색어에 해당되는 값이 있을 경우
     const params = new URLSearchParams(searchQuery);
-    //convert to String
     const query = params.toString();
-
     navigate("?" + query);
   }, [searchQuery]);
 
-  //아이템 삭제하기
   const deleteItem = (id) => {
     const isConfirmed = window.confirm("해당 상품을 삭제하시겠습니까?");
     if (isConfirmed) {
@@ -71,15 +65,29 @@ const AdminProduct = () => {
   };
 
   const handleClickNewItem = () => {
-    //new 모드로 설정하고
     setMode("new");
-    // 다이얼로그 열어주기
     setShowDialog(true);
   };
 
-  //쿼리에 페이지값 바꿔주기
   const handlePageClick = ({ selected }) => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });
+  };
+
+  const openDiscountModal = (product) => {
+    setSelectedProduct(product);
+    setShowDiscountModal(true);
+  };
+
+  const applyDiscount = (discount) => {
+    if (selectedProduct) {
+      dispatch(productActions.updateProductDiscount(selectedProduct._id, discount));
+    }
+  };
+
+  const restorePrice = () => {
+    if (selectedProduct) {
+      dispatch(productActions.restoreProductPrice(selectedProduct._id));
+    }
   };
 
   return (
@@ -102,14 +110,15 @@ const AdminProduct = () => {
           data={productList}
           deleteItem={deleteItem}
           openEditForm={openEditForm}
+          openDiscountModal={openDiscountModal}
         />
 
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={totalPageNum} //전체 페이지
-          forcePage={searchQuery.page - 1} // 1페이지 = 2 (페이지 +1)
+          pageCount={totalPageNum}
+          forcePage={searchQuery.page - 1}
           previousLabel="< previous"
           renderOnZeroPageCount={null}
           pageClassName="page-item"
@@ -125,13 +134,20 @@ const AdminProduct = () => {
           activeClassName="active"
           className="display-center list-style-none"
         />
-      </Container>
 
-      <NewItemDialog
-        mode={mode}
-        showDialog={showDialog}
-        setShowDialog={setShowDialog}
-      />
+        <NewItemDialog
+          mode={mode}
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
+        />
+
+        <DiscountModal
+          show={showDiscountModal}
+          handleClose={() => setShowDiscountModal(false)}
+          applyDiscount={applyDiscount}
+          restorePrice={restorePrice}
+        />
+      </Container>
     </div>
   );
 };
