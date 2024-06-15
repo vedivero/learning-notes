@@ -3,18 +3,6 @@ import * as types from "../constants/product.constants";
 import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
-// 조회수 기준으로 내림차순 정렬된 상품 목록 가져오기
-const getHottestProductList = () => async (dispatch) => {
-  try {
-    dispatch({ type: types.PRODUCT_GET_HOTTEST_REQUEST });
-    const response = await api.get("/product/hottest");
-    dispatch({ type: types.PRODUCT_GET_HOTTEST_SUCCESS, payload: response.data });
-  } catch (error) {
-    const errorMessage = error.response ? error.response.data.message : error.message;
-    dispatch({ type: types.PRODUCT_GET_HOTTEST_FAIL, payload: errorMessage });
-  }
-};
-
 
 //상품 가져오기
 const getProductList = (query) => async (dispatch) => {
@@ -29,7 +17,6 @@ const getProductList = (query) => async (dispatch) => {
     dispatch({ type: types.PRODUCT_GET_FAIL, payload: errorMessage });
   }
 };
-
 
 
 //상품 상세정보
@@ -106,7 +93,29 @@ const incrementViewCount = (id) => async (dispatch) => {
 };
 
 
+// 조회수 기준으로 내림차순 정렬된 상품 목록 가져오기
+const getHottestProductList = () => async (dispatch) => {
+  try {
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_REQUEST });
+    const response = await api.get("/product/hottest");
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_SUCCESS, payload: response.data });
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_GET_HOTTEST_FAIL, payload: errorMessage });
+  }
+};
 
+//새롭게 등록된 상품 모아보기
+const getNewArrivalProductList = () => async (dispatch) => {
+  try {
+    dispatch({ type: types.PRODUCT_GET_NEWARRIVAL_REQUEST });
+    const response = await api.get("/product/new");
+    dispatch({ type: types.PRODUCT_GET_NEWARRIVAL_SUCCESS, payload: response.data });
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_GET_NEWARRIVAL_FAIL, payload: errorMessage });
+  }
+};
 
 export const productActions = {
   getProductList,
@@ -115,5 +124,6 @@ export const productActions = {
   editProduct,
   getProductDetail,
   incrementViewCount,
-  getHottestProductList
+  getHottestProductList,
+  getNewArrivalProductList
 };

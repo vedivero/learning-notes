@@ -14,10 +14,9 @@ const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf("Mobile") !== -1;
   const [showSearchBox, setShowSearchBox] = useState(false);
   const menuList = [
-    { name: "인기Top10", path: "hottest" },
+    { name: "전체 상품", path: "product" },
     { name: "신상", path: "new" },
-    // { name: "랭킹", path: "ranking" },
-    { name: "상품", path: "product" },
+    { name: "인기", path: "hottest" },
     { name: "세일", path: "sale" },
   ];
   let [width, setWidth] = useState(0);

@@ -5,7 +5,7 @@ import "../style/ProductCard.css";
 import { productActions } from "../action/productAction";
 import { useDispatch } from "react-redux";
 
-const ProductCard = ({ product, rank }) => {
+const ProductCard = ({ product, rank, isNew }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -17,7 +17,11 @@ const ProductCard = ({ product, rank }) => {
 
   return (
     <div className="card" onClick={() => showProduct(product._id)}>
-      {rank !== undefined && <div className="rank-badge">{`Top ${rank}`}</div>} {/* rank가 있을 때만 표시 */}
+      {isNew ? (
+        <div className="new-badge">NEW</div> // isNew가 true이면 NEW 배지 표시
+      ) : (
+        rank !== undefined && <div className="rank-badge">{`Top ${rank}`}</div> // rank가 있을 때만 표시
+      )}
       <img src={product.image} alt={product.name} />
       <div>{product.name}</div>
       <div>\ {currencyFormat(product.price)}</div>
