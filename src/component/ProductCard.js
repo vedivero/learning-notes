@@ -5,7 +5,7 @@ import "../style/ProductCard.css";
 import { productActions } from "../action/productAction";
 import { useDispatch } from "react-redux";
 
-const ProductCard = ({ product, rank, isNew }) => {
+const ProductCard = ({ product, rank, isNew, isSale }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -15,16 +15,27 @@ const ProductCard = ({ product, rank, isNew }) => {
     navigate(`/product/${id}`);
   };
 
+  const calculateDiscountPercentage = (originalPrice, discountedPrice) => {
+    return ((originalPrice - discountedPrice) / originalPrice * 100).toFixed(0);
+  };
+
   return (
     <div className="card" onClick={() => showProduct(product._id)}>
-      {isNew ? (
-        <div className="new-badge">NEW</div> // isNew가 true이면 NEW 배지 표시
-      ) : (
-        rank !== undefined && <div className="rank-badge">{`Top ${rank}`}</div> // rank가 있을 때만 표시
-      )}
+      {isNew && <div className="new-badge">NEW</div>}
+      {rank !== undefined && <div className="rank-badge">{`Top ${rank}`}</div>}
+      {isSale && <div className="sale-badge">SALE</div>}
       <img src={product.image} alt={product.name} />
       <div>{product.name}</div>
-      <div>\ {currencyFormat(product.price)}</div>
+      {isSale && product.originalPrice && product.originalPrice !== product.price ? (
+        <div className="price-info">
+          <span className="original-price">{currencyFormat(product.originalPrice)}</span>
+          <span className="discount-arrow">→</span>
+          <span className="discounted-price">{currencyFormat(product.price)}</span>
+          <span className="discount-badge">{calculateDiscountPercentage(product.originalPrice, product.price)}% OFF</span>
+        </div>
+      ) : (
+        <div>\ {currencyFormat(product.price)}</div>
+      )}
     </div>
   );
 };

@@ -3,6 +3,20 @@ import * as types from "../constants/product.constants";
 import { toast } from "react-toastify";
 import { commonUiActions } from "./commonUiAction";
 
+// 관리자 페이지 - 모든 상품 가져오기
+const getAllProductsForAdmin = (query) => async (dispatch) => {
+  try {
+    dispatch({ type: types.PRODUCT_GET_REQUEST });
+    const response = await api.get("/product/admin/products", {
+      params: { ...query }
+    });
+    dispatch({ type: types.PRODUCT_GET_SUCCESS, payload: response.data });
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : error.message;
+    dispatch({ type: types.PRODUCT_GET_FAIL, payload: errorMessage });
+  }
+};
+
 
 //상품 가져오기
 const getProductList = (query) => async (dispatch) => {
@@ -84,7 +98,6 @@ const editProduct = (formData, id) => async (dispatch) => {
 
 // 상품 조회수 증가
 const incrementViewCount = (id) => async (dispatch) => {
-  console.log("조회수 증가 : ", id)
   try {
     await api.put(`/product/${id}/increment-view`);
   } catch (error) {
@@ -156,10 +169,8 @@ const restoreProductPrice = (id) => async (dispatch) => {
 // 세일 상품 가져오기
 export const getDiscountedProducts = () => async (dispatch) => {
   try {
-    console.log("세일 상품 가져오기")
     dispatch({ type: types.PRODUCT_DISCOUNTED_REQUEST });
     const response = await api.get("/product/discounted");
-    console.log("response : ", response)
     dispatch({ type: types.PRODUCT_DISCOUNTED_SUCCESS, payload: response.data });
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;
@@ -179,5 +190,6 @@ export const productActions = {
   getNewArrivalProductList,
   updateProductDiscount,
   restoreProductPrice,
-  getDiscountedProducts
+  getDiscountedProducts,
+  getAllProductsForAdmin
 };

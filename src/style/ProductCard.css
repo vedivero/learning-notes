@@ -22,3 +22,49 @@
 	font-size: 14px;
 	font-weight: bold;
 }
+
+.sale-badge {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: red;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.original-price {
+	text-decoration: line-through;
+	color: red;
+}
+
+.discount-arrow {
+	margin: 0 10px;
+	font-size: 1.5em;
+}
+
+.discounted-price {
+	color: green;
+	font-weight: bold;
+}
+
+.discount-badge {
+	background-color: orange;
+	color: white;
+	padding: 2px 5px;
+	border-radius: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-left: auto;
+	/* 오른쪽 정렬을 위한 마진 자동 설정 */
+}
+
+.price-info {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	/* 왼쪽으로 정렬 */
+	width: 100%;
+}

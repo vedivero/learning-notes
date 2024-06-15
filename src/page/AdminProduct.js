@@ -38,7 +38,7 @@ const AdminProduct = () => {
   ];
 
   useEffect(() => {
-    dispatch(productActions.getProductList({ ...searchQuery }));
+    dispatch(productActions.getAllProductsForAdmin({ ...searchQuery }));
   }, [query]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const AdminProduct = () => {
     const isConfirmed = window.confirm("해당 상품을 삭제하시겠습니까?");
     if (isConfirmed) {
       dispatch(productActions.deleteProduct(id));
-      dispatch(productActions.getProductList(searchQuery));
+      dispatch(productActions.getAllProductsForAdmin(searchQuery));
     }
   };
 

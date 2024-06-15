@@ -24,7 +24,7 @@ const ProductAllDiscounted = () => {
 					discountedProducts && discountedProducts.length > 0 ? (
 						discountedProducts.map((product) => (
 							<Col key={product._id} className="card" md={3} sm={12}>
-								<ProductCard product={product} />
+								<ProductCard product={product} isSale />
 							</Col>
 						))
 					) : (

@@ -5,57 +5,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { productActions } from "../action/productAction";
 import { ColorRing } from "react-loader-spinner";
 import { cartActions } from "../action/cartAction";
-import { commonUiActions } from "../action/commonUiAction";
 import { currencyFormat } from "../utils/number";
 import "../style/productDetail.style.css";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
-
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   const loading = useSelector((state) => state.product.loading);
-  const error = useSelector((state) => state.product.error);
   const [size, setSize] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
   const [sizeError, setSizeError] = useState(false);
   const { user } = useSelector((state) => state.user);
 
-
-  const pickIsTrue = () => {
-    return selectedProduct.choice ? true : false
-  }
-
-  //카트에 상품 추가
+  // 카트에 상품 추가
   const addItemToCart = () => {
-    //사이즈 선택 체크
+    // 사이즈 선택 체크
     if (size === "") {
       setSizeError(true);
       return;
     }
-    //로그인 여부 체크
+    // 로그인 여부 체크
     if (!user) {
       alert("로그인 후 카트에 추가해 주세요.");
       navigate("/login");
     }
-    //카트에 아이템 추가
+    // 카트에 아이템 추가
     dispatch(cartActions.addToCart({ id, size }));
   };
 
-  //사이즈 추가
+  // 사이즈 추가
   const selectSize = (value) => {
-    if (sizeError) setSizeError(false);//에러 메세지 초기화
+    if (sizeError) setSizeError(false); // 에러 메시지 초기화
     setSize(value);
   };
 
-  //카트에러가 있으면 에러메세지 보여주기
-
-  //에러가 있으면 에러메세지 보여주기
-
-  //상품 디테일 정보 가져오기
+  // 상품 디테일 정보 가져오기
   useEffect(() => {
     dispatch(productActions.getProductDetail(id));
   }, [id]);
@@ -73,15 +60,29 @@ const ProductDetail = () => {
       />
     );
 
+  const isSale = selectedProduct.originalPrice && selectedProduct.price !== selectedProduct.originalPrice;
+
   return (
     <Container className="product-detail-card">
       <Row>
-        <Col sm={6}>
+        <Col sm={6} className="position-relative">
           <img src={selectedProduct.image} className="w-100" alt="image" />
+          {isSale && <div className="sale-badge">SALE</div>}
         </Col>
         <Col className="product-info-area" sm={6}>
           <div className="product-info">{selectedProduct.name}</div>
-          <div className="product-info">₩ {currencyFormat(selectedProduct.price)}</div>
+          {isSale ? (
+            <div className="product-info price-info">
+              <span className="original-price">₩ {currencyFormat(selectedProduct.originalPrice)}</span>
+              <span className="discount-arrow">→</span>
+              <span className="discounted-price">₩ {currencyFormat(selectedProduct.price)}</span>
+              <span className="discount-badge">
+                {((selectedProduct.originalPrice - selectedProduct.price) / selectedProduct.originalPrice * 100).toFixed(0)}% OFF
+              </span>
+            </div>
+          ) : (
+            <div className="product-info">₩ {currencyFormat(selectedProduct.price)}</div>
+          )}
           <div className="product-info">{selectedProduct.description}</div>
 
           <Dropdown
