@@ -3,6 +3,29 @@ const PAGE_SIZE = 4
 const productController = {}
 
 
+// 관리자 페이지 - 모든 상품 조회
+productController.getAllProductsForAdmin = async (req, res) => {
+	try {
+		const { page, name } = req.query;
+		const cond = name ? { name: { $regex: name, $options: 'i' }, isDeleted: false } : { isDeleted: false };
+		let query = Product.find(cond);
+		const response = { status: "success" };
+		if (page) {
+			query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
+			const totalItemNum = await Product.find(cond).count();
+			const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+			response.totalPageNum = totalPageNum;
+		}
+		const productList = await query.exec();
+		response.data = productList;
+		res.status(200).json(response);
+	} catch (error) {
+		res.status(500).json({ status: "Fail get Products", error: error.message });
+	}
+};
+
+
+
 //상품 생성
 productController.createProduct = async (req, res) => {
 	try {
@@ -23,34 +46,46 @@ productController.createProduct = async (req, res) => {
 	}
 };
 
-//상품 조회
+// 전체 상품 조회 (할인 중인 상품 제외)
 productController.getProducts = async (req, res) => {
-
 	try {
 		const { page, name } = req.query;
-		//검색 키워드
-		const cond = name ? {
-			name: { $regex: name, $options: 'i' }, isDeleted: false
-		} : { isDeleted: false };
+
+		const cond = name
+			? {
+				name: { $regex: name, $options: "i" },
+				isDeleted: false,
+				$or: [
+					{ originalPrice: { $exists: false } },
+					{ $expr: { $eq: ["$price", "$originalPrice"] } },
+				],
+			}
+			: {
+				isDeleted: false,
+				$or: [
+					{ originalPrice: { $exists: false } },
+					{ $expr: { $eq: ["$price", "$originalPrice"] } },
+				],
+			};
+
 		let query = Product.find(cond);
 		const response = { status: "success" };
+
 		if (page) {
 			query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
-			//총 페이지 개수 조회
-			const totalItemNum = await Product.find(cond).count();
+			const totalItemNum = await Product.find(cond).countDocuments();
 			const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
 			response.totalPageNum = totalPageNum;
 		}
-		//exec실행 시점 정의
+
 		const productList = await query.exec();
 		response.data = productList;
-		//조회한 결과를 보내주기
+
 		res.status(200).json(response);
 	} catch (error) {
 		res.status(500).json({ status: "Fail get Products", error: error.message });
 	}
-
-}
+};
 
 //상품 수정
 productController.updateProduct = async (req, res) => {
@@ -84,7 +119,7 @@ productController.deleteProduct = async (req, res) => {
 }
 
 
-
+//상품 상세정보
 productController.getProductById = async (req, res) => {
 	try {
 		const productId = req.params.id;
@@ -134,6 +169,7 @@ productController.checkItemListStock = async (itemList) => {
 }
 
 
+//조회수 증가
 productController.incrementViewCount = async (req, res) => {
 	try {
 		const product = await Product.findByIdAndUpdate(
@@ -148,10 +184,15 @@ productController.incrementViewCount = async (req, res) => {
 };
 
 
-// 조회수 기준으로 내림차순 정렬된 상품 목록 반환
+//인기 상품 목록 조회
 productController.getHottestProducts = async (req, res) => {
 	try {
-		const products = await Product.find({ isDeleted: false }).sort({ viewCnt: -1 }).exec();
+		const products = await Product.find({
+			isDeleted: false
+		})
+			.sort({ viewCnt: -1 })
+			.exec();
+
 		res.status(200).json(products);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -186,7 +227,8 @@ productController.updateProductDiscount = async (req, res) => {
 	}
 };
 
-// 상품 가격 복구
+
+//상품 가격 복구
 productController.restoreProductPrice = async (req, res) => {
 	try {
 		const productId = req.params.id;
@@ -213,23 +255,38 @@ productController.restoreProductPrice = async (req, res) => {
 };
 
 
-// 특정 설정 기간 내의 등록된 상품 목록 반환
+//신상 상품 조회
 productController.getNewArrivalProducts = async (req, res) => {
 	try {
-		// const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
-		//const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-		//const twelveHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000);
 		const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-		//const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
 		const products = await Product.find({
 			isDeleted: false,
-			createdAt: { $gte: oneDayAgo }
-		}).sort({ createdAt: -1 }).exec();
+			createdAt: { $gte: oneDayAgo },
+			$expr: { $eq: ["$price", "$originalPrice"] } // originalPrice와 price가 같은 상품만 포함
+		})
+			.sort({ createdAt: -1 })
+			.exec();
 
-		res.status(200).json(products);
+		return res.status(200).json(products);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		return res.status(500).json({ error: error.message });
 	}
 };
+
+
+//할인 상품 가져오기
+productController.getDiscountedProducts = async (req, res) => {
+	try {
+		const discountedProducts = await Product.find({
+			originalPrice: { $exists: true },
+			$expr: { $ne: ["$price", "$originalPrice"] }
+		});
+		return res.status(200).json({ status: "Success", data: discountedProducts });
+	} catch (error) {
+		return res.status(500).json({ status: "Fail", error: error.message });
+	}
+};
+
+
 
 module.exports = productController

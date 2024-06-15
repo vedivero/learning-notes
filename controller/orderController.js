@@ -11,12 +11,8 @@ orderController.createOrder = async (req, res) => {
 		const { userId } = req;
 		const { shipTo, contact, totalPrice, orderList } = req.body;
 
-		console.log("userId: ", userId)
-		console.log("shipTo, contact, totalPrice, orderList: ", shipTo, contact, totalPrice, orderList)
-
 		//재고 체크(재고가 없는 상품 조회)
 		const insufficientStockItems = await productContoller.checkItemListStock(orderList);
-		console.log("insufficientStockItems: ", insufficientStockItems)
 
 		//재고가 없는 경우
 		if (insufficientStockItems.length > 0) {

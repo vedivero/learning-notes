@@ -6,6 +6,9 @@ const router = express.Router();
 // 조회수 기준으로 내림차순 정렬된 상품 목록 반환
 router.get("/hottest", productController.getHottestProducts);
 
+// 할인 상품 가져오기 엔드포인트 추가
+router.get("/discounted", productController.getDiscountedProducts);
+
 // 상품 조회수 증가
 router.put("/:id/increment-view", productController.incrementViewCount);
 
@@ -13,6 +16,15 @@ router.put("/:id/increment-view", productController.incrementViewCount);
 router.get("/", productController.getProducts);
 router.get("/new", productController.getNewArrivalProducts);
 router.get("/:id", productController.getProductById);
+
+// 관리자 페이지 - 모든 상품 조회
+router.get(
+	"/admin/products",
+	authController.authenticate,
+	authController.checkAdminPermission,
+	productController.getAllProductsForAdmin
+);
+
 
 // 상품 생성
 router.post(
