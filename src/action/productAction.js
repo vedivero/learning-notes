@@ -120,8 +120,6 @@ const getNewArrivalProductList = () => async (dispatch) => {
 
 // 할인율 업데이트
 const updateProductDiscount = (id, discount) => async (dispatch) => {
-  console.log("할인율");
-  console.log(id, discount)
   try {
     dispatch({ type: types.PRODUCT_DISCOUNT_UPDATE_REQUEST });
     const response = await api.put(`/product/${id}/discount`, { discount });
@@ -142,7 +140,10 @@ const restoreProductPrice = (id) => async (dispatch) => {
     dispatch({ type: types.PRODUCT_RESTORE_PRICE_REQUEST });
     const response = await api.put(`/product/${id}/restore-price`);
     dispatch({ type: types.PRODUCT_RESTORE_PRICE_SUCCESS, payload: response.data });
-    dispatch(commonUiActions.showToastMessage("상품 가격이 원래대로 복구되었습니다.", "success"));
+
+    const message = response.data.message || "상품 가격이 원래대로 복구되었습니다.";
+    dispatch(commonUiActions.showToastMessage(message, "success"));
+
     dispatch(getProductList({ page: 1, name: "" }));
   } catch (error) {
     const errorMessage = error.response ? error.response.data.message : error.message;

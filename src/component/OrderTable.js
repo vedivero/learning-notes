@@ -28,19 +28,21 @@ const OrderTable = ({ header, data, openEditForm }) => {
             data.map((item, index) => (
               // 각 주문 항목을 클릭 시 편집 폼을 여는 이벤트 핸들러를 추가
               <tr key={item._id} onClick={() => openEditForm(item)}>
-                <th>{index}</th>
+                <th>{index + 1}</th>
                 <th>{item.orderNum}</th>
                 <th>{item.createdAt.slice(0, 10)}</th>
-                <th>{item.userId.email}</th>
-                {item.items.length > 0 ? (
-                  <th>
-                    {item.items[0].productId.name}
-                    {item.items.length > 1 && `외 ${item.items.length - 1}개`}
-                  </th>
-                ) : (
-                  <th></th>
-                )}
-                <th>{item.shipTo.address + " " + item.shipTo.city}</th>
+                <th>{item.userId && item.userId.email ? item.userId.email : "Unknown"}</th>
+                <th>
+                  {item.items.length > 0 && item.items[0].productId ? (
+                    <>
+                      {item.items[0].productId.name}
+                      {item.items.length > 1 && ` 외 ${item.items.length - 1}개`}
+                    </>
+                  ) : (
+                    "No Product Info"
+                  )}
+                </th>
+                <th>{item.shipTo ? `${item.shipTo.address} ${item.shipTo.city}` : "No address provided"}</th>
                 <th>{currencyFormat(item.totalPrice)}</th>
                 <th>
                   <Badge bg={badgeBg[item.status]}>{item.status}</Badge>

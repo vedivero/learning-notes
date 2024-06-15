@@ -37,7 +37,7 @@ const ProductTable = ({ header, data, deleteItem, openEditForm, openDiscountModa
                   <Button className="mr-1" size="sm" onClick={() => openEditForm(item)}>
                     수정하기
                   </Button>
-                  <Button className="mr-1" size="sm" variant="warning" onClick={() => openDiscountModal(item)}>
+                  <Button className="mr-1" size="sm" variant="success" onClick={() => openDiscountModal(item)}>
                     할인 설정
                   </Button>
                   <Button

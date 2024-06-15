@@ -33,16 +33,18 @@ const DiscountModal = ({ show, handleClose, applyDiscount, restorePrice }) => {
 					</Form.Group>
 				</Form>
 			</Modal.Body>
-			<Modal.Footer>
-				<Button variant="secondary" onClick={handleClose}>
-					취소
-				</Button>
-				<Button variant="primary" onClick={handleSave}>
-					저장
-				</Button>
+			<Modal.Footer style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Button variant="success" onClick={handleRestore}>
 					세일 전 가격으로 복구
 				</Button>
+				<div style={{ display: 'flex', gap: '10px' }}>
+					<Button variant="secondary" onClick={handleClose}>
+						취소
+					</Button>
+					<Button variant="primary" onClick={handleSave}>
+						저장
+					</Button>
+				</div>
 			</Modal.Footer>
 		</Modal>
 	);

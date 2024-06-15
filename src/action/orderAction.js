@@ -36,7 +36,7 @@ const getOrder = () => async (dispatch) => {
 };
 
 
-//주문 목록을 조회하는 비동기 액션 크리에이터
+//주문 목록을 조회하는 비동기 액션
 const getOrderList = (query) => async (dispatch) => {
   try {
     // 주문 목록 조회 요청 시작 액션 디스패치
@@ -56,11 +56,13 @@ const getOrderList = (query) => async (dispatch) => {
       payload: response.data,
     });
   } catch (error) {
-    // 주문 목록 조회 실패 액션 디스패치, 에러 객체를 전달
-    dispatch({ type: types.GET_ORDER_LIST_FAIL, error: error });
+    const errorMessage = error.response ? error.response.data.message : error.message;
+
+    // 주문 목록 조회 실패 액션 디스패치, 에러 메시지를 전달
+    dispatch({ type: types.GET_ORDER_LIST_FAIL, error: errorMessage });
 
     // 에러 메시지를 표시하기 위해 토스트 메시지 디스패치
-    dispatch(commonUiActions.showToastMessage(error, "error"));
+    dispatch(commonUiActions.showToastMessage(errorMessage, "error"));
   }
 };
 
