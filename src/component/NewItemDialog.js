@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Modal, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CloudinaryUploadWidget from "../utils/CloudinaryUploadWidget";
+import CloudinaryUploadWidget2 from "../utils/CloudinaryUploadWidget2";
 import { productActions } from "../action/productAction";
 import { CATEGORY, STATUS, SIZE } from "../constants/product.constants";
 import "../style/adminProduct.style.css";
@@ -119,6 +120,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const uploadImage = (url) => {
     //이미지 업로드
     setFormData({ ...formData, image: url });
+  };
+
+  const uploadDetail = (url) => {
+    //이미지 업로드
+    setFormData({ ...formData, detail: url });
   };
 
   useEffect(() => {
@@ -251,12 +257,24 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="Image" required>
-          <Form.Label>이미지</Form.Label>
+          <Form.Label>대표 이미지</Form.Label>
           <CloudinaryUploadWidget uploadImage={uploadImage} />
 
           <img
             id="uploadedimage"
             src={formData.image}
+            className="upload-image mt-2"
+            alt="uploadedimage"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="Image" required>
+          <Form.Label>상세 이미지</Form.Label>
+          <CloudinaryUploadWidget2 uploadImage={uploadDetail} imageId={"uploadImgDetail"} />
+
+          <img
+            id="uploadImgDetail"
+            src={formData?.detail}
             className="upload-image mt-2"
             alt="uploadedimage"
           />

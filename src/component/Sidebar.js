@@ -17,7 +17,7 @@ const Sidebar = () => {
         <Link to="/">
           <img width={200} src="/image/logo.png" alt="logo.png" />
         </Link>
-        <div className="sidebar-item">관리자 계정</div>
+        {/* <div className="sidebar-item">관리자 계정</div> */}
         <ul className="sidebar-area">
           <li
             className="sidebar-item"

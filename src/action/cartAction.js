@@ -35,7 +35,7 @@ const deleteCartItem = (id) => async (dispatch) => {
     dispatch({ type: types.DELETE_CART_ITEM_REQUEST });
     const response = await api.delete(`/cart/${id}`);
     dispatch({ type: types.DELETE_CART_ITEM_SUCCESS, payload: response.data.cartItemQty, });
-    dispatch(commonUiActions.showToastMessage("해당 상품이 카트에서 삭제되었습니다.", "success"));
+    dispatch(commonUiActions.showToastMessage("카트에서 삭제되었습니다.", "success"));
     dispatch(getCartList());
   } catch (error) {
     dispatch({ type: types.DELETE_CART_ITEM_FAIL, payload: error });

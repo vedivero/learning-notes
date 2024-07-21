@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 // 상황따라 주소 다름
 const LOCAL_BACKEND = process.env.REACT_APP_LOCAL_BACKEND;
 const PROD_BACKEND = process.env.REACT_APP_PROD_BACKEND;
@@ -8,8 +8,8 @@ const api = axios.create({
   baseURL: BACKEND_PROXY,
   //baseURL: LOCAL_BACKEND,
   headers: {
-    "Content-Type": "application/json",
-    authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    'Content-Type': 'application/json',
+    authorization: `Bearer ${sessionStorage.getItem('token')}`,
   },
 });
 
@@ -18,12 +18,12 @@ const api = axios.create({
  */
 api.interceptors.request.use(
   (request) => {
-    request.headers.authorization = `Bearer ${sessionStorage.getItem("token")}`;
+    request.headers.authorization = `Bearer ${sessionStorage.getItem('token')}`;
     return request;
   },
   function (error) {
-    console.log("REQUEST ERROR", error);
-  }
+    console.log('REQUEST ERROR', error);
+  },
 );
 
 api.interceptors.response.use(
@@ -32,9 +32,9 @@ api.interceptors.response.use(
   },
   function (error) {
     error = error.response.data;
-    console.log("RESPONSE ERROR", error);
+    console.log('RESPONSE ERROR', error);
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
