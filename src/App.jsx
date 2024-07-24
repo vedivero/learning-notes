@@ -3,6 +3,7 @@ import './App.css';
 import Editor from './components/Editor';
 import Header from './components/Header';
 import List from './components/List';
+import Exam from './components/Exam';
 
 //테스트를 위한 임시 테이터. 각각의 todoItem을 객체형태로 저장
 //다시 생성하지 않도록 컴포넌트 외부에 선언
@@ -57,9 +58,10 @@ function App() {
 
   return (
     <div className='App'>
-      <Header />
+      {/* <Header />
       <Editor onCreate={onCreate} />
-      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} /> */}
+      <Exam />
     </div>
   );
 }
