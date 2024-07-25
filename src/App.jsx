@@ -1,9 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useReducer } from 'react';
 import './App.css';
 import Editor from './components/Editor';
 import Header from './components/Header';
 import List from './components/List';
-import Exam from './components/Exam';
 
 //테스트를 위한 임시 테이터. 각각의 todoItem을 객체형태로 저장
 //다시 생성하지 않도록 컴포넌트 외부에 선언
@@ -28,40 +27,55 @@ const mockData = [
   },
 ];
 
+function reducer(state, action) {
+  switch (action.type) {
+    case 'CREATE':
+      return [action.data, ...state];
+    case 'UPDATE':
+      return state.map((item) =>
+        item.id === action.targetId ? { ...item, isDone: !item.isDone } : item,
+      );
+    case 'DELETE':
+      return state.filter((item) => item.id !== action.targetId);
+    default:
+      return state;
+  }
+}
+
 function App() {
-  const [todos, setTodos] = useState(mockData);
+  const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
   const onCreate = (content) => {
-    //할 일 객체
-    const newTodo = {
-      id: idRef.current++,
-      isDone: false,
-      content: content,
-      date: new Date().getTime(), //현재 시간
-    };
-
-    //할 일 객체를 > `todos`배열에 추가
-    setTodos([newTodo, ...todos]);
+    dispatch({
+      type: 'CREATE',
+      data: {
+        id: idRef.current++,
+        isDone: false,
+        content: content,
+        date: new Date().getTime(),
+      },
+    });
   };
 
   const onUpdate = (targetId) => {
-    // todos State 값들 중 targetID와 일치하는 id값을 갖는 todo의 isDone 변경
-    setTodos(
-      todos.map((todo) => (todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo)),
-    );
+    dispatch({
+      type: 'UPDATE',
+      targetId: targetId,
+    });
   };
 
   const onDelete = (targetId) => {
-    //기존 todos 배열에서 targetId와 일치하는 id를 갖는 요소만 삭제시킨 새로운 배열
-    setTodos(todos.filter((todo) => todo.id !== targetId));
+    dispatch({
+      type: 'DELETE',
+      targetId: targetId,
+    });
   };
 
   return (
     <div className='App'>
-      {/* <Header />
+      <Header />
       <Editor onCreate={onCreate} />
-      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} /> */}
-      <Exam />
+      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
     </div>
   );
 }
