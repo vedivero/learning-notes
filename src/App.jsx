@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer } from 'react';
+import { useState, useRef, useReducer, useCallback } from 'react';
 import './App.css';
 import Editor from './components/Editor';
 import Header from './components/Header';
@@ -45,7 +45,7 @@ function reducer(state, action) {
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
-  const onCreate = (content) => {
+  const onCreate = useCallback((content) => {
     dispatch({
       type: 'CREATE',
       data: {
@@ -55,21 +55,24 @@ function App() {
         date: new Date().getTime(),
       },
     });
-  };
+  }, []);
 
-  const onUpdate = (targetId) => {
+  const onUpdate = useCallback((targetId) => {
     dispatch({
       type: 'UPDATE',
       targetId: targetId,
     });
-  };
+  }, []);
 
-  const onDelete = (targetId) => {
+  //첫 번째로 전달한 콜백함수를 그대로 생성해서 반환
+  const onDelete = useCallback((targetId) => {
+    //마운트되었을 때 딱 한번만 생성
+    //리랜더링 되지 않음
     dispatch({
       type: 'DELETE',
       targetId: targetId,
     });
-  };
+  }, []);
 
   return (
     <div className='App'>
