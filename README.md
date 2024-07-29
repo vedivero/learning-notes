@@ -20,6 +20,12 @@ React로 구현한 `할 일 리스트`입니다.
 ### 2. 할 일 완료하기
 ### 3. 할 일 삭제하기
 ### 4. 할 일 검색하기
+
+<br>
+
+#### useState, useRef, useReducer, useCallback, createContext, useMemo를 사용하여
+#### 연산 최적화, 컴포넌트 랜더링 최적화, 불필요한 함수 재 생성 방지등을 적용했습니다.
+
 <br>
 
 ### 👇 아래 링크에서 구동되고 있습니다.
