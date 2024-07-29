@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer, useCallback, createContext } from 'react';
+import { useState, useRef, useReducer, useCallback, createContext, useMemo } from 'react';
 import './App.css';
 import Editor from './components/Editor';
 import Header from './components/Header';
@@ -43,11 +43,17 @@ function reducer(state, action) {
 }
 
 //createContext 주로 컴포넌트 외부에 선언
-export const TodoContext = createContext(); //데이터를 하위 컴포넌트에 공급
+//데이터를 하위 컴포넌트에 공급
+
+//변화할 값을 담을 컨텍스트
+export const TodoStateContext = createContext();
+//변하지 않을 값을 담을 컨텍스트
+export const TodoDispatchContext = createContext();
 
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
   const idRef = useRef(3);
+
   const onCreate = useCallback((content) => {
     dispatch({
       type: 'CREATE',
@@ -77,13 +83,22 @@ function App() {
     });
   }, []);
 
+  //TodoDispatchContext 객체를
+  //( onCreate, onUpdate, onDelete의 3개의 함수를 묶어주는)
+  //다시 생성하지 않도록
+  const memoizedDispatch = useMemo(() => {
+    return { onCreate, onUpdate, onDelete };
+  }, []); //두번째 인수로는 빈 배열을 전달하여 이 객체 값이 앱 컴퍼넌트 이후에는 다시 재생성되지 않도록 설정
+
   return (
     <div className='App'>
       <Header />
-      <TodoContext.Provider value={{ todos, onCreate, onUpdate, onDelete }}>
-        <Editor />
-        <List />
-      </TodoContext.Provider>
+      <TodoStateContext.Provider value={todos}>
+        <TodoDispatchContext.Provider value={memoizedDispatch}>
+          <Editor />
+          <List />
+        </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </div>
   );
 }

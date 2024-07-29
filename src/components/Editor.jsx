@@ -1,10 +1,10 @@
 import { useState, useRef, useContext } from 'react';
 import './Editor.css';
-import { TodoContext } from '../App';
+import { TodoDispatchContext } from '../App';
 
 const Editor = () => {
   //data를 불러오고자 하는 context를 인수로 넣는다
-  const { onCreate } = useContext(TodoContext); //App.jsx에 선언한 `TodoContext`
+  const { onCreate } = useContext(TodoDispatchContext); //App.jsx에 선언한 `TodoContext`
   const [content, setContent] = useState('');
   const contentRef = useRef();
 
