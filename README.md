@@ -23,7 +23,7 @@ React로 구현한 `할 일 리스트`입니다.
 
 <br>
 
-#### useState, useRef, useReducer, useCallback, createContext, useMemo를 사용하여
+#### `useState`, `useRef`, `useReducer`, `useCallback`, `createContext`, `useMemo`를 사용하여
 #### 연산 최적화, 컴포넌트 랜더링 최적화, 불필요한 함수 재 생성 방지등을 적용했습니다.
 
 <br>
