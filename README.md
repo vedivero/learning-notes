@@ -12,8 +12,6 @@ Currently, two official plugins are available:
 
 React로 구현한 할 일 리스트입니다.
 
-https://vedivero-todolist.netlify.app/
-
 ![image](https://github.com/user-attachments/assets/8dc3b6b0-6aef-4a05-b36a-7f974eba6869)
 
 # 기능
@@ -22,3 +20,8 @@ https://vedivero-todolist.netlify.app/
 ### 2. 할 일 완료하기
 ### 3. 할 일 삭제하기
 ### 4. 할 일 검색하기
+<br>
+
+### 👇 아래 링크에서 구동되고 있습니다.
+
+https://vedivero-todolist.netlify.app/
