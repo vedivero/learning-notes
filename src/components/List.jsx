@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import './List.css';
 import TodoItem from './TodoItem';
+import { TodoContext } from '../App';
 
-const List = ({ todos, onUpdate, onDelete }) => {
+const List = () => {
+  const { todos } = useContext(TodoContext);
   const [search, setSearch] = useState('');
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
@@ -46,7 +48,7 @@ const List = ({ todos, onUpdate, onDelete }) => {
       <div className='todos_wrapper'>
         {filteredTodos.map((todo) => {
           //리스트 형태로 랜더링된 컴포넌트 요소들을 구분할 때 `key`를 사용
-          return <TodoItem key={todo.id} {...todo} onUpdate={onUpdate} onDelete={onDelete} />;
+          return <TodoItem key={todo.id} {...todo} />;
         })}
       </div>
     </div>

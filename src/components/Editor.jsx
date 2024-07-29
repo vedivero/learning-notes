@@ -1,7 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import './Editor.css';
+import { TodoContext } from '../App';
 
-const Editor = ({ onCreate }) => {
+const Editor = () => {
+  //data를 불러오고자 하는 context를 인수로 넣는다
+  const { onCreate } = useContext(TodoContext); //App.jsx에 선언한 `TodoContext`
   const [content, setContent] = useState('');
   const contentRef = useRef();
 
@@ -9,6 +12,7 @@ const Editor = ({ onCreate }) => {
     setContent(e.target.value);
   };
 
+  //엔터키로 todo 추가
   const onKeydown = (e) => {
     if (e.keyCode === 13) {
       onSubmit();
