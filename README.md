@@ -10,7 +10,7 @@ Currently, two official plugins are available:
 
 # 프로젝트 소개
 
-React로 구현한 할 일 리스트입니다.
+React로 구현한 `할 일 리스트`입니다.
 
 ![image](https://github.com/user-attachments/assets/8dc3b6b0-6aef-4a05-b36a-7f974eba6869)
 
