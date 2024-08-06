@@ -10,15 +10,21 @@ import Edit from './pages/Edit';
 const mockData = [
   {
     id: 1,
-    createdDate: new Date().getTime(),
+    createdDate: new Date('2024-08-06').getTime(),
     emotionId: 1,
     content: '일기 내용1',
   },
   {
     id: 2,
-    createdDate: new Date().getTime(),
+    createdDate: new Date('2024-08-05').getTime(),
     emotionId: 2,
     content: '일기 내용2',
+  },
+  {
+    id: 3,
+    createdDate: new Date('2024-07-04').getTime(),
+    emotionId: 3,
+    content: '일기 내용3',
   },
 ];
 
@@ -34,6 +40,11 @@ function reducer(state, action) {
       return state.filter((item) => String(item.id) !== String(action.id));
   }
 }
+
+//추가, 수정, 삭제 함수를 `Context`를 통해 App컴포넌트 하위 컴포넌트에 전달
+export const DiaryStateContext = createContext();
+//Data State의 값을 변경하는 함수들을 `Context`를 통해 공급
+export const DiaryDispatchContext = createContext();
 
 function App() {
   //일기 데이터를 관리하는 state
@@ -72,11 +83,6 @@ function App() {
       id,
     });
   };
-
-  //추가, 수정, 삭제 함수를 `Context`를 통해 App컴포넌트 하위 컴포넌트에 전달
-  const DiaryStateContext = createContext();
-  //Data State의 값을 변경하는 함수들을 `Context`를 통해 공급
-  const DiaryDispatchContext = createContext();
 
   return (
     <>

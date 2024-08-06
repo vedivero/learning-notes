@@ -2,7 +2,7 @@ import Button from './Button';
 import DiaryItem from './DiaryItem';
 import './DiaryList.css';
 
-const DiaryList = () => {
+const DiaryList = ({ data }) => {
   return (
     <div className='DiaryList'>
       <div className='menu_bar'>
@@ -13,7 +13,9 @@ const DiaryList = () => {
         <Button text={'새 일기 쓰기'} />
       </div>
       <div className='list_wrapper'>
-        <DiaryItem />
+        {data.map((item) => (
+          <DiaryItem key={item.id} {...item} />
+        ))}
       </div>
     </div>
   );
