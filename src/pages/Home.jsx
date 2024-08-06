@@ -1,10 +1,18 @@
-//Query Stirng을 사용하기 위한 커스텀 훅
-import { useSearchParams } from 'react-router-dom';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import DiaryList from '../components/DiaryList';
 
 const Home = () => {
-  const [params, setParams] = useSearchParams();
-  console.log(params.get('value'));
-  return <div>Home</div>;
+  return (
+    <div>
+      <Header
+        title={'2024년 02월'}
+        leftChild={<Button text={'<'} />}
+        rightChild={<Button text={'>'} />}
+      />
+      <DiaryList />
+    </div>
+  );
 };
 
 export default Home;
