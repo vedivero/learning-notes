@@ -99,7 +99,7 @@ function App() {
         일기 삭제 테스트
       </button>
       <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContext.Providerd value={(onCreate, onUpdate, onDelete)}>
+        <DiaryDispatchContext.Provider value={{ onCreate, onUpdate, onDelete }}>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/new' element={<New />} />
@@ -107,7 +107,7 @@ function App() {
             <Route path='/edit/:id' element={<Edit />} />
             <Route path='*' element={<Notfound />} />
           </Routes>
-        </DiaryDispatchContext.Providerd>
+        </DiaryDispatchContext.Provider>
       </DiaryStateContext.Provider>
     </>
   );
