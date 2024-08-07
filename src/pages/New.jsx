@@ -20,6 +20,9 @@ const New = () => {
       input.emotionId,
       input.content,
     );
+    nav('/', {
+      replace: true,
+    });
   };
 
   return (

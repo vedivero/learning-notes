@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from './Button';
 import './Editor.css';
 import EmotionItem from './EmotionItem';
+import { useNavigate } from 'react-router-dom';
 
 const emotionList = [
   {
@@ -54,6 +55,8 @@ const Editor = ({ onSubmit }) => {
     content: '',
   });
 
+  const nav = useNavigate();
+
   //사용자가 날짜 설정하는 경우
   const onChangeInput = (e) => {
     let name = e.target.name; //값이 들어온 요소
@@ -83,7 +86,9 @@ const Editor = ({ onSubmit }) => {
         <input
           name='createdDate'
           onChange={onChangeInput}
-          value={getStringedDate(input.createdDate)}
+          value={getStringedDate(
+            input.createdDate,
+          )}
           type='date'
         />
       </section>
@@ -102,7 +107,9 @@ const Editor = ({ onSubmit }) => {
               }
               key={item.emotionId}
               {...item}
-              isSelected={item.emotionId === input.emotionId}
+              isSelected={
+                item.emotionId === input.emotionId
+              }
             />
           ))}
         </div>
@@ -117,8 +124,18 @@ const Editor = ({ onSubmit }) => {
         />
       </section>
       <section className='button_section'>
-        <Button text={'취소'} type='NEGATIVE' />
-        <Button onClick={onClickSubmitButton} text={'작성'} type='POSITIVE' />
+        <Button
+          onClick={() => {
+            nav(-1);
+          }}
+          text={'취소'}
+          type='NEGATIVE'
+        />
+        <Button
+          onClick={onClickSubmitButton}
+          text={'작성'}
+          type='POSITIVE'
+        />
       </section>
     </div>
   );
