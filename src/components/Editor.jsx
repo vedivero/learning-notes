@@ -3,47 +3,8 @@ import Button from './Button';
 import './Editor.css';
 import EmotionItem from './EmotionItem';
 import { useNavigate } from 'react-router-dom';
-
-const emotionList = [
-   {
-      emotionId: 1,
-      emotionName: '아주 좋음',
-   },
-   {
-      emotionId: 2,
-      emotionName: '좋음',
-   },
-   {
-      emotionId: 3,
-      emotionName: '그럭저럭',
-   },
-   {
-      emotionId: 4,
-      emotionName: '안 좋음',
-   },
-   {
-      emotionId: 5,
-      emotionName: '아주 안 좋음',
-   },
-];
-
-//Date객체를 문자열로 변환하는 함수
-const getStringedDate = (targetDate) => {
-   //"YYYY-MM-DD"
-   let year = targetDate.getFullYear();
-   let month = targetDate.getMonth() + 1;
-   let date = targetDate.getDate();
-
-   //10이하의 숫자 처리 (1 -> 01)
-   if (month < 10) {
-      month = `0${month}`;
-   }
-   if (date < 10) {
-      date = `0${date}`;
-   }
-
-   return `${year}-${month}-${date}`;
-};
+import { emotionList } from '../util/constants';
+import { getStringedDate } from '../util/get-stringed_date';
 
 const Editor = ({ initData, onSubmit }) => {
    //사용자가 입력한 값을 저장하는 State
