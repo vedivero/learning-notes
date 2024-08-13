@@ -24,6 +24,8 @@ https://emotion-diary-one-sigma.vercel.app/
 - 오늘 하루 느꼈던 소소한 감정을 기록할 수 있습니다.
 😀😁🤣🥲🤨😣😥😒
 
+<br>
+
 # 2. 기술 스택
 <div>
   <img src="https://img.shields.io/badge/javascript-grey?style=for-the-badge&logo=javascript&logoColor=f7df1e" />
@@ -31,6 +33,8 @@ https://emotion-diary-one-sigma.vercel.app/
   <img src="https://img.shields.io/badge/Prettier-grey?style=for-the-badge&logo=Prettier&logoColor=F7B93E"/>
   <img src="https://img.shields.io/badge/ESLint-grey?style=for-the-badge&logo=ESLint&logoColor=4B32C3"/>
 </div>
+
+<br>
 
 # 3. 기능 소개
 
