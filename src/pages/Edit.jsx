@@ -8,6 +8,7 @@ import {
    DiaryStateContext,
 } from '../App';
 import useDiary from '../hooks/useDiary';
+import usePageTitle from '../hooks/usePageTitle';
 
 const Edit = () => {
    const params = useParams(); //URL파라미터를 추출하는 Hook
@@ -17,6 +18,8 @@ const Edit = () => {
    ); //onDelet함수를 useContext를 통해 DiaryDispatchContext로부터 호출
 
    const curDiaryItem = useDiary(params.id);
+
+   usePageTitle(`${params.id}번 일기 수정`);
 
    //일기 삭제
    const onClickDelete = () => {
