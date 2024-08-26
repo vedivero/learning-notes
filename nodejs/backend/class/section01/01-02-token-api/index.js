@@ -32,4 +32,4 @@ function createTokenOfPhone(number) {
    console.log(number + ' 번호로 토큰"' + token + '"을 전송했습니다.');
 }
 
-createTokenOfPhone('01099450703'); //인자 argument
+createTokenOfPhone('01012344321'); //인자 argument
