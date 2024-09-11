@@ -1,7 +1,4 @@
 function solution(numbers) {
-   let total = 0;
-   for (const num of numbers) {
-      total += num;
-   }
-   return total / numbers.length;
+   let answer = numbers.reduce((a, b) => a + b);
+   return answer / numbers.length;
 }
