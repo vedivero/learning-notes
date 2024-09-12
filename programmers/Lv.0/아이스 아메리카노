@@ -1,0 +1,5 @@
+function solution(money) {
+   let array1 = Math.floor(money / 5500);
+   let array2 = money % 5500;
+   return [array1, array2];
+}
