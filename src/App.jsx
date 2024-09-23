@@ -6,19 +6,32 @@ import RegisterPage from './pages/RegisterPage/RegisterPage';
 import { useEffect } from 'react';
 import app from './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { clearUser, setUser } from './store/userSlice';
 
 function App() {
    const auth = getAuth(app);
    const navigeate = useNavigate();
+   const dispatch = useDispatch();
 
    useEffect(() => {
       //user상태가 change될 때 마다 호출
       const unsubscribe = onAuthStateChanged(auth, (user) => {
          if (user) {
+            console.log('user');
+            console.log(user);
             //미 로그인 -> 로그인
             navigeate('/');
+            dispatch(
+               setUser({
+                  uid: user.uid,
+                  displayName: user.displayName,
+                  photoURL: user.photoURL,
+               }),
+            );
          } else {
             navigeate('/login');
+            dispatch(clearUser());
          }
       });
 

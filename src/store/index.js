@@ -5,6 +5,6 @@ import chatRoomReducer from './chatRoomSlice';
 export const store = configureStore({
    reducer: {
       user: userReducer,
-      charRoom: chatRoomReducer,
+      chatRoom: chatRoomReducer,
    },
 });

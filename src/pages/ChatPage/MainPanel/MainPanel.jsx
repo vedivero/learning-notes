@@ -1,7 +1,25 @@
 import React from 'react';
+import MessageHeader from './MessageHeader';
+import MessageForm from './MessageForm';
 
 const MainPanel = () => {
-   return <div>MainPanel</div>;
+   return (
+      <div>
+         <MessageHeader />
+         <div
+            style={{
+               width: '100%',
+               height: '450px',
+               border: '0.2rem solid #ececec',
+               borderRadius: '4px',
+               padding: '1rem',
+               marginBottom: '1rem',
+               overflow: 'auto',
+            }}
+         ></div>
+         <MessageForm />
+      </div>
+   );
 };
 
 export default MainPanel;
