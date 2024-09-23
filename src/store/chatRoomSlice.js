@@ -19,4 +19,4 @@ export const chatRoomSlice = createSlice({
    reducers: {},
 });
 
-export default chatRoomSlice.reduce;
+export default chatRoomSlice.reducer;
