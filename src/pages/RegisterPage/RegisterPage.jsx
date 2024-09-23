@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import app from '../../firebase';
+import {
+   createUserWithEmailAndPassword,
+   getAuth,
+   updateProfile,
+} from 'firebase/auth';
+import { ref, set } from 'firebase/database';
+import app, { db } from '../../firebase';
+import md5 from 'md5';
 
 const RegisterPage = () => {
    const auth = getAuth(app);
@@ -11,7 +17,6 @@ const RegisterPage = () => {
    const [errorFromSubmit, setErrorFromSubmit] = useState('');
    const {
       register,
-      watch,
       formState: { errors },
       handleSubmit,
    } = useForm();
@@ -25,12 +30,24 @@ const RegisterPage = () => {
             data.password,
          );
          console.log(createdUser);
+
+         await updateProfile(auth.currentUser, {
+            displayName: data.name,
+            photoURL: `http://gravatar.com/avatar/${md5(
+               createdUser.user.email,
+            )}?d=identicon`,
+         });
+
+         set(ref(db, `users/${createdUser.user.uid}`), {
+            name: createdUser.user.displayName,
+            image: createdUser.user.photoURL,
+         });
       } catch (error) {
          console.log(error);
          setErrorFromSubmit(error.message);
          setTimeout(() => {
             setErrorFromSubmit('');
-         });
+         }, 5000);
       } finally {
          setLoading(false);
       }
@@ -79,9 +96,9 @@ const RegisterPage = () => {
 
             {errorFromSubmit && <p>{errorFromSubmit}</p>}
 
-            <input type='submit' />
+            <input type='submit' disabled={loading} />
             <Link style={{ color: 'gray', textDecoration: 'none' }} to='/login'>
-               이미 아이디가 있다면...{' '}
+               이미 아이디가 있다면...
             </Link>
          </form>
       </div>
