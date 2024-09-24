@@ -4,16 +4,15 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FaPlus, FaRegSmileWink } from 'react-icons/fa';
 import {
    child,
-   DataSnapshot,
    ref as dbRef,
    off,
    onChildAdded,
    push,
-   ref,
    update,
 } from 'firebase/database';
 import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentChatRoom } from '../../../store/chatRoomSlice';
 
 const ChatRooms = () => {
    const [show, setShow] = useState(false); //false일 때는 modal이 안 보이게끔
@@ -30,7 +29,7 @@ const ChatRooms = () => {
    const dispatch = useDispatch();
 
    useEffect(() => {
-      AddChatRoomsListeners();
+      addChatRoomsListeners();
       return () => {
          off(chatRoomsRef);
       };
@@ -63,22 +62,48 @@ const ChatRooms = () => {
    };
 
    //component가 mount될 때 실행
-   const AddChatRoomsListeners = () => {
+   const addChatRoomsListeners = () => {
       let chatRoomsArray = [];
 
       onChildAdded(chatRoomsRef, (DataSnapshot) => {
          chatRoomsArray.push(DataSnapshot.val());
          const newChatRooms = [...chatRoomsArray];
          setChatRooms(newChatRooms);
+         setFirstChatRoom(newChatRooms);
       });
+   };
+
+   const setFirstChatRoom = (chatRooms) => {
+      const firstChatRoom = chatRooms[0];
+      if (firstLoad && chatRooms.length > 0) {
+         dispatch(setCurrentChatRoom(firstChatRoom));
+         setActiveChatRoomId(firstChatRoom.id);
+      }
+      setFirstLoad(false);
    };
 
    const isFormValid = (name, description) => name && description;
 
+   const changeChatRoom = (room) => {
+      dispatch(setCurrentChatRoom(room));
+      setActiveChatRoomId(room.id);
+   };
+
    const renderChatRooms = (chatRooms) =>
       chatRooms.length > 0 &&
       chatRooms.map((room) => {
-         return <li key={room.id}># {room.name}</li>;
+         return (
+            <li
+               key={room.id}
+               onClick={() => changeChatRoom(room)}
+               style={{
+                  backgroundColor:
+                     room.id === activeChatRoomId ? '#ffffff45' : '',
+               }}
+            >
+               # {room.name}
+            </li>
+         );
       });
 
    return (
