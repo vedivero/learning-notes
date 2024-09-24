@@ -1,8 +1,16 @@
 //채팅방의 이름이 나열되는 컴포넌트
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FaPlus, FaRegSmileWink } from 'react-icons/fa';
-import { child, ref as dbRef, push, ref, update } from 'firebase/database';
+import {
+   child,
+   DataSnapshot,
+   ref as dbRef,
+   onChildAdded,
+   push,
+   ref,
+   update,
+} from 'firebase/database';
 import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,7 +18,7 @@ const ChatRooms = () => {
    const [show, setShow] = useState(false); //false일 때는 modal이 안 보이게끔
    const [name, setName] = useState(''); //채팅 방 이름
    const [description, setDescription] = useState(''); //채팅 방 설명
-   const ChatRoomsRef = dbRef(db, 'chatRooms');
+   const chatRoomsRef = dbRef(db, 'chatRooms');
 
    const [chatRooms, setChatRooms] = useState([]); //여러 채팅 방을 저장하기 위해 배열로 선언
    const [firstLoad, setFirstLoad] = useState(true); //첫 실행 시에만 true, 그 이후는 false
@@ -20,14 +28,14 @@ const ChatRooms = () => {
 
    const dispatch = useDispatch();
 
+   useEffect(() => {
+      AddChatRoomsListeners();
+   }, []);
+
    const handleSubmit = async (e) => {
-      console.log('채팅 방 생성!!');
-      console.log(name);
-      console.log(description);
       //채팅 방 이름과 설명을 작성했는지 유효성 체크
       if (isFormValid(name, description)) {
-         console.log('유효성 통과!!', name, description);
-         const key = push(ChatRoomsRef).key;
+         const key = push(chatRoomsRef).key;
          const newChatRoom = {
             id: key, //firebase에서 제공하는 함수, ID값을 추출
             name: name,
@@ -38,7 +46,7 @@ const ChatRooms = () => {
             },
          };
          try {
-            await update(child(ChatRoomsRef, key), newChatRoom); //데이터 DB에 저장
+            await update(child(chatRoomsRef, key), newChatRoom); //데이터 DB에 저장
             //사용자가 입력한 텍스트 초기화
             setName('');
             setDescription('');
@@ -50,7 +58,24 @@ const ChatRooms = () => {
       }
    };
 
+   //component가 mount될 때 실행
+   const AddChatRoomsListeners = () => {
+      let chatRoomsArray = [];
+
+      onChildAdded(chatRoomsRef, (DataSnapshot) => {
+         chatRoomsArray.push(DataSnapshot.val());
+         const newChatRooms = [...chatRoomsArray];
+         setChatRooms(newChatRooms);
+      });
+   };
+
    const isFormValid = (name, description) => name && description;
+
+   const renderChatRooms = (chatRooms) =>
+      chatRooms.length > 0 &&
+      chatRooms.map((room) => {
+         return <li key={room.id}># {room.name}</li>;
+      });
 
    return (
       <div>
@@ -65,6 +90,10 @@ const ChatRooms = () => {
             <FaRegSmileWink style={{ marginRight: 3 }} /> CHAT ROOMS{' '}
             <FaPlus onClick={() => setShow(!show)} />
          </div>
+
+         <ul style={{ listStyleType: 'none', padding: 0 }}>
+            {renderChatRooms(chatRooms)}
+         </ul>
 
          <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
