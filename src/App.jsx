@@ -11,17 +11,15 @@ import { clearUser, setUser } from './store/userSlice';
 
 function App() {
    const auth = getAuth(app);
-   const navigeate = useNavigate();
+   const navigate = useNavigate();
    const dispatch = useDispatch();
 
    useEffect(() => {
       //user상태가 change될 때 마다 호출
       const unsubscribe = onAuthStateChanged(auth, (user) => {
          if (user) {
-            console.log('user');
-            console.log(user);
             //미 로그인 -> 로그인
-            navigeate('/');
+            navigate('/');
             dispatch(
                setUser({
                   uid: user.uid,
@@ -30,7 +28,7 @@ function App() {
                }),
             );
          } else {
-            navigeate('/login');
+            navigate('/login');
             dispatch(clearUser());
          }
       });

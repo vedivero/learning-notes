@@ -18,7 +18,7 @@ export const userSlice = createSlice({
          state.currentUser.displayName = action.payload.displayName;
       },
       clearUser: (state) => {
-         state.currentUser = {}; //logout
+         state.currentUser = { ...initialState.currentUser }; // 로그아웃 시 초기 상태로 되돌리기
       },
       setPhotoUrl: (state, action) => {
          //change User profile image
