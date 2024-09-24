@@ -6,6 +6,7 @@ import {
    child,
    DataSnapshot,
    ref as dbRef,
+   off,
    onChildAdded,
    push,
    ref,
@@ -30,6 +31,9 @@ const ChatRooms = () => {
 
    useEffect(() => {
       AddChatRoomsListeners();
+      return () => {
+         off(chatRoomsRef);
+      };
    }, []);
 
    const handleSubmit = async (e) => {
