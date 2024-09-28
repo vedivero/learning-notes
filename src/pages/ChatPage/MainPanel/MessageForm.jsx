@@ -52,8 +52,6 @@ const MessageForm = () => {
 
       //farebase에 message를 저장하는 부분
       try {
-         console.log('currentChatRoom.id : ', currentChatRoom.id);
-         console.log('messagesRef : ', messagesRef);
          await set(
             push(child(messagesRef, currentChatRoom.id)),
             createMessage(),
