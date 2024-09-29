@@ -11,6 +11,9 @@ const MainPanel = () => {
 
    const [messages, setMessages] = useState([]);
    const [messagesLoading, setMessagesLoading] = useState(true);
+   const [searchTerm, setSearchTerm] = useState('');
+   const [searchResults, setSearchResults] = useState([]);
+   const [searchLoading, setSearchLoading] = useState(false);
    const { currentUser } = useSelector((state) => state.user);
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
    const dispatch = useDispatch();
@@ -25,8 +28,31 @@ const MainPanel = () => {
       };
    }, [currentChatRoom.id]);
 
+   //MessageHeader에서 발생되는 이벤트
+   const handleSearchChange = (event) => {
+      //타이핑 이벤트 발생때마다 'setSetsearchTerm' state update
+      setSearchTerm(event.target.value);
+      setSearchLoading(true);
+
+      handleSearchMessages(event.target.value);
+   };
+
+   const handleSearchMessages = (searchTerm) => {
+      console.log(searchTerm);
+      const chatRoomMessages = [...messages];
+      const regex = new RegExp(searchTerm, 'gi');
+      const searchResults = chatRoomMessages.reduce((acc, message) => {
+         if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
+            acc.push(message);
+         }
+         return acc;
+      }, []);
+      setSearchResults(searchResults);
+      setSearchLoading(false);
+   };
+
    const addMessagesListeners = (chatRoomId) => {
-      console.log('채팅 입력됨');
+      console.log('addMessagesListeners');
       let messagesArray = [];
       setMessages([]);
 
@@ -41,17 +67,11 @@ const MainPanel = () => {
 
    const renderMessages = (messages) =>
       messages.length > 0 &&
-      messages.map((message) => (
-         <Message
-            key={message.timestamp}
-            message={message}
-            user={currentUser}
-         />
-      ));
+      messages.map((message) => <Message key={message.timestamp} message={message} user={currentUser} />);
 
    return (
       <div>
-         <MessageHeader />
+         <MessageHeader handleSearchChange={handleSearchChange} />
          <div
             style={{
                width: '100%',
@@ -63,7 +83,10 @@ const MainPanel = () => {
                overflow: 'auto',
             }}
          >
-            {renderMessages(messages)}
+            {searchLoading && <div>Searching...</div>}
+            {/* {searchLoading} */}
+
+            {searchTerm ? renderMessages(searchResults) : renderMessages(messages)}
          </div>
          <MessageForm />
       </div>

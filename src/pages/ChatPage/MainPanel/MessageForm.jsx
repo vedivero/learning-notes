@@ -148,6 +148,7 @@ const MessageForm = () => {
                }}
                value={content}
                onChange={(e) => setContent(e.target.value)}
+               placeholder='메세지 내용을 입력하세요'
             />
             {!(percentage === 0 || percentage === 100) && (
                <ProgressBar variant='warning' label={`${percentage}`} now={percentage} />
