@@ -1,22 +1,19 @@
 //메세지 작성 폼 컴포넌트
-import {
-   child,
-   push,
-   set,
-   ref as dbRef,
-   serverTimestamp,
-} from 'firebase/database';
-import React, { useState } from 'react';
-import { db } from '../../../firebase';
+import { child, push, set, ref as dbRef, serverTimestamp } from 'firebase/database';
+import React, { useRef, useState } from 'react';
+import { db, storage } from '../../../firebase';
+import { getDownloadURL, getStorage, ref as strRef, uploadBytesResumable } from 'firebase/storage';
 import { useSelector } from 'react-redux';
+import { ProgressBar } from 'react-bootstrap';
 
 const MessageForm = () => {
    const [content, setContent] = useState(''); //메세지 내용
    const [loading, setLoading] = useState(false); //전송
    const [errors, setErrors] = useState([]); //에러
+   const [percentage, setPercentage] = useState(0); //progress bar
 
    const messagesRef = dbRef(db, 'messages'); //참조하는 경로
-
+   const inputOpenImageRef = useRef(null);
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
    const { currentUser } = useSelector((state) => state.user); //로그인 된 유저의 데이터
    const { isPriavateChatRoom } = useSelector((state) => state.chatRoom); //Direct Message
@@ -52,10 +49,7 @@ const MessageForm = () => {
 
       //farebase에 message를 저장하는 부분
       try {
-         await set(
-            push(child(messagesRef, currentChatRoom.id)),
-            createMessage(),
-         );
+         await set(push(child(messagesRef, currentChatRoom.id)), createMessage());
          setLoading(false);
          setContent('');
          setErrors([]);
@@ -67,6 +61,79 @@ const MessageForm = () => {
          setTimeout(() => {
             setErrors([]);
          }, 5000);
+      }
+   };
+
+   const handleOpenImageRef = () => {
+      inputOpenImageRef.current.click();
+   };
+
+   const getPath = () => {
+      if (isPriavateChatRoom) {
+         return `message/private/${currentChatRoom.id}`;
+      } else {
+         return `message/public`;
+      }
+   };
+
+   const handleUploadImage = (event) => {
+      const file = event.target.files[0];
+      const storage = getStorage();
+
+      const filePath = `${getPath()}/${file.name}`;
+      console.log('filePath : ', filePath);
+      const metadata = { contentType: file.type };
+      setLoading(true);
+      try {
+         // https://firebase.google.com/docs/storage/web/upload-files#full_example
+         // Upload file and metadata to the object 'images/mountains.jpg'
+         const storageRef = strRef(storage, filePath);
+         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+         // Listen for state changes, errors, and completion of the upload.
+         uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+               // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+               const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+               console.log('Upload is ' + progress + '% done');
+               setPercentage(Math.round(progress));
+               switch (snapshot.state) {
+                  case 'paused':
+                     console.log('Upload is paused');
+                     break;
+                  case 'running':
+                     console.log('Upload is running');
+                     break;
+               }
+            },
+            (error) => {
+               // A full list of error codes is available at
+               // https://firebase.google.com/docs/storage/web/handle-errors
+               switch (error.code) {
+                  case 'storage/unauthorized':
+                     // User doesn't have permission to access the object
+                     break;
+                  case 'storage/canceled':
+                     // User canceled the upload
+                     break;
+                  // ...
+                  case 'storage/unknown':
+                     // Unknown error occurred, inspect error.serverResponse
+                     break;
+               }
+            },
+            () => {
+               // Upload completed successfully, now we can get the download URL
+               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                  // console.log('File available at', downloadURL);
+                  set(push(child(messagesRef, currentChatRoom.id)), createMessage(downloadURL));
+                  setLoading(false);
+               });
+            },
+         );
+      } catch (error) {
+         console.log(error);
       }
    };
    return (
@@ -82,6 +149,9 @@ const MessageForm = () => {
                value={content}
                onChange={(e) => setContent(e.target.value)}
             />
+            {!(percentage === 0 || percentage === 100) && (
+               <ProgressBar variant='warning' label={`${percentage}`} now={percentage} />
+            )}
             <div>
                {errors.map((errorMsg, i) => (
                   <p key={i} style={{ color: 'red' }}>
@@ -102,7 +172,8 @@ const MessageForm = () => {
                </div>
                <div style={{ flexGrow: 1 }}>
                   <button
-                     type='submit'
+                     type='button'
+                     onClick={handleOpenImageRef}
                      className='message-form-button'
                      style={{ width: '100%', fontSize: 20, fontWeight: 'bold' }}
                      disabled={loading}
@@ -117,6 +188,8 @@ const MessageForm = () => {
             type='file'
             accept='image/jpeg, image/png'
             style={{ display: 'none' }}
+            ref={inputOpenImageRef}
+            onChange={handleUploadImage}
          />
       </div>
    );
