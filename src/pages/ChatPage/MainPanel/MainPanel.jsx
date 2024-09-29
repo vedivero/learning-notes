@@ -42,7 +42,8 @@ const MainPanel = () => {
       const chatRoomMessages = [...messages];
       const regex = new RegExp(searchTerm, 'gi');
       const searchResults = chatRoomMessages.reduce((acc, message) => {
-         if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
+         // if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
+         if (message.content && message.content.match(regex)) {
             acc.push(message);
          }
          return acc;
