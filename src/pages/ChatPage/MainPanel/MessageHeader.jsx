@@ -6,9 +6,11 @@ import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
+import { FaLock, FaLockOpen } from 'react-icons/fa';
 
 const MessageHeader = ({ handleSearchChange }) => {
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
+   const { isPrivateChatRoom } = useSelector((state) => state.chatRoom);
 
    return (
       <div
@@ -22,7 +24,10 @@ const MessageHeader = ({ handleSearchChange }) => {
          }}
       >
          <Row>
-            <Col></Col>
+            <Col>
+               <h2>{isPrivateChatRoom ? <FaLock style={{ marginBottom: 10 }} /> : <FaLockOpen />}</h2>{' '}
+               <span>{currentChatRoom?.name}</span>
+            </Col>
 
             <Col>
                <InputGroup className='mb-3'>
@@ -38,23 +43,21 @@ const MessageHeader = ({ handleSearchChange }) => {
                </InputGroup>
             </Col>
          </Row>
-         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {currentChatRoom?.createdBy && (
-               <>
-                  <Image
-                     src={currentChatRoom.createdBy.image}
-                     style={{ width: '30px', height: '30px', marginRight: 7 }}
-                     roundedCircle
-                  />{' '}
-                  <p>{currentChatRoom.createdBy.name}</p>
-               </>
-            )}
-         </div>
 
-         <Row>
-            <Col></Col>
-            <Col></Col>
-         </Row>
+         {!isPrivateChatRoom && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+               {currentChatRoom?.createdBy && (
+                  <>
+                     <Image
+                        src={currentChatRoom.createdBy.image}
+                        style={{ width: '30px', height: '30px', marginRight: 7 }}
+                        roundedCircle
+                     />{' '}
+                     <p>{currentChatRoom.createdBy.name}</p>
+                  </>
+               )}
+            </div>
+         )}
       </div>
    );
 };

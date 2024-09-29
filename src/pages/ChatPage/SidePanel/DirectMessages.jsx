@@ -3,7 +3,8 @@ import { DataSnapshot, onChildAdded, ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import { FaRegSmile } from 'react-icons/fa';
 import { db } from '../../../firebase';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../store/chatRoomSlice';
 
 const DirectMessages = () => {
    const usersRef = ref(db, 'users');
@@ -12,6 +13,7 @@ const DirectMessages = () => {
    const [activeChatRoom, setActiveChatRoom] = useState('');
 
    const { currentUser } = useSelector((state) => state.user);
+   const dispatch = useDispatch();
 
    useEffect(() => {
       if (currentUser?.uid) {
@@ -33,10 +35,33 @@ const DirectMessages = () => {
       });
    };
 
+   const getChatRoomId = (userId) => {
+      const currentUserId = currentUser.uid;
+
+      return userId > currentUserId ? `${userId}` : `${currentUserId}`;
+   };
+
+   const changeChatRoom = (user) => {
+      const chatRoomId = getChatRoomId(user.uid);
+      const chatRoomData = {
+         id: chatRoomId,
+         name: user.name,
+      };
+      dispatch(setCurrentChatRoom(chatRoomData));
+      dispatch(setPrivateChatRoom(true));
+      setActiveChatRoom(user.uid);
+   };
+
    const renderDirectMessages = (users) =>
       users.length > 0 &&
       users.map((user) => (
-         <li key={user.uid} style={{ background: user.uid === activeChatRoom ? '#FFFFFF45' : '' }}>
+         <li
+            key={user.uid}
+            style={{ background: user.uid === activeChatRoom ? '#FFFFFF45' : '' }}
+            onClick={() => {
+               changeChatRoom(user);
+            }}
+         >
             #{user.name}
          </li>
       ));

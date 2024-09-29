@@ -2,17 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FaPlus, FaRegSmileWink } from 'react-icons/fa';
-import {
-   child,
-   ref as dbRef,
-   off,
-   onChildAdded,
-   push,
-   update,
-} from 'firebase/database';
+import { child, ref as dbRef, off, onChildAdded, push, update } from 'firebase/database';
 import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentChatRoom } from '../../../store/chatRoomSlice';
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../store/chatRoomSlice';
 
 const ChatRooms = () => {
    const [show, setShow] = useState(false); //false일 때는 modal이 안 보이게끔
@@ -86,6 +79,7 @@ const ChatRooms = () => {
 
    const changeChatRoom = (room) => {
       dispatch(setCurrentChatRoom(room));
+      dispatch(setPrivateChatRoom(false));
       setActiveChatRoomId(room.id);
    };
 
@@ -97,8 +91,7 @@ const ChatRooms = () => {
                key={room.id}
                onClick={() => changeChatRoom(room)}
                style={{
-                  backgroundColor:
-                     room.id === activeChatRoomId ? '#ffffff45' : '',
+                  backgroundColor: room.id === activeChatRoomId ? '#ffffff45' : '',
                }}
             >
                # {room.name}
@@ -116,13 +109,10 @@ const ChatRooms = () => {
                alignItems: 'center',
             }}
          >
-            <FaRegSmileWink style={{ marginRight: 3 }} /> CHAT ROOMS{' '}
-            <FaPlus onClick={() => setShow(!show)} />
+            <FaRegSmileWink style={{ marginRight: 3 }} /> CHAT ROOMS <FaPlus onClick={() => setShow(!show)} />
          </div>
 
-         <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {renderChatRooms(chatRooms)}
-         </ul>
+         <ul style={{ listStyleType: 'none', padding: 0 }}>{renderChatRooms(chatRooms)}</ul>
 
          <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
