@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -7,10 +7,49 @@ import Image from 'react-bootstrap/Image';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { FaLock, FaLockOpen } from 'react-icons/fa';
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { child, onValue, ref, remove, update } from 'firebase/database';
+import { db } from '../../../firebase';
 
 const MessageHeader = ({ handleSearchChange }) => {
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
    const { isPrivateChatRoom } = useSelector((state) => state.chatRoom);
+   const [isFavorite, setIsFavorite] = useState(false);
+   const usersRef = ref(db, 'users');
+   const { currentUser } = useSelector((state) => state.user);
+
+   useEffect(() => {
+      if (currentChatRoom?.id && currentUser?.uid) {
+         addFavoriteListener(currentChatRoom.id, currentUser.uid);
+      }
+   }, [currentChatRoom?.id, currentUser?.uid]);
+
+   const addFavoriteListener = (chatRoomId, userId) => {
+      onValue(child(usersRef, `${userId}/favorite`), (data) => {
+         const chatRoomIds = Object.keys(data.val());
+         const isAlreadyFavorite = chatRoomIds.includes(chatRoomId);
+         setIsFavorite(isAlreadyFavorite);
+      });
+   };
+
+   const handleFavorite = () => {
+      if (isFavorite) {
+         setIsFavorite(false);
+         remove(child(usersRef, `${currentUser.uid}/favorite/${currentChatRoom.id}`));
+      } else {
+         setIsFavorite(true);
+         update(child(usersRef, `${currentUser.uid}/favorite`), {
+            [currentChatRoom.id]: {
+               name: currentChatRoom.name,
+               description: currentChatRoom.description,
+               createdBy: {
+                  name: currentChatRoom.createdBy.name,
+                  image: currentChatRoom.createdBy.image,
+               },
+            },
+         });
+      }
+   };
 
    return (
       <div
@@ -26,7 +65,16 @@ const MessageHeader = ({ handleSearchChange }) => {
          <Row>
             <Col>
                <h2>{isPrivateChatRoom ? <FaLock style={{ marginBottom: 10 }} /> : <FaLockOpen />}</h2>{' '}
-               <span>{currentChatRoom?.name}</span>
+               <span>{currentChatRoom?.name}</span>{' '}
+               {!isPrivateChatRoom && (
+                  <span style={{ cursor: 'pointer' }} onClick={handleFavorite}>
+                     {isFavorite ? (
+                        <MdFavorite style={{ marginBottom: 10 }} />
+                     ) : (
+                        <MdFavoriteBorder style={{ marginBottom: 10 }} />
+                     )}
+                  </span>
+               )}
             </Col>
 
             <Col>
