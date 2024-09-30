@@ -26,9 +26,11 @@ const MessageHeader = ({ handleSearchChange }) => {
 
    const addFavoriteListener = (chatRoomId, userId) => {
       onValue(child(usersRef, `${userId}/favorite`), (data) => {
-         const chatRoomIds = Object.keys(data.val());
-         const isAlreadyFavorite = chatRoomIds.includes(chatRoomId);
-         setIsFavorite(isAlreadyFavorite);
+         if (data.val() !== null) {
+            const chatRoomIds = Object.keys(data.val());
+            const isAlreadyFavorite = chatRoomIds.includes(chatRoomId);
+            setIsFavorite(isAlreadyFavorite);
+         }
       });
    };
 
@@ -64,17 +66,23 @@ const MessageHeader = ({ handleSearchChange }) => {
       >
          <Row>
             <Col>
-               <h2>{isPrivateChatRoom ? <FaLock style={{ marginBottom: 10 }} /> : <FaLockOpen />}</h2>{' '}
-               <span>{currentChatRoom?.name}</span>{' '}
-               {!isPrivateChatRoom && (
-                  <span style={{ cursor: 'pointer' }} onClick={handleFavorite}>
-                     {isFavorite ? (
-                        <MdFavorite style={{ marginBottom: 10 }} />
-                     ) : (
-                        <MdFavoriteBorder style={{ marginBottom: 10 }} />
-                     )}
-                  </span>
-               )}
+               <h2>
+                  {isPrivateChatRoom ? (
+                     <FaLock style={{ marginBottom: '10px' }} />
+                  ) : (
+                     <FaLockOpen style={{ marginBottom: '10px' }} />
+                  )}{' '}
+                  {currentChatRoom && <span>{currentChatRoom.name}</span>}{' '}
+                  {!isPrivateChatRoom && (
+                     <span style={{ cursor: 'pointer' }} onClick={handleFavorite}>
+                        {isFavorite ? (
+                           <MdFavorite style={{ marginBottom: '10px' }} />
+                        ) : (
+                           <MdFavoriteBorder style={{ marginBottom: '10px' }} />
+                        )}
+                     </span>
+                  )}
+               </h2>
             </Col>
 
             <Col>
