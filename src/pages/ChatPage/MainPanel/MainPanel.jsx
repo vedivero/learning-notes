@@ -5,6 +5,7 @@ import { child, off, onChildAdded, ref as dbRef } from 'firebase/database';
 import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from './Message';
+import { setUserPosts } from '../../../store/chatRoomSlice';
 
 const MainPanel = () => {
    const messagesRef = dbRef(db, 'messages');
@@ -53,7 +54,6 @@ const MainPanel = () => {
    };
 
    const addMessagesListeners = (chatRoomId) => {
-      console.log('addMessagesListeners');
       let messagesArray = [];
       setMessages([]);
 
@@ -62,8 +62,23 @@ const MainPanel = () => {
          const newMessageArray = [...messagesArray];
          setMessages(newMessageArray); // 상태 업데이트
          setMessagesLoading(false);
+         userPostsCount(newMessageArray);
       });
-      console.log('addMessagesListeners messagesArray: ', messagesArray);
+   };
+
+   const userPostsCount = (messages) => {
+      const userPosts = messages.reduce((acc, message) => {
+         if (message.user.name in acc) {
+            acc[message.user.name].count += 1;
+         } else {
+            acc[message.user.name] = {
+               image: message.user.image,
+               count: 1,
+            };
+         }
+         return acc;
+      }, {});
+      dispatch(setUserPosts(userPosts));
    };
 
    const renderMessages = (messages) =>
