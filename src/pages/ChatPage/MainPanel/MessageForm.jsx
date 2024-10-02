@@ -1,5 +1,5 @@
 //메세지 작성 폼 컴포넌트
-import { child, push, set, ref as dbRef, serverTimestamp } from 'firebase/database';
+import { child, push, set, ref as dbRef, serverTimestamp, remove } from 'firebase/database';
 import React, { useRef, useState } from 'react';
 import { db, storage } from '../../../firebase';
 import { getDownloadURL, getStorage, ref as strRef, uploadBytesResumable } from 'firebase/storage';
@@ -136,6 +136,19 @@ const MessageForm = () => {
          console.log(error);
       }
    };
+
+   const handleChange = (event) => {
+      setContent(event.target.value);
+
+      if (event.target.value) {
+         set(dbRef(db, `typing/${currentChatRoom.id}/${currentUser.uid}`), {
+            userUid: currentUser.displayName,
+         });
+      } else {
+         remove(dbRef(db, `typing/${currentChatRoom.id}/${currentUser.uid}`));
+      }
+   };
+
    return (
       <div>
          <form onSubmit={handleSubmit}>
@@ -147,7 +160,7 @@ const MessageForm = () => {
                   borderRadius: 4,
                }}
                value={content}
-               onChange={(e) => setContent(e.target.value)}
+               onChange={handleChange}
                placeholder='메세지 내용을 입력하세요'
             />
             {!(percentage === 0 || percentage === 100) && (

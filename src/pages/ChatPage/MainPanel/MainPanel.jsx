@@ -62,6 +62,7 @@ const MainPanel = () => {
          const newMessageArray = [...messagesArray];
          setMessages(newMessageArray); // 상태 업데이트
          setMessagesLoading(false);
+         console.log(newMessageArray);
          userPostsCount(newMessageArray);
       });
    };
