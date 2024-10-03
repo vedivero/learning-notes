@@ -6,6 +6,7 @@ import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from './Message';
 import { setUserPosts } from '../../../store/chatRoomSlice';
+import Skeleton from '../../../components/Skeleton';
 
 const MainPanel = () => {
    const messagesRef = dbRef(db, 'messages');
@@ -44,10 +45,6 @@ const MainPanel = () => {
 
       //typing이 새로 들어올 때
       onChildAdded(child(typingRef, chatRoomId), (DataSnapshot) => {
-         console.log('DataSnapshot.key : ', DataSnapshot.key);
-         console.log('currentUser.uid : ', currentUser.uid);
-         console.log(DataSnapshot.key !== currentUser.uid);
-         console.log('typingUsers : ', typingUsers);
          if (DataSnapshot.key !== currentUser.uid) {
             typingUsers = typingUsers.concat({
                id: DataSnapshot.key,
@@ -128,6 +125,15 @@ const MainPanel = () => {
          <span key={user.name.userUid}>{user.name.userUid}님이 채팅을 입력하고 있습니다...</span>
       ));
 
+   const renderMessageSkeleton = (loading) =>
+      loading && (
+         <>
+            {[...Array(11)].map((v, i) => (
+               <Skeleton key={i} />
+            ))}
+         </>
+      );
+
    return (
       <div>
          <MessageHeader handleSearchChange={handleSearchChange} />
@@ -142,6 +148,7 @@ const MainPanel = () => {
                overflow: 'auto',
             }}
          >
+            {renderMessageSkeleton(messagesLoading)}
             {searchLoading && <div>Searching...</div>}
             {/* {searchLoading} */}
 
