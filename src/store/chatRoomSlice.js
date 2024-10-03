@@ -24,7 +24,6 @@ export const chatRoomSlice = createSlice({
          state.isPrivateChatRoom = action.payload;
       },
       setUserPosts: (state, action) => {
-         console.log('setUserPosts');
          state.userPosts = action.payload;
       },
    },

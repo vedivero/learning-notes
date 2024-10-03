@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MessageHeader from './MessageHeader';
 import MessageForm from './MessageForm';
-import { child, off, onChildAdded, ref as dbRef } from 'firebase/database';
+import { child, off, onChildAdded, ref as dbRef, DataSnapshot, onChildRemoved } from 'firebase/database';
 import { db } from '../../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from './Message';
@@ -9,12 +9,15 @@ import { setUserPosts } from '../../../store/chatRoomSlice';
 
 const MainPanel = () => {
    const messagesRef = dbRef(db, 'messages');
+   const typingRef = dbRef(db, 'typing');
 
    const [messages, setMessages] = useState([]);
    const [messagesLoading, setMessagesLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
    const [searchResults, setSearchResults] = useState([]);
    const [searchLoading, setSearchLoading] = useState(false);
+   const [typingUsers, setTypingUsers] = useState([]);
+
    const { currentUser } = useSelector((state) => state.user);
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
    const dispatch = useDispatch();
@@ -22,12 +25,40 @@ const MainPanel = () => {
    useEffect(() => {
       if (currentChatRoom.id) {
          addMessagesListeners(currentChatRoom.id);
+         addTypingListeners(currentChatRoom.id);
       }
 
       return () => {
          off(messagesRef);
       };
    }, [currentChatRoom.id]);
+
+   const addTypingListeners = (chatRoomId) => {
+      let typingUsers = [];
+
+      //typing이 새로 들어올 때
+      onChildAdded(child(typingRef, chatRoomId), (DataSnapshot) => {
+         console.log('DataSnapshot.key : ', DataSnapshot.key);
+         console.log('currentUser.uid : ', currentUser.uid);
+         console.log(DataSnapshot.key !== currentUser.uid);
+         console.log('typingUsers : ', typingUsers);
+         if (DataSnapshot.key !== currentUser.uid) {
+            typingUsers = typingUsers.concat({
+               id: DataSnapshot.key,
+               name: DataSnapshot.val(),
+            });
+            setTypingUsers(typingUsers);
+         }
+      });
+      //typing을 지워줄 때
+      onChildRemoved(child(typingRef, chatRoomId), (DataSnapshot) => {
+         const index = typingUsers.findIndex((user) => user.id === DataSnapshot.key);
+         if (index !== -1) {
+            typingUsers = typingUsers.filter((user) => user.id !== DataSnapshot.key);
+            setTypingUsers(typingUsers);
+         }
+      });
+   };
 
    //MessageHeader에서 발생되는 이벤트
    const handleSearchChange = (event) => {
@@ -62,7 +93,6 @@ const MainPanel = () => {
          const newMessageArray = [...messagesArray];
          setMessages(newMessageArray); // 상태 업데이트
          setMessagesLoading(false);
-         console.log(newMessageArray);
          userPostsCount(newMessageArray);
       });
    };
@@ -86,6 +116,12 @@ const MainPanel = () => {
       messages.length > 0 &&
       messages.map((message) => <Message key={message.timestamp} message={message} user={currentUser} />);
 
+   const renderTypingUsers = (typingUsers) =>
+      typingUsers.length > 0 &&
+      typingUsers.map((user) => (
+         <span key={user.name.userUid}>{user.name.userUid}님이 채팅을 입력하고 있습니다...</span>
+      ));
+
    return (
       <div>
          <MessageHeader handleSearchChange={handleSearchChange} />
@@ -104,6 +140,7 @@ const MainPanel = () => {
             {/* {searchLoading} */}
 
             {searchTerm ? renderMessages(searchResults) : renderMessages(messages)}
+            {renderTypingUsers(typingUsers)}
          </div>
          <MessageForm />
       </div>
