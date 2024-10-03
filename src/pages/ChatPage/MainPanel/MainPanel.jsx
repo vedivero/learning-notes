@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MessageHeader from './MessageHeader';
 import MessageForm from './MessageForm';
 import { child, off, onChildAdded, ref as dbRef, DataSnapshot, onChildRemoved } from 'firebase/database';
@@ -20,7 +20,13 @@ const MainPanel = () => {
 
    const { currentUser } = useSelector((state) => state.user);
    const { currentChatRoom } = useSelector((state) => state.chatRoom);
+
+   const messageEndRef = useRef(null);
    const dispatch = useDispatch();
+
+   useEffect(() => {
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+   });
 
    useEffect(() => {
       if (currentChatRoom.id) {
@@ -141,6 +147,7 @@ const MainPanel = () => {
 
             {searchTerm ? renderMessages(searchResults) : renderMessages(messages)}
             {renderTypingUsers(typingUsers)}
+            <div ref={messageEndRef} />
          </div>
          <MessageForm />
       </div>
