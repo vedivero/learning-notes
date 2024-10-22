@@ -32,6 +32,7 @@ export default [
          'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
          'react/react-in-jsx-scope': 'off',
          'no-unused-vars': 'off',
+         'no-console': 'off',
       },
    },
 ];
