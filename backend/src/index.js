@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-   res.send('Hello World!');
+   throw new Error('Error');
 });
 
 app.post('/', (req, res) => {
