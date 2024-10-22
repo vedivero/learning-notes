@@ -1,5 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../store/thunkFunctions';
 
 const RegisterPage = () => {
    const {
@@ -8,8 +10,18 @@ const RegisterPage = () => {
       formState: { errors },
       reset,
    } = useForm({ mode: 'onChange' });
+   const dispatch = useDispatch();
 
    const onSubmit = ({ email, password, name }) => {
+      const body = {
+         email,
+         password,
+         name,
+         image: `https://via.placeholder.com/600x400?text=no+user+image`,
+      };
+
+      dispatch(registerUser(body));
+
       reset();
    };
 
@@ -23,7 +35,7 @@ const RegisterPage = () => {
       required: '필수 필드입니다.',
       minLength: {
          value: 6,
-         message: '최소 4자리로 입력해 주세요.',
+         message: '최소 6자입니다.',
       },
    };
 
