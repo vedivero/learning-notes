@@ -6,7 +6,7 @@ router.post('/register', async (req, res, next) => {
    try {
       const user = new User(req.body);
       await user.save();
-      return res.statusCode(200);
+      return res.sendStatus(200);
    } catch (error) {
       next(error);
    }
