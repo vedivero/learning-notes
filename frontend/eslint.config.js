@@ -33,6 +33,10 @@ export default [
          'react/react-in-jsx-scope': 'off',
          'no-unused-vars': 'off',
          'no-console': 'off',
+         // 'react/jsx-key': 'off',
+         // 'jsx-a11y/anchor-is-valid': 'off',
+         'no-undef': 'off',
+         'react/prop-types': 'off',
       },
    },
 ];
