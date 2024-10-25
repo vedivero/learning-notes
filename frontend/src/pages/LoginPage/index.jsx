@@ -13,15 +13,25 @@ const LoginPage = () => {
 
    const dispatch = useDispatch();
 
-   const onSubmit = ({ email, password, name }) => {
+   const onSubmit = ({ email, password }) => {
       const body = {
          email,
          password,
       };
-
       dispatch(loginUser(body));
 
       reset();
+   };
+
+   const userEmail = {
+      required: '필수 필드입니다.',
+   };
+   const userPassword = {
+      required: '필수 필드입니다.',
+      minLength: {
+         value: 6,
+         message: '최소 6자입니다.',
+      },
    };
 
    return (
@@ -37,7 +47,13 @@ const LoginPage = () => {
                      type='email'
                      id='email'
                      className='w-full px-4 py-2 mt-2 bg-white border rounded-md'
+                     {...register('email', userEmail)}
                   />
+                  {errors?.email && (
+                     <div>
+                        <span className='text-red-500'>{errors.email.message}</span>
+                     </div>
+                  )}
                </div>
 
                <div className='mb-2'>
@@ -48,7 +64,13 @@ const LoginPage = () => {
                      type='password'
                      id='password'
                      className='w-full px-4 py-2 mt-2 bg-white border rounded-md'
+                     {...register('password', userPassword)}
                   />
+                  {errors?.password && (
+                     <div>
+                        <span className='text-red-500'>{errors.password.message}</span>
+                     </div>
+                  )}
                </div>
 
                <div className='mt-6'>

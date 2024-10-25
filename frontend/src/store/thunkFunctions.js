@@ -11,12 +11,22 @@ export const registerUser = createAsyncThunk('user/registerUser', async (body, t
    }
 });
 
-export const loginUser = createAsyncThunk('user/registerUser', async (userData, thunkAPI) => {
+export const loginUser = createAsyncThunk('user/loginUser', async (userData, thunkAPI) => {
    try {
       const response = await axiosInstance.post(`/users/login`, userData);
       return response.data;
    } catch (error) {
-      console.log('registerUser error : ', error);
+      console.log('loginUser error : ', error);
+      return thunkAPI.rejectWithValue(error.response.data || error.message);
+   }
+});
+
+export const authUser = createAsyncThunk('user/authUser', async (_, thunkAPI) => {
+   try {
+      const response = await axiosInstance.get(`/users/auth`);
+      return response.data;
+   } catch (error) {
+      console.log('authUser error : ', error);
       return thunkAPI.rejectWithValue(error.response.data || error.message);
    }
 });
