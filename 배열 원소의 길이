@@ -1,0 +1,7 @@
+function solution(strlist) {
+   let result = [];
+   for (const a of strlist) {
+      result.push(a.length);
+   }
+   return result;
+}
