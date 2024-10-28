@@ -1,0 +1,7 @@
+function solution(emergency) {
+
+    let sorted = [...emergency].sort((a,b)=>b-a);
+    let result = emergency.map(e=> sorted.indexOf(e)+1);
+    return result;
+        
+}
