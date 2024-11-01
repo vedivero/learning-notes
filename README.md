@@ -1,3 +1,9 @@
+### 👇 아래 링크에서 구동되고 있습니다.
+
+https://vedivero-todolist.netlify.app/
+
+<br>
+
 # 프로젝트 소개
 
 React로 구현한 `할 일 리스트`입니다.
@@ -16,8 +22,3 @@ React로 구현한 `할 일 리스트`입니다.
 #### `useState`, `useRef`, `useReducer`, `useCallback`, `createContext`, `useMemo`를 사용하여
 #### 연산 최적화, 컴포넌트 랜더링 최적화, 불필요한 함수 재 생성 방지등을 적용했습니다.
 
-<br>
-
-### 👇 이 애플리케이션은 아래 링크에서 구동되고 있습니다.
-
-https://vedivero-todolist.netlify.app/
