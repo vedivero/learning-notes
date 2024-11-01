@@ -28,6 +28,6 @@ React로 구현한 `할 일 리스트`입니다.
 
 <br>
 
-### 👇 아래 링크에서 구동되고 있습니다.
+### 👇 이 애플리케이션은 아래 링크에서 구동되고 있습니다.
 
 https://vedivero-todolist.netlify.app/
