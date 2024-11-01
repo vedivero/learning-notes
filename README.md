@@ -26,7 +26,7 @@ https://chattyspace.netlify.app/login
 
 </br>
 
-## 4. 기능 소개
+## 3. 기능 소개
 
 ### 1) 로그인 화면
 
