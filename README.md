@@ -1,3 +1,6 @@
+## 0. 서비스 바로가기
+https://chattyspace.netlify.app/login
+
 ## 1. 서비스 소개
 
 <em>`React`와 `Firebase`로 만들어진 <strong>채팅 애플리케이션</strong>입니다.</em>
