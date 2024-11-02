@@ -1,8 +1,4 @@
-## 0. 서비스 바로가기
 
-https://chattyspace.netlify.app/login
-
-<br>
 
 ## 1. 서비스 소개
 
