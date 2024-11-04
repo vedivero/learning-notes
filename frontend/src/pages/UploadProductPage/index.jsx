@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
+import FileUpload from '../../components/FileUpload';
 
 const continents = [
    { key: 1, value: '아프리카' },
@@ -29,16 +30,24 @@ const UploadProductPage = () => {
       }));
    };
 
+   const handleImages = (newImages) => {
+      setProduct((prevState) => ({
+         ...prevState,
+         images: newImages,
+      }));
+   };
+
    const userData = useSelector((state) => state.user?.userData);
    const navigate = useNavigate();
 
    const handleSubmit = async (event) => {
-      event.prevetDefault();
+      event.preventDefault();
 
       const body = {
-         writer: user.userData._id,
+         writer: userData.id,
          ...product,
       };
+      console.log('body : ', body);
       try {
          await axiosInstance.post('/products', body);
          navigate('/');
@@ -53,6 +62,7 @@ const UploadProductPage = () => {
          </div>
 
          <form className='mt-6' onSubmit={handleSubmit}>
+            <FileUpload images={product.images} onImageChange={handleImages} />
             <div className='mt-4'>
                <label htmlFor='title'>이름</label>
                <input
