@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/thunkFunctions';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
    const {
@@ -11,6 +12,7 @@ const RegisterPage = () => {
       reset,
    } = useForm({ mode: 'onChange' });
    const dispatch = useDispatch();
+   const navigate = useNavigate();
 
    const onSubmit = ({ email, password, name }) => {
       const body = {
@@ -21,8 +23,10 @@ const RegisterPage = () => {
       };
 
       dispatch(registerUser(body));
-
-      reset();
+      setTimeout(() => {
+         navigate('/login');
+      }, 1000);
+      // reset();
    };
 
    const userEmail = {
