@@ -24,10 +24,42 @@ router.post('/image', auth, (req, res, next) => {
    });
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
+   const order = req.query.order ? req.query.order : 'desc';
+   const sortBy = req.query.sortBy ? req.query.sortBy : '_id';
+   const limit = req.query.limit ? Number(req.query.limit) : '20';
+   const skip = req.query.skip ? Number(req.query.skip) : 0;
+   const term = req.query.searchTerm;
+
+   let findArgs = {};
+   for (let key in req.query.filters) {
+      if (req.query.filters[key].length > 0) {
+         if (key === 'prices') {
+            findArgs[key] = {
+               $gte: req.query.filters[key][0],
+               $lte: req.query.filters[key][1],
+            };
+         } else {
+            findArgs[key] = req.query.filters[key];
+         }
+      }
+   }
+
+   if (term) {
+      findArgs['$text'] = { $search: term };
+   }
+
    try {
-      const products = await Product.find().populate('writer');
-      return res.status(200).json({ products });
+      const products = await Product.find(findArgs)
+         .populate('writer')
+         .sort([[sortBy, order]])
+         .skip(skip)
+         .limit(limit);
+
+      const productsTotal = await Product.countDocuments(findArgs);
+      const hasMore = skip + limit < productsTotal ? true : false;
+
+      return res.status(200).json({ products, hasMore });
    } catch (error) {
       next(error);
    }
