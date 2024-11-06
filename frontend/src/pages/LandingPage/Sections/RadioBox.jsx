@@ -2,7 +2,7 @@ import React from 'react';
 
 const RadioBox = ({ prices, checkedPrice, onFilters }) => {
    return (
-      <div className='flex flex-wrap p-2 mb-3 bg-gray-100 rounded-md justify-around'>
+      <div className='flex flex-wrap p-2 mb-3 bg-gray-100 rounded-md '>
          {prices?.map((price) => (
             <div key={price._id} className='flex items-center mr-4'>
                <input
