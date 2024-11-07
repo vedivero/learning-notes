@@ -35,7 +35,6 @@ function App() {
    const dispatch = useDispatch();
    const isAuth = useSelector((state) => state.user?.isAuth);
    const { pathname } = useLocation();
-   console.log('isAuth : ', isAuth);
 
    useEffect(() => {
       if (isAuth) {
