@@ -1,0 +1,7 @@
+function solution(my_string, letter) {
+    let result = '';
+    for(const char of my_string){
+        if(char !== letter)result += char;
+    }
+    return result;
+}
