@@ -1,0 +1,4 @@
+function solution(array, n) {
+   let filterArr = array.filter((i) => i === n);
+   return filterArr.length;
+}
