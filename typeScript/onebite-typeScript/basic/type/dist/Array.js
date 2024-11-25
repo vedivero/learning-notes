@@ -21,4 +21,12 @@ tuple1.pop();
 tuple1.pop();
 tuple1.pop();
 let tuple2 = [1, '2', true];
+// Use Examples
+const users = [
+    ['홍길동', 1],
+    ['임꺽정', 1],
+    ['고길동', 1],
+    ['신짱구', 1],
+    //[5, '봉미선'],   //값을 잘못 할당하지 않도록 방지
+];
 export {};
