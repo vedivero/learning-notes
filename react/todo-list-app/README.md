@@ -8,7 +8,8 @@ https://vedivero-todolist.netlify.app/
 
 React로 구현한 `할 일 리스트`입니다.
 
-![image](https://github.com/user-attachments/assets/8dc3b6b0-6aef-4a05-b36a-7f974eba6869)
+![image](https://github.com/user-attachments/assets/26f4dcf8-a742-4553-ae97-b932767b1807)
+
 
 # 기능
 
