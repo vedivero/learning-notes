@@ -31,6 +31,7 @@ let user = {
 //    bio: '안녕하세요',
 //    location: '서울',
 // };
+// 중복되는 타입을 변수로 관리
 let user2 = {
     id: 2,
     name: '임꺽정',
@@ -38,5 +39,17 @@ let user2 = {
     bio: '안녕하세요',
     location: '서울',
 };
+let countryCodes = {
+    Korea: 'ko',
+    UnitedState: 'us',
+    UnitedKingdom: 'uk',
+};
+let countryNumberCodes = {
+    Korea: 410,
+    UnitedState: 840,
+    UnitedKingdom: 826,
+};
+let countryNumberAndStringCodes = {
+    Korea: 410,
+};
 export {};
-// 중복되는 타입을 변수로 관리
