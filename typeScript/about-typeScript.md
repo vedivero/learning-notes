@@ -164,3 +164,103 @@
 
 -  타입스크립트는 자바스크립트의 단점을 보완해 정적 타입 검사를 통해 더 안전한 코드를 작성 가능.
 -  실행 중 오류를 방지해 대규모 프로젝트 개발 시 효율성과 안정성을 제공
+
+# 타입스크립트 기본 타입 구조
+
+1. 전체 최상위 타입
+
+   -  `unknown`: 모든 값을 포함하는 가장 일반적인 타입.
+
+2. 차트키 타입
+
+   -  `any`: 어떤 값도 허용하며 타입 검사가 제외됨.
+
+3. 구체적인 타입
+
+   -  `null`: 값이 없음을 나타냄.
+   -  `void`: 함수에서 반환 값이 없음을 의미.
+      -  하위 타입: undefined.
+   -  `number`: 숫자 타입.
+      -  하위 타입: Number Enum(열거형).
+   -  `bigint`: 큰 정수를 다루는 타입.
+   -  `boolean`: 참(true)과 거짓(false) 값.
+   -  `string`: 문자열 타입.
+      -  하위 타입: String Enum(열거형).
+   -  `symbol`: 고유하고 변경 불가능한 심볼 값. - 하위 타입: Unique Symbol.
+   -  `object`: 객체 타입. - 하위 타입:
+   -  `Array`: 배열 타입.
+   -  `Tuple`: 고정 길이 배열.
+   -  `Function`: 함수 타입.
+   -  `Constructor`: 생성자 타입.
+
+4. 특수 타입
+
+   -  never: 절대 발생하지 않는 값을 나타냄(예: 함수가 항상 오류를 던지거나 종료되지 않는 경우).
+
+# tsconfig.json
+
+![alt text](image.png)
+
+## compilerOptions
+
+compilerOptions는 TypeScript 컴파일러가 코드를 컴파일하는 방식과 결과물을 제어하는 옵션 설정
+
+### 1. target
+
+-  설정
+   -  "ESNext"
+-  설명
+   -  TypeScript 코드를 컴파일할 때 변환되는 JavaScript의 ECMAScript 버전을 지정
+   -  "ESNext"는 최신 ECMAScript 기능(현재 표준화된 최신 버전)을 사용하도록 설정
+   -  최신 브라우저 환경이나 최신 Node.js 환경에서 실행할 경우 유용합니다.
+
+### 2. module
+
+-  설정
+   -  "ESNext"
+-  설명
+   -  모듈 시스템을 지정
+   -  "ESNext"는 최신 ECMAScript 모듈 표준(import와 export 문법)을 사용
+   -  이 옵션은 주로 ES Modules을 지원하는 환경에서 사용
+   -  브라우저 및 최신 Node.js 환경에서 동작하며, CommonJS가 아닌 ES Module 방식을 따름
+
+### 3. outDir
+
+-  설정
+   -  "dist"
+-  설명
+   -  컴파일된 JavaScript 파일이 저장될 디렉터리를 지정
+   -  TypeScript 파일을 JavaScript로 변환한 결과물이 dist 디렉터리에 저장
+   -  디렉터리가 자동으로 생성
+   -  명시적으로 지정하지 않으면 소스 코드 디렉터리와 동일한 위치에 파일이 생성
+
+### 4. strict
+
+-  설정
+   -  true
+-  설명
+   -  엄격한 TypeScript 검사 모드를 활성화
+   -  여러 가지 엄격한 옵션을 묶어 제공
+
+### 5. moduleDetection
+
+-  설정
+   -  "force"
+-  설명
+
+   -  모듈 파일을 감지하는 방법을 제어
+
+   -  "force"는 모든 파일을 모듈로 간주
+   -  TypeScript가 모듈로 처리되지 않는 파일(전역 스코프에 코드를 작성한 경우 등)을 발견해도 이를 강제로 모듈로 인식
+   -  일반적으로 import 또는 export 문이 없는 파일은 모듈로 간주되지 않지만, 이 설정을 통해 예외적으로 모듈로 처리
+   -  모듈 시스템을 강제하기 위해 사용
+
+### include
+
+-  설정
+   -  ["../type"]
+-  설명
+   -  컴파일 대상 파일 또는 디렉터리를 지정
+   -  ../type 디렉터리에 있는 모든 .ts 파일이 컴파일 대상
+   -  ../type 경로는 tsconfig.json 파일이 위치한 디렉터리를 기준으로 상대 경로를 표시
+   -  디렉터리 내의 .ts, .d.ts, .tsx 파일만 컴파일
