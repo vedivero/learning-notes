@@ -1,10 +1,8 @@
 # 나만의 작은 일기장.
 
+👇🏻 아래 링크에서 서비스되고 있습니다
 https://emotion-diary-one-sigma.vercel.app/
 <br>
-
-![스크린샷 2024-08-13 210848](https://github.com/user-attachments/assets/175fd3dc-84fe-4d7d-828f-3339280318cc)
-
 
 # 1. 프로젝트 소개
 
@@ -29,5 +27,4 @@ https://emotion-diary-one-sigma.vercel.app/
 
 | 새 일기 쓰기                                                                                                            | 작성한 일기 보기                                                                                                                                                                  | 일기 수정하기                                                                                                                           | 일기 삭제하기                                                                                                                                                                  |
 | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/ce0838ee-2327-4a1b-9dd7-145d783f0516" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/f01fc9af-a4dc-4758-99c9-fa11dbc5fca4" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/d8978939-e9ab-4789-ad77-078ab76cb3c5" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/b6fe0887-2277-4ead-805e-05e03d31a7c7" width="196" height="324"> |
-
+| <img src="https://github.com/user-attachments/assets/fc486f2a-3671-4ba2-b0e5-2b74d1ba1050" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/6cfe294b-4dd4-4f36-a460-c80fb034b97c" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/1880e250-717b-496c-a2e6-2ef9e83ef6f1" width="196" height="324"> | <img src="https://github.com/user-attachments/assets/175df465-b4b1-4ebf-a68c-41eace66b1fa" width="196" height="324"> |
