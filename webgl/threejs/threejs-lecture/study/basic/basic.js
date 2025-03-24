@@ -32,7 +32,7 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100); // 카메라 객체 생성
-		camera.position.z = 2;
+		camera.position.z = 3; // 카메라 위치 설정
 		this._camera = camera; // 생성한 카메라 객체를 또 다른 메서드에서 사용할 수 있도록 필드화
 	}
 
@@ -46,7 +46,7 @@ class App {
 
 	// 파란색 계열의 정육면체 Mesh를 생성하는 코드
 	_setupModel() {
-		const geometry = new THREE.BoxGeometry(1, 1, 1); // 정육면체 형상을 정의하기 위해 BoxGeometry 클래스를 이용해 Geometry객체를 생성 3개의 인자= 가로/세로/깊이
+		const geometry = new THREE.BoxGeometry(1, 1, 1); // 정육면체 형상을 정의하기 위해 BoxGeometry 클래스를 이용해 Geometry객체를 생성 3개의 인자 = 가로/세로/깊이
 		const material = new THREE.MeshPhongMaterial({ color: 0x44a88 }); // 파란색 계열의 정육면체 생성을 위한 코드
 
 		const cube = new THREE.Mesh(geometry, material); // geometry객체와 material 객체를 통해 Mesh가 생성
