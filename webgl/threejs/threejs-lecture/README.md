@@ -6,7 +6,32 @@
 [![DeepScan][deepscan]][deepscan-url]
 [![Discord][discord]][discord-url]
 
-#### JavaScript 3D library
+# 기본 구성 요소
+
+![alt text](image.png)
+
+- ### Renderer(출력)
+
+  - 모니터와 같은 출력 장치에 출력할 수 있는, 즉 렌더링 할 수 있는 렌더러
+  - Scene을 렌더링 할 때, 어떤 시점에서 보느냐에 따라 다양한 모습으로 렌더링 됨
+  - ### Scene(장면)
+
+    - 3차원 객체로 구성되는 Scene
+
+    - ### Light(광원)
+
+      - 3차원 형상이 화면에 표시되기 위해 적절한 광원이 필요
+
+    - ### Mesh(Object3D의 파생 Class)
+
+      - ### Geometry(형상 정의)
+
+      - ### Material(색상 및 투명도 정의)
+
+  - ### Camera(시점)
+    - 바라보는 시점을 정의
+
+### JavaScript 3D library
 
 The aim of the project is to create an easy-to-use, lightweight, cross-browser, general-purpose 3D library. The current builds only include WebGL and WebGPU renderers but SVG and CSS3D renderers are also available as addons.
 
@@ -24,37 +49,36 @@ The aim of the project is to create an easy-to-use, lightweight, cross-browser, 
 This code creates a scene, a camera, and a geometric cube, and it adds the cube to the scene. It then creates a `WebGL` renderer for the scene and camera, and it adds that viewport to the `document.body` element. Finally, it animates the cube within the scene for the camera.
 
 ```javascript
-import * as THREE from 'three';
+import * as THREE from "three";
 
-const width = window.innerWidth, height = window.innerHeight;
+const width = window.innerWidth,
+  height = window.innerHeight;
 
 // init
 
-const camera = new THREE.PerspectiveCamera( 70, width / height, 0.01, 10 );
+const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10);
 camera.position.z = 1;
 
 const scene = new THREE.Scene();
 
-const geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
 const material = new THREE.MeshNormalMaterial();
 
-const mesh = new THREE.Mesh( geometry, material );
-scene.add( mesh );
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
-const renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setSize( width, height );
-renderer.setAnimationLoop( animate );
-document.body.appendChild( renderer.domElement );
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(width, height);
+renderer.setAnimationLoop(animate);
+document.body.appendChild(renderer.domElement);
 
 // animation
 
-function animate( time ) {
+function animate(time) {
+  mesh.rotation.x = time / 2000;
+  mesh.rotation.y = time / 1000;
 
-	mesh.rotation.x = time / 2000;
-	mesh.rotation.y = time / 1000;
-
-	renderer.render( scene, camera );
-
+  renderer.render(scene, camera);
 }
 ```
 
@@ -72,7 +96,6 @@ git clone --depth=1 https://github.com/mrdoob/three.js.git
 
 [Releases](https://github.com/mrdoob/three.js/releases)
 
-
 [npm]: https://img.shields.io/npm/v/three
 [npm-url]: https://www.npmjs.com/package/three
 [build-size]: https://badgen.net/bundlephobia/minzip/three
@@ -83,4 +106,3 @@ git clone --depth=1 https://github.com/mrdoob/three.js.git
 [deepscan-url]: https://deepscan.io/dashboard#view=project&tid=16600&pid=19901&bid=525701
 [discord]: https://img.shields.io/discord/685241246557667386
 [discord-url]: https://discord.gg/56GBJwAnUS
-
