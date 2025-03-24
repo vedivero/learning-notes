@@ -38,7 +38,7 @@ class App {
 
 	_setupLight() {
 		const color = 0xffffff; // 색상
-		const intensity = 1; // 광원의 세기
+		const intensity = 10; // 광원의 세기
 		const light = new THREE.DirectionalLight(color, intensity); // 광원 생성
 		light.position.set(-1, 2, 4); // 광원의 위치
 		this._scene.add(light); // 광원 필드화
