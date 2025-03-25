@@ -29,7 +29,7 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 3;
+		camera.position.z = 14;
 		this._camera = camera;
 	}
 
@@ -46,9 +46,25 @@ class App {
 	}
 
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:2π(360도))
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		// Shape 모양 정의 샘플(x,y 좌표 사용)
+		// shape.moveTo(1, 1); // 우측 상단
+		// shape.lineTo(1, -1); // 우측 하단까지 선을 이음
+		// shape.lineTo(-1, -1); // 좌측 하단까지 선을 이음
+		// shape.lineTo(-1, 1); // 좌측 상단까지 선을 이음
+		// shape.closePath(); // 도형을 닫는 메서드
+		// 하트 모양
+		const shape = new THREE.Shape();
+		const x = -2.5,
+			y = -5;
+		shape.moveTo(x + 2.5, y + 2.5);
+		shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
+		shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+		shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+		shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+		shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+		shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+
+		const geometry = new THREE.ShapeGeometry(shape);
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);

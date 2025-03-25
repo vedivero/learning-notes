@@ -29,7 +29,7 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 3;
+		camera.position.z = 14;
 		this._camera = camera;
 	}
 
@@ -46,9 +46,28 @@ class App {
 	}
 
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:2π(360도))
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		class CustomSinCurve extends THREE.Curve {
+			constructor(scale) {
+				super();
+				this.scale = scale;
+			}
+			// t매개 변수의 방정식으로 정의
+			getPoint(t) {
+				// 0과 1사이의 t값에 대한 Curve의 구성 좌표를 계산
+				const tx = t * 3 - 1.5;
+				const ty = Math.sin(2 * Math.PI * t);
+				const tz = 0;
+				return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+			}
+		}
+		const path = new CustomSinCurve(4); // tube가 이어지는 형태를 결정하기 위한 Curve 객체를 path라는 이름으로 생성
+
+		// 첫 번째 인자 : 튜브가 따라갈 경로를 정의한 Curve 객체 (예: S자 곡선, 나선 등)
+		// 두 번째 인자 : 튜브 진행 방향에 대한 분할 수(default:64)
+		// 두 번째 인자 : 튜브 원통에 대한 반지름 크기(default:1)
+		// 네 번째 인자 : 튜브 원통에 대한 분할 수(default:8)
+		// 다섯 번째 인자 : 튜브 원통의 시작 단과 끝단 개방 여부(default:false)
+		const geometry = new THREE.TubeGeometry(path, 128, 0.5, 16, true); // path를 Tube Geometry 생성자에 전달
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
@@ -64,7 +83,6 @@ class App {
 		group.add(line);
 
 		this._scene.add(group); // Group객체를 Scene객체의 구성요소로 추가
-		this._cube = group; // 또 다른 메서드에서 참조되어 사용할 수 있도록 필드 정의
 	}
 
 	resize() {
