@@ -1,5 +1,5 @@
-import * as THREE from "../../build/three.module.js";
-import { OrbitControls } from "../../examples/jsm/controls/OrbitControls.js";
+import * as THREE from "../../../build/three.module.js";
+import { OrbitControls } from "../../../examples/jsm/controls/OrbitControls.js";
 
 class App {
 	constructor() {
@@ -46,16 +46,10 @@ class App {
 	}
 
 	_setupModel() {
-		// 평면 형태의 사각 Geometry
-		// GIS에서 3차원 지형 표현에 유용하게 사용
+		// 원 형태의 Geometry
+		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:360도)
+		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
 
-		// 첫 번째 인자 : 너비(default:1),
-		// 두 번째 인자 : 높이(default:1)
-		// 세 번째 인자 : 너비 방향에 대한 분할 수(default:1)
-		// 네 번째 인자 : 높이 방향에 대한 분할 수(default:1)
-		const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-
-		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
 
 		const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 }); // 노란색 선 정의

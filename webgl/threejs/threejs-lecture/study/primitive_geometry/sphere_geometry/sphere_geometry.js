@@ -1,5 +1,5 @@
-import * as THREE from "../../build/three.module.js";
-import { OrbitControls } from "../../examples/jsm/controls/OrbitControls.js";
+import * as THREE from "../../../build/three.module.js";
+import { OrbitControls } from "../../../examples/jsm/controls/OrbitControls.js";
 
 class App {
 	constructor() {
@@ -46,10 +46,25 @@ class App {
 	}
 
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:360도)
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		// 구 형태의 Geometry
+		// 첫 번째 인자 : 구의 반지름 크기(default:1),
+		// 두 번째 인자 : 구의 수평 방향에 대한 분할 수(default:32)
+		// 세 번째 인자 : 구의 수직 방향에 대한 분할 수(default:16)
+		// 네 번째 인자 : 구의 수평 방향에 대한 시작 각도(default:0)
+		// 다섯 번째 인자 : 구의 수평 방향에 대한 연장 각도(default:2π(360도))
+		// 여섯 번째 인자 : 구의 수직 방향에 대한 시작 각도(default:0)
+		// 일곱 번째 인자 : 구의 수직 방향에 대한 연장 각도(default:2π(360도))
+		const geometry = new THREE.SphereGeometry(
+			0.5,
+			16,
+			16,
+			0,
+			Math.PI,
+			0,
+			Math.PI / 2
+		);
 
+		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
 
 		const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 }); // 노란색 선 정의

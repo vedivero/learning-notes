@@ -1,5 +1,5 @@
-import * as THREE from "../../build/three.module.js";
-import { OrbitControls } from "../../examples/jsm/controls/OrbitControls.js";
+import * as THREE from "../../../build/three.module.js";
+import { OrbitControls } from "../../../examples/jsm/controls/OrbitControls.js";
 
 class App {
 	constructor() {
@@ -46,25 +46,14 @@ class App {
 	}
 
 	_setupModel() {
-		// 원통 형태의 Geometry
-		// 첫 번째 인자 : 원통의 윗 면의 반지름 크기(default:1),
-		// 두 번째 인자 : 원통의 밑 면의 반지름 크기(default:1)
-		// 세 번째 인자 : 원통의 높이(default:1)
-		// 네 번째 인자 : 원통의 둘레 방향에 대한 분할 개수(default:8)
-		// 다섯 번째 인자 : 원통의 높이 방향에 대한 분할 개수(default:1)
-		// 여섯 번째 인자 : 원뿔의 윗 면과 밑 면 개방 여부(default:false)
-		// 일곱 번째 인자 : 원뿔의 시작 각도(default:0)
-		// 여덟 번째 인자 : 원뿔의 연장 각도(default:2π)
-		const geometry = new THREE.CylinderGeometry(
-			1,
-			1,
-			3,
-			24,
-			4,
-			true,
-			0,
-			Math.PI
-		);
+		// 2차원 형태의 반지모양 Geometry
+		// 첫 번째 인자 : 내부 반지름 크기(default:0.5),
+		// 두 번째 인자 : 외부 반지름 크기(default:1)
+		// 세 번째 인자 : 가장 자리 둘레 방향으로의 분할 수(default:8)
+		// 네 번째 인자 : 내부 방향에 대한 시작 각도(default:1)
+		// 다섯 번째 인자 : 시작 각도(default:0)
+		// 여섯 번째 인자 : 각도(default:2π)
+		const geometry = new THREE.RingGeometry(0.5, 0.3, 4, 4, 0, Math.PI / 2);
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
