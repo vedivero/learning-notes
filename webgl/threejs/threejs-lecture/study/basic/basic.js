@@ -27,23 +27,6 @@ class App {
 		requestAnimationFrame(this.render.bind(this));
 	}
 
-	_setupCamera() {
-		// THREE.JS가 3차원 그래픽을 출력할 영역의 가로x세로 크기
-		const width = this._divContainer.clientWidth;
-		const height = this._divContainer.clientHeight;
-		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100); // 카메라 객체 생성
-		camera.position.z = 3; // 카메라 위치 설정
-		this._camera = camera; // 생성한 카메라 객체를 또 다른 메서드에서 사용할 수 있도록 필드화
-	}
-
-	_setupLight() {
-		const color = 0xffffff; // 색상
-		const intensity = 10; // 광원의 세기
-		const light = new THREE.DirectionalLight(color, intensity); // 광원 생성
-		light.position.set(-1, 2, 4); // 광원의 위치
-		this._scene.add(light); // 광원 필드화
-	}
-
 	// 파란색 계열의 정육면체 Mesh를 생성하는 코드
 	_setupModel() {
 		const geometry = new THREE.BoxGeometry(1, 1, 1); // 정육면체 형상을 정의하기 위해 BoxGeometry 클래스를 이용해 Geometry객체를 생성 3개의 인자 = 가로/세로/깊이
@@ -66,12 +49,21 @@ class App {
 		this._renderer.setSize(width, height); // renderer의 크기를 설정
 	}
 
-	// time: render함수가 실행된 이후에 경과된 시간 값(단위 ms)
-	// time인자를 통해 장면의 애니메이션에 이용
-	render(time) {
-		this._renderer.render(this._scene, this._camera); // scene을 camera의 시점을 이용해서 렌더링
-		this.update(time); // update 메서드 안에서 속성 값 변경 - 애니메이션 효과 발생
-		requestAnimationFrame(this.render.bind(this)); // 이 코드를 통해 렌더 메서드가 무한으로 반복해서 호출
+	_setupCamera() {
+		// THREE.JS가 3차원 그래픽을 출력할 영역의 가로x세로 크기
+		const width = this._divContainer.clientWidth;
+		const height = this._divContainer.clientHeight;
+		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100); // 카메라 객체 생성
+		camera.position.z = 3; // 카메라 위치 설정
+		this._camera = camera; // 생성한 카메라 객체를 또 다른 메서드에서 사용할 수 있도록 필드화
+	}
+
+	_setupLight() {
+		const color = 0xffffff; // 색상
+		const intensity = 10; // 광원의 세기
+		const light = new THREE.DirectionalLight(color, intensity); // 광원 생성
+		light.position.set(-1, 2, 4); // 광원의 위치
+		this._scene.add(light); // 광원 필드화
 	}
 
 	update(time) {
@@ -80,6 +72,13 @@ class App {
 		// 정육면체의 회전 값 설정
 		this._cube.rotation.x = time;
 		this._cube.rotation.y = time;
+	}
+	// time: render함수가 실행된 이후에 경과된 시간 값(단위 ms)
+	// time인자를 통해 장면의 애니메이션에 이용
+	render(time) {
+		this._renderer.render(this._scene, this._camera); // scene을 camera의 시점을 이용해서 렌더링
+		this.update(time); // update 메서드 안에서 속성 값 변경 - 애니메이션 효과 발생
+		requestAnimationFrame(this.render.bind(this)); // 이 코드를 통해 렌더 메서드가 무한으로 반복해서 호출
 	}
 }
 window.onload = function () {
