@@ -16,9 +16,38 @@
 
     - ### Mesh(Object3D의 파생 Class)
 
+      - 3차원 객체를 화면에 표시하기 위한 Class
+      - Object 3D의 파생 Class
+        ![alt text](image-5.png)
+
+        - Mesh : 삼각형 면으로 구성된 객체를 표현
+        - Line : 선형 객체를 표현
+        - Points : 점 객체를 표현
+
+        > Mesh, Line, Points 3차원 객체는 3차원 공간에 표출
+
+        ![alt text](image-6.png)
+
+        - 3D Object가 3차원 공간 상에 놓여지기 위해 위치, 회전, 크기 값이 필요
+        - 이를 위해 부모 클래스인 Object3D에는 위치, 회전, 크기 속성을 가짐
+
+          - 위치(position)
+            - x,y,z 축에 대한 위치 값(default:0,0,0)
+          - 회전(rotation)
+            - x,y,z 축에 대한 회전 값(default:0,0,0)
+          - 크기(scale)
+            - x,y,z 축에 대한 크기의 배수 값(default:1,1,1)(=원래 크기)
+
+        ![alt text](image-7.png)
+
       - ### Geometry(형상 정의)
 
+        - Mesh를 구성하는 요소
+        - 3차원 객체의 형상을 정의
+
       - ### Material(색상 및 투명도 정의)
+        - Mesh를 구성하는 요소
+        - 3차원 객체의 색상 및 투명도 정의
 
   - ### Camera(시점)
     - 바라보는 시점을 정의
