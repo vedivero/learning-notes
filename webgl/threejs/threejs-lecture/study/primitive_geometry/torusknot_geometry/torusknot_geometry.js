@@ -1,5 +1,5 @@
-import * as THREE from "../../build/three.module.js";
-import { OrbitControls } from "../../examples/jsm/controls/OrbitControls.js";
+import * as THREE from "../../../build/three.module.js";
+import { OrbitControls } from "../../../examples/jsm/controls/OrbitControls.js";
 
 class App {
 	constructor() {
@@ -48,12 +48,14 @@ class App {
 	_setupModel() {
 		// 3차원 반지 모양 형태의 Geometry
 
-		// 첫 번째 인자 : Torus의 반지름(default:1),
-		// 두 번째 인자 : 원통의 반지름(default:0.4)
-		// 세 번째 인자 : Torus의 방사 방향에 대한 분할 수(default:8)
-		// 네 번째 인자 : Torus의 긴 원통에 대한 분할 수(default:6)
-		// 다섯 번째 인자 : Torus의 연장 각 길이(default:2π(360도))
-		const geometry = new THREE.TorusGeometry(1, 0.4, 50, 20, Math.PI);
+		// 첫 번째 인자 : TorusKnot 반지름 (default: 1)
+		// 두 번째 인자 : TorusKnot를 구성하는 원통의 반지름 (default: 0.4)
+		// 세 번째 인자 : TorusKnot 튜브 분할 수 (default: 64)
+		// 네 번째 인자 : TorusKnot 원 반지름 방향 분할 수 (default: 8)
+		// 다섯 번째 인자 : TorusKnot가 축을 중심으로 감기는 횟수 p (default: 2)
+		// 여섯 번째 인자 : TorusKnot가 도넛 내부 원을 따라 감기는 횟수 q (default: 3)
+
+		const geometry = new THREE.TorusKnotGeometry();
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);

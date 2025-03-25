@@ -1,5 +1,5 @@
-import * as THREE from "../../build/three.module.js";
-import { OrbitControls } from "../../examples/jsm/controls/OrbitControls.js";
+import * as THREE from "../../../build/three.module.js";
+import { OrbitControls } from "../../../examples/jsm/controls/OrbitControls.js";
 
 class App {
 	constructor() {
@@ -46,15 +46,14 @@ class App {
 	}
 
 	_setupModel() {
-		// 원뿔 형태의 Geometry
-		// 첫 번째 인자 : 원의 반지름 크기(default:1),
-		// 두 번째 인자 : 원뿔의 높이(default:1)
-		// 세 번째 인자 : 둘레 방향에 대한 분할 개수(default:8)
-		// 네 번째 인자 : 높이 방향에 대한 분할 개수(default:1)
-		// 다섯 번째 인자 : 원뿔 밑면 개방 여부(default:false)
-		// 여섯 번째 인자 : 원뿔의 시작 각도(default:0)
-		// 일곱 번째 인자 : 원뿔의 연장 각도(default:2π)
-		const geometry = new THREE.ConeGeometry(1, 5, 10, 10, true, 0, Math.PI);
+		// 평면 형태의 사각 Geometry
+		// GIS에서 3차원 지형 표현에 유용하게 사용
+
+		// 첫 번째 인자 : 너비(default:1),
+		// 두 번째 인자 : 높이(default:1)
+		// 세 번째 인자 : 너비 방향에 대한 분할 수(default:1)
+		// 네 번째 인자 : 높이 방향에 대한 분할 수(default:1)
+		const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
