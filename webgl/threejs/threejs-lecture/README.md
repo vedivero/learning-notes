@@ -6,31 +6,6 @@
 [![DeepScan][deepscan]][deepscan-url]
 [![Discord][discord]][discord-url]
 
-# 기본 구성 요소
-
-![alt text](image.png)
-
-- ### Renderer(출력)
-
-  - 모니터와 같은 출력 장치에 출력할 수 있는, 즉 렌더링 할 수 있는 렌더러
-  - Scene을 렌더링 할 때, 어떤 시점에서 보느냐에 따라 다양한 모습으로 렌더링 됨
-  - ### Scene(장면)
-
-    - 3차원 객체로 구성되는 Scene
-
-    - ### Light(광원)
-
-      - 3차원 형상이 화면에 표시되기 위해 적절한 광원이 필요
-
-    - ### Mesh(Object3D의 파생 Class)
-
-      - ### Geometry(형상 정의)
-
-      - ### Material(색상 및 투명도 정의)
-
-  - ### Camera(시점)
-    - 바라보는 시점을 정의
-
 ### JavaScript 3D library
 
 The aim of the project is to create an easy-to-use, lightweight, cross-browser, general-purpose 3D library. The current builds only include WebGL and WebGPU renderers but SVG and CSS3D renderers are also available as addons.

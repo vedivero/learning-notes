@@ -29,7 +29,7 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 3;
+		camera.position.z = 14;
 		this._camera = camera;
 	}
 
@@ -46,25 +46,33 @@ class App {
 	}
 
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:2π(360도))
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		// 곡선을 따라 원통이 이어지는 형태
+		// Tube를 이해하기 위해 곡선을 정의하는 Curve Class를 파악해야 함
 
-		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
-		const cube = new THREE.Mesh(geometry, fillMaterial);
+		class CustomSinCurve extends THREE.Curve {
+			constructor(scale) {
+				super();
+				this.scale = scale;
+			}
+			// t매개 변수의 방정식으로 정의
+			getPoint(t) {
+				// 0과 1사이의 t값에 대한 Curve의 구성 좌표를 계산
+				const tx = t * 3 - 1.5;
+				const ty = Math.sin(2 * Math.PI * t);
+				const tz = 0;
+				return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale);
+			}
+		}
+		const path = new CustomSinCurve(4);
 
-		const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 }); // 노란색 선 정의
-		const line = new THREE.LineSegments( // Line 타입의 Object 생성
-			new THREE.WireframeGeometry(geometry), // WireframeGeometry은 Wire형태로 Geometry를 구현하기 위해 사용
-			lineMaterial
-		);
+		const geometry = new THREE.BufferGeometry();
+		const points = path.getPoints(100); // 커브를 구성하는 좌표의 개수(default:5)
+		geometry.setFromPoints(points);
 
-		const group = new THREE.Group(); // Mesh Object와 Line Object를 하나의 Object로 다루기 위해 Group으로 묶음
-		group.add(cube);
-		group.add(line);
+		const material = new THREE.LineBasicMaterial({ color: 0xffff00 });
+		const line = new THREE.Line(geometry, material);
 
-		this._scene.add(group); // Group객체를 Scene객체의 구성요소로 추가
-		this._cube = group; // 또 다른 메서드에서 참조되어 사용할 수 있도록 필드 정의
+		this._scene.add(line);
 	}
 
 	resize() {

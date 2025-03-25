@@ -29,7 +29,8 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 3;
+		camera.position.x = -15;
+		camera.position.z = 15;
 		this._camera = camera;
 	}
 
@@ -45,26 +46,42 @@ class App {
 		new OrbitControls(this._camera, this._divContainer); // 카메라 객체와 마우스 이벤트를 받는 DOM 요소가 필요
 	}
 
+	// extrude_geometry : 평면 Shape에 깊이 값을 부여하고 Mesh의 윗 면과 밑 면을 비스듬하게 처리해주는 geometry = 베벨링
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:2π(360도))
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		const x = -2.5,
+			y = -5;
+		const shape = new THREE.Shape();
+		shape.moveTo(x + 2.5, y + 2.5);
+		shape.bezierCurveTo(x + 2.5, y + 2.5, x + 2, y, x, y);
+		shape.bezierCurveTo(x - 3, y, x - 3, y + 3.5, x - 3, y + 3.5);
+		shape.bezierCurveTo(x - 3, y + 5.5, x - 1.5, y + 7.7, x + 2.5, y + 9.5);
+		shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5);
+		shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y);
+		shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5);
+
+		// extrude_geometry 생성하기 위한 설정 값
+		const settings = {
+			steps: 4, // 깊이 방향으로의 분할 수(default:1)
+			depth: 2, // 깊이 값(default:100)
+			bevelEnabled: true, // 베벨링 처리 여부(default:true)
+			bevelThickness: 0.4, // 베벨링 두께 값(default:6)
+			bevelSize: 1, // Shape의 외곽선으로 부터 얼마나 멀리 베벨링 할 것인지(default:2)
+			bevelSegments: 5, // 베벨링 단계 수(default:3)
+		};
+
+		const geometry = new THREE.ExtrudeGeometry(shape, settings);
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
-
 		const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 }); // 노란색 선 정의
 		const line = new THREE.LineSegments( // Line 타입의 Object 생성
 			new THREE.WireframeGeometry(geometry), // WireframeGeometry은 Wire형태로 Geometry를 구현하기 위해 사용
 			lineMaterial
 		);
-
 		const group = new THREE.Group(); // Mesh Object와 Line Object를 하나의 Object로 다루기 위해 Group으로 묶음
 		group.add(cube);
 		group.add(line);
-
 		this._scene.add(group); // Group객체를 Scene객체의 구성요소로 추가
-		this._cube = group; // 또 다른 메서드에서 참조되어 사용할 수 있도록 필드 정의
 	}
 
 	resize() {

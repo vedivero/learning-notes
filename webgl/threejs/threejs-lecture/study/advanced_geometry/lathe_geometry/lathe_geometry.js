@@ -29,7 +29,7 @@ class App {
 		const width = this._divContainer.clientWidth;
 		const height = this._divContainer.clientHeight;
 		const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-		camera.position.z = 3;
+		camera.position.z = 14;
 		this._camera = camera;
 	}
 
@@ -45,26 +45,31 @@ class App {
 		new OrbitControls(this._camera, this._divContainer); // 카메라 객체와 마우스 이벤트를 받는 DOM 요소가 필요
 	}
 
+	// latheGeometry : y축으로 회전하여 얻어지는 3차원 Mesh
 	_setupModel() {
-		// 원 형태의 Geometry
-		// 4개 인자 : 반지름 (defualt:1) , 원판을 구성하는 분할 개수(sagment,default:8), 시작각도(default:0), 연장각도(default:2π(360도))
-		const geometry = new THREE.CircleGeometry(1, 32, Math.PI / 2, Math.PI);
+		// 무엇을 회전할 것인지 지정 필요
+		const points = []; // points로 구성되는 좌표들이 이루는 선
+		for (let i = 0; i < 10; ++i) {
+			points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * 0.8));
+		}
+
+		// 첫 번째 인자 : 회전시킬 2D 점들의 배열 (THREE.Vector2[]) → x > 0이어야 함
+		// 두 번째 인자 : 분할 수(default:12)
+		// 세 번째 인자 : 시작 각도(default:0) (3시 방향 : 0도)
+		// 네 번째 인자 : 연장 각도(default:2π(360도))
+		const geometry = new THREE.LatheGeometry(points, 24, 0, Math.PI);
 
 		const fillMaterial = new THREE.MeshPhongMaterial({ color: 0x515151 });
 		const cube = new THREE.Mesh(geometry, fillMaterial);
-
 		const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffff00 }); // 노란색 선 정의
 		const line = new THREE.LineSegments( // Line 타입의 Object 생성
 			new THREE.WireframeGeometry(geometry), // WireframeGeometry은 Wire형태로 Geometry를 구현하기 위해 사용
 			lineMaterial
 		);
-
 		const group = new THREE.Group(); // Mesh Object와 Line Object를 하나의 Object로 다루기 위해 Group으로 묶음
 		group.add(cube);
 		group.add(line);
-
 		this._scene.add(group); // Group객체를 Scene객체의 구성요소로 추가
-		this._cube = group; // 또 다른 메서드에서 참조되어 사용할 수 있도록 필드 정의
 	}
 
 	resize() {
