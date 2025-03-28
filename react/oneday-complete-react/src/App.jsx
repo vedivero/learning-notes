@@ -1,34 +1,24 @@
 import './App.css';
 
-function Welcome(props) {
+function App() {
    return (
-      <h1
-         onClick={() => {
-            props.onTitleClick(props.name);
-         }}
-      >
-         {props.name}
-      </h1>
+      <>
+         <WelcomeDiaog />
+      </>
    );
 }
 
-function App() {
-   const msg = 'Hello React';
-   const showMessage = (name) => {
-      alert(`Welcome ${name}`);
-   };
+function WelcomeDiaog() {
    return (
-      <div>
-         <h1
-            onClick={() => {
-               alert('Hi');
-            }}
-         >
-            {msg}
-         </h1>
-         <Welcome name='Henry' onTitleClick={showMessage} />
-      </div>
+      <FancyBorder color='blue'>
+         <h1>Welcome</h1>
+         <p>my name is henry</p>
+      </FancyBorder>
    );
+}
+
+function FancyBorder(props) {
+   return <div style={{ border: `2px solid ${props.color}` }}>{props.children}</div>;
 }
 
 export default App;
