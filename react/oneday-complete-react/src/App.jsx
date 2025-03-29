@@ -1,24 +1,17 @@
+import { useState } from 'react';
 import './App.css';
 
 function App() {
+   const [value, setValue] = useState(0);
+   const handleClick = () => {
+      setValue(value + 1);
+   };
    return (
-      <>
-         <WelcomeDiaog />
-      </>
+      <div>
+         <span>증가값 : {value}</span>
+         <button onClick={handleClick}>증가</button>
+      </div>
    );
-}
-
-function WelcomeDiaog() {
-   return (
-      <FancyBorder color='blue'>
-         <h1>Welcome</h1>
-         <p>my name is henry</p>
-      </FancyBorder>
-   );
-}
-
-function FancyBorder(props) {
-   return <div style={{ border: `2px solid ${props.color}` }}>{props.children}</div>;
 }
 
 export default App;
