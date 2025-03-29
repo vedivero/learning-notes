@@ -90,11 +90,41 @@
 -  Props는 **부모 컴포넌트로부터 전달된 값**으로, 자식 컴포넌트 내부에서 \*\*직접 변경하지 않음.
 -  반면, State는 **컴포넌트 내부에서 선언하고 변경**할 수 있음
 
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+## ✅ useEffect
+
+![alt text](image-2.png)
+
+## Mounting
+
+컴포넌트가 웹 브라우저에 처음 추가되어 렌더링될 때 발생합니다.
+
+## Updating
+
+컴포넌트가 상태(state)나 속성(props)의 변경으로 인해 다시 렌더링될 때 발생합니다.
+
+## Unmounting
+
+컴포넌트가 웹 브라우저에서 제거될 때 발생합니다.
+
+---
+
+## useEffect Hook
+
+-  컴포넌트가 Mounting, Updating, Unmounting 될 때 특정 작업을 실행하기 위해 사용
+-  첫 번째 인자는 실행할 작업을 담은 함수이며, useEffect의 콜백 함수
+-  두 번째 인자는 의존성 배열(Dependency Array)
+
+### 동작 방식
+
+-  의존성 배열을 **지정하지 않으면**, 컴포넌트가 업데이트될 때 마다 useEffect의 콜백 함수가 호출
+-  의존성 배열을 **빈 배열([])** 로 지정하면, 컴포넌트가 마운트될 때 한 번만 useEffect의 콜백 함수가 호출
+-  useEffect의 콜백 함수 내에서 **정리 함수(return 함수)** 를 작성하면, 컴포넌트가 Unmounting 될 때 해당 작업이 실행
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # React + Vite
 
