@@ -1,37 +1,44 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 
-const calculate = (number) => {
-   console.time('계산');
-   let result = 0;
-   //result += Math.sin(number);
-   for (let i = 0; i < 1400000; i++) {
-      result += Math.sin(i + number);
-   }
-
-   console.timeEnd('계산');
-   return result;
-};
-
 export default function App() {
-   const [inputValue, setInputValue] = useState(1);
+   const [currentTemp, setCurrentTemp] = useState(17);
+   const [standardTemp, setStandardTemp] = useState(40);
+   // const check = currentTemp > standardTemp ? '위험' : '정상';
 
-   // 연산이 오래 걸리는 동작을 useMemo에 저장함으로써 UI 렌더링 반응 속도 향상
-   const calValue = useMemo(() => {
-      calculate(inputValue);
-   }, [inputValue]); // calculate 함수에 영향을 주는 두 번째 인자의 의존성 배열
+   // 아래 객체 형태로 사용 시, 콜백 함수가 계속 실행
+   // const check = {
+   //   text:currentTemp > standardTemp ?"위험":"정상";
+   // }
 
-   const [count, setCount] = useState(0);
-   const increaseCount = () => {
-      setCount(count + 1);
-   };
+   // 객체는 메모리 주소(참조값)를 비교함
+   // 같은 내용이라도 주소가 다르면 false
+
+   // useMemo를 사용해서 해결
+   // 현재 온도가 기준 온도보다 높을 때만 check 객체를 생성하여 값을 할당
+   const check = useMemo(() => {
+      return {
+         text: currentTemp > standardTemp ? '위험' : '정상',
+         time: new Date().toLocaleTimeString(),
+      };
+   }, [currentTemp > standardTemp]);
+
+   useEffect(() => {
+      console.log('온도 감지 상황이 변경되었습니다.');
+   }, [check]); // check 값이 변경될 때, 콜백 함수 실행
 
    return (
-      <div>
-         <h3>계산기</h3>
-         <input type='number' value={inputValue} onChange={(e) => setInputValue(parseInt(e.target.value))} />
-         <div>결과 = {calValue}</div>
-         <button onClick={increaseCount}>증가 : {count}</button>
-      </div>
+      <>
+         <div>
+            <label>현재온도</label>
+            <input type='number' value={currentTemp} onChange={(e) => setCurrentTemp(e.target.value)} />
+         </div>
+         <div>
+            <label>기준온도</label>
+            <input type='number' value={standardTemp} onChange={(e) => setStandardTemp(e.target.value)} />
+         </div>
+         <h2>{check.text}</h2>
+         <h2>온도 변경 감지 시간 : {check.time}</h2>
+      </>
    );
 }
