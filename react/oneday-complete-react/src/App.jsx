@@ -1,15 +1,21 @@
-import { useContext } from 'react';
+import { useState } from 'react';
 import './App.css';
-import { userContext } from './user';
-import { BalckChild } from './Child';
+import { BlackChild } from './Child';
+import { CountContext } from './count';
 
 export default function App() {
-   const user = useContext(userContext);
-
+   const [count, setCount] = useState(0);
    return (
       <>
-         {user.name}
-         <BalckChild />
+         <button
+            onClick={() => {
+               setCount(count + 1);
+            }}
+         >{`count: ${count}`}</button>
+
+         <CountContext.Provider value={{ count, setCount }}>
+            <BlackChild />
+         </CountContext.Provider>
       </>
    );
 }
