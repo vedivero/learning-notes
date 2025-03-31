@@ -265,6 +265,27 @@ useEffect(() => {
 -  refInput.current가 가리키는 input에 자동으로 커서 이동
 
 <br>
+
+## ✅ useImperativeHandle Hook
+
+-  컴포넌트의 **내부 상태나 메서드**를 외부(부모 컴포넌트)에서 사용할 수 있도록 공개할 때 사용하는 Hook
+-  주로 `forwardRef`와 함께 사용되어, 부모가 자식 컴포넌트에 접근할 수 있는 **특정 메서드나 속성을 커스터마이징**할 수 있음
+
+---
+
+### 📘 인자 설명
+
+```ts
+useImperativeHandle(ref, createHandle, [deps]);
+```
+
+| 인자           | 설명                                                                   |
+| -------------- | ---------------------------------------------------------------------- |
+| `ref`          | 부모로부터 전달받은 `ref` 객체 (React가 이 객체에 `.current`를 설정함) |
+| `createHandle` | 부모가 사용할 수 있도록 노출할 값(객체)을 반환하는 함수(or 상태)       |
+| `[deps]`       | 이 값이 언제 갱신될지를 결정하는 **의존성 배열** (예: 상태 값 등)      |
+
+<br>
 <br>
 <br>
 <br>
@@ -282,3 +303,7 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+```
+
+```

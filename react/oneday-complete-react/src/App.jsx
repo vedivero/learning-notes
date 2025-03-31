@@ -1,24 +1,22 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
-import CustomInput from './CustomInput';
+import CustomInput2 from './CustomInput2';
 
 export default function App() {
-   const refInput = useRef(); // CustomInput 컴포넌트의 input tag를 참조
+   const inputRef = useRef();
 
    useEffect(() => {
-      refInput.current.focus();
+      inputRef.current.focus();
    }, []);
+
+   const login = () => {
+      alert('반갑습니다.' + inputRef.current.getValue() + '님');
+   };
 
    return (
       <>
-         <CustomInput ref={refInput} label='아이디' />
-         <button
-            onClick={() => {
-               alert(`환영합니다. ${refInput.current.value}`);
-            }}
-         >
-            로그인
-         </button>
+         <CustomInput2 ref={inputRef} label='아이디' />
+         <button onClick={login}>Login</button>
       </>
    );
 }
