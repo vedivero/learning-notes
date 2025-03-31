@@ -315,6 +315,47 @@ useImperativeHandle(ref, createHandle, [deps]);
 -  `dispatch("명령어")` 방식으로 **명령 중심(액션 기반)** 으로 동작하는 것이 핵심
 
 <br>
+
+## ✅ useLayoutEffect Hook
+
+![alt text](image-7.png)
+
+-  `useEffect` 훅과 같은 훅으로 볼 수 있으며, **차이점은 콜백 함수의 실행 시점**에 있음
+
+   -  `useLayoutEffect`: **DOM이 그려지기 직전**에 실행
+   -  `useEffect`: **DOM이 화면에 나타난 후**에 실행됨
+
+-  따라서 `useLayoutEffect`는 **레이아웃에 영향을 주는 작업(예: 크기 측정, 위치 계산 등)** 이 필요할 때 사용됨
+
+   -  예: DOM 요소의 너비를 계산하거나 스크롤 위치를 제어할 때
+
+-  반대로 `useEffect`는 **비동기 작업, API 호출, 로그 출력 등 렌더링과 무관한 작업**에 적합함
+
+-  ⚠️ 성능 최적화를 위해 **특별한 이유가 없다면 기본적으로는 `useEffect`를 사용하는 것이 좋음**
+   -  `useLayoutEffect`는 렌더링을 **블로킹(막음)** 하므로, **잘못 사용하면 깜빡임(flicker)** 이 발생하거나 성능에 악영향을 줄 수 있음
+
+---
+
+### 🧪 실행 순서 예시
+
+```jsx
+useLayoutEffect(() => {
+   console.log('🟨 useLayoutEffect 실행');
+});
+
+useEffect(() => {
+   console.log('🟦 useEffect 실행');
+});
+```
+
+브라우저 콘솔 출력 순서
+
+```
+🟨 useLayoutEffect 실행
+🟦 useEffect 실행
+```
+
+<br>
 <br>
 <br>
 <br>
@@ -332,6 +373,10 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+```
+
+```
 
 ```
 
