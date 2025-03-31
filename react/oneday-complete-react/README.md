@@ -155,7 +155,7 @@
 
 <br>
 
-## 🔁 useMemo 작동 방식
+## ✅ useMemo 작동 방식
 
 -  `useMemo`는 첫 번째 인자인 **콜백 함수**를 호출해 값을 계산합니다.
 -  두 번째 인자인 **의존성 배열**의 항목 중 하나라도 변경되면,
@@ -165,7 +165,7 @@
 
 <br>
 
-## 🔁 useCallback Hook
+## ✅ useCallback Hook
 
 -  `useCallback`은 `useMemo`와 유사한 동작
 -  **차이점은 "함수(Function)"을 메모이제이션한다는 것**
@@ -173,12 +173,24 @@
 
 <br>
 
-## 🔁 useContext
+## ✅ useContext
+
+![alt text](image-4.png)
 
 -  전역적으로 사용할 수 있는 객체를 정의한 후
 -  **부모 컴포넌트의 상태(State)를 자식 컴포넌트에서 사용할 수 있도록** 전달하는 데 활용
 
-![alt text](image-4.png)
+<br>
+
+### 📘 컴포넌트 트리 구조 및 상태 전달 흐름
+
+![alt text](image-5.png)
+
+-  `App` 컴포넌트는 `count`라는 상태(state)를 가지고 있음
+-  `App` → `BlackChild` → `GreenChild` → `BlueChild` 순으로 하위 컴포넌트가 연결됨
+-  `count` 값을 `BlueChild`에서 사용하고자 할 경우,
+   일반적인 방식으로는 props를 통해 아래로 계속 전달해야 함 → **prop drilling 발생**
+-  이런 구조에서는 Context API 또는 전역 상태 관리 도구의 도입을 고려할 수 있음
 
 <br>
 <br>
