@@ -1,35 +1,24 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
-   console.log('렌더링');
-   const [count, setCount] = useState(0);
-   const countRef = useRef(0);
-   let value = 0;
+   // useRef의 또 다른 사용처 -> DOM객체를 참조
 
-   const increaseCount = () => {
-      setCount(count + 1);
+   const inputRef = useRef(); // inputRef의 current가 input의 DOM을 참조하게 됨
+
+   const login = () => {
+      alert(`환영합니다 , ${inputRef.current.value}`);
    };
 
-   const increaseRefCount = () => {
-      countRef.current += 1; // 값은 유지하면서, 렌더링은 피하는 방법
-      console.log('ref : ', countRef.current);
-   };
-
-   const increaseVariable = () => {
-      value += 1; // 값이 변경되도 컴포넌트가 랜더링 되지 않음, 0 으로 초기화
-      console.log('value : ', value);
-   };
+   useEffect(() => {
+      inputRef.current.focus(); // input 태그 DOM을 참조 중
+   }, []);
 
    return (
-      <>
-         <p>State : {count}</p>
-         <p>Ref : {countRef.current}</p>
-         <p>Variable : {value}</p>
-         <button onClick={increaseCount}>State +1</button>
-         <button onClick={increaseRefCount}>Ref +1</button>
-         <button onClick={increaseVariable}>value +1</button>
-      </>
+      <div>
+         <input ref={inputRef} type='text' placeholder='사용자 이름' />
+         <button onClick={login}>로그인</button>
+      </div>
    );
 }
 
