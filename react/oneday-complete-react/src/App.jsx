@@ -1,44 +1,39 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
 export default function App() {
-   const [currentTemp, setCurrentTemp] = useState(17);
-   const [standardTemp, setStandardTemp] = useState(40);
-   // const check = currentTemp > standardTemp ? '위험' : '정상';
+   const [color, setColor] = useState('white');
+   const [count, setCount] = useState(0);
 
-   // 아래 객체 형태로 사용 시, 콜백 함수가 계속 실행
-   // const check = {
-   //   text:currentTemp > standardTemp ?"위험":"정상";
-   // }
-
-   // 객체는 메모리 주소(참조값)를 비교함
-   // 같은 내용이라도 주소가 다르면 false
-
-   // useMemo를 사용해서 해결
-   // 현재 온도가 기준 온도보다 높을 때만 check 객체를 생성하여 값을 할당
-   const check = useMemo(() => {
-      return {
-         text: currentTemp > standardTemp ? '위험' : '정상',
-         time: new Date().toLocaleTimeString(),
-      };
-   }, [currentTemp > standardTemp]);
+   // App컴포넌트가 랜더링 될 때 마다, someFunction 함수가 생성 됨
+   // useCallBack으로 해결 가능
+   // 의존성 배열을 빈 배열[]로 설정 시, 새롭게 정의되는 것은 막았으나, count 값 변경에도 함수를 재 생성하지 않음
+   // 의존성 배열을 [count]로 설정 시,
+   const someFunction = useCallback(() => {
+      console.log(`count 값은 ${count} 입니다.`);
+   }, [count]);
 
    useEffect(() => {
-      console.log('온도 감지 상황이 변경되었습니다.');
-   }, [check]); // check 값이 변경될 때, 콜백 함수 실행
+      console.log('someFunction이 새롭게 정의되었습니다.');
+   }, [someFunction]);
 
    return (
       <>
-         <div>
-            <label>현재온도</label>
-            <input type='number' value={currentTemp} onChange={(e) => setCurrentTemp(e.target.value)} />
+         <div
+            style={{
+               display: 'flex',
+               gap: '2px',
+               flexFlow: 'column',
+               height: '100px',
+               padding: '20px',
+               border: '1px solid black',
+               backgroundColor: color,
+            }}
+         >
+            <input type='text' value={color} onChange={(e) => setColor(e.target.value)} />
+            <button onClick={() => setCount(count + 1)}>{`count: ${count}`}</button>
+            <button onClick={someFunction}>함수 실행</button>
          </div>
-         <div>
-            <label>기준온도</label>
-            <input type='number' value={standardTemp} onChange={(e) => setStandardTemp(e.target.value)} />
-         </div>
-         <h2>{check.text}</h2>
-         <h2>온도 변경 감지 시간 : {check.time}</h2>
       </>
    );
 }
