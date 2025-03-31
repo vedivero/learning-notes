@@ -215,6 +215,56 @@ const MemoizedComponent = React.memo(MyComponent);
 -  따라서 `React.memo` 자체는 **객체가 아니라 함수**이며, **반환된 값은 기억(memoized)된 컴포넌트 객체**
 
 <br>
+
+## ✅ forwardRef 고차 함수
+
+-  `forwardRef`는 **부모 컴포넌트에서 `useRef`를 사용하여, 자식 컴포넌트 내부 DOM 또는 요소에 직접 접근할 수 있도록** 해주는 고차 함수
+-  일반적으로 함수형 컴포넌트는 ref를 직접 전달받지 못하지만, `forwardRef`를 사용하면 예외적으로 허용
+
+### 이해를 돕기 위한 예시
+
+#### ✅ ref로 input을 "가리키기"
+
+<br>
+<br>
+
+```js
+const refInput = useRef();
+```
+
+-  input DOM을 직접 참조할 수 있는 변수 생성
+
+<br>
+<br>
+
+```js
+<CustomInput ref={refInput} label='아이디' />
+```
+
+-  refInput을 CustomInput에 props처럼 전달
+-  일반 컴포넌트는 ref를 받을 수 없기 때문에 forwardRef() 사용
+
+<br>
+<br>
+
+```js
+<input ref={ref} />
+```
+
+-  부모 컴포넌트 refInput.current는는 해당 input tag를 가리킴
+
+<br>
+<br>
+
+```js
+useEffect(() => {
+   refInput.current.focus();
+}, []);
+```
+
+-  refInput.current가 가리키는 input에 자동으로 커서 이동
+
+<br>
 <br>
 <br>
 <br>
