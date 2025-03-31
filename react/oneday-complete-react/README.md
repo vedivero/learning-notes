@@ -94,21 +94,21 @@
 
 ![alt text](image-2.png)
 
-## Mounting
+## ✅ Mounting
 
-컴포넌트가 웹 브라우저에 처음 추가되어 렌더링될 때 발생합니다.
+컴포넌트가 웹 브라우저에 처음 추가되어 렌더링될 때 발생
 
-## Updating
+### Updating
 
-컴포넌트가 상태(state)나 속성(props)의 변경으로 인해 다시 렌더링될 때 발생합니다.
+컴포넌트가 상태(state)나 속성(props)의 변경으로 인해 다시 렌더링될 때 발생
 
-## Unmounting
+### Unmounting
 
-컴포넌트가 웹 브라우저에서 제거될 때 발생합니다.
+컴포넌트가 웹 브라우저에서 제거될 때 발생
 
 ---
 
-## useEffect Hook
+## ✅ useEffect Hook
 
 -  컴포넌트가 Mounting, Updating, Unmounting 될 때 특정 작업을 실행하기 위해 사용
 -  첫 번째 인자는 실행할 작업을 담은 함수이며, useEffect의 콜백 함수
@@ -119,6 +119,12 @@
 -  의존성 배열을 **지정하지 않으면**, 컴포넌트가 업데이트될 때 마다 useEffect의 콜백 함수가 호출
 -  의존성 배열을 **빈 배열([])** 로 지정하면, 컴포넌트가 마운트될 때 한 번만 useEffect의 콜백 함수가 호출
 -  useEffect의 콜백 함수 내에서 **정리 함수(return 함수)** 를 작성하면, 컴포넌트가 Unmounting 될 때 해당 작업이 실행
+
+## ✅ useRef Hook
+
+-  `useRef`의 값은 `useState`처럼 컴포넌트가 유지되는 동안 동일하게 유지, 변경도 가능
+-  하지만 `useState`와는 달리, **`useRef`의 값이 변경되어도 컴포넌트는 다시 렌더링되지 않음**
+-  `useRef`의 실제 값은 `.current` 속성에 저장
 
 <br>
 <br>
