@@ -1,22 +1,65 @@
-import { useEffect, useRef } from 'react';
+import { useReducer, useState } from 'react';
 import './App.css';
-import CustomInput2 from './CustomInput2';
 
 export default function App() {
-   const inputRef = useRef();
+   // useState
+   const [count1, setCount1] = useState(0);
 
-   useEffect(() => {
-      inputRef.current.focus();
-   }, []);
-
-   const login = () => {
-      alert('반갑습니다.' + inputRef.current.getValue() + '님');
+   // useReducer
+   const reducer = (currentState, action) => {
+      if (action.type === 'inc') return currentState + action.step;
+      else if (action.type === 'dec') return currentState - action.step;
+      else return currentState;
    };
+
+   const [count2, dispatch] = useReducer(reducer, 0);
+
+   const [step, setStep] = useState(1);
 
    return (
       <>
-         <CustomInput2 ref={inputRef} label='아이디' />
-         <button onClick={login}>Login</button>
+         <div>
+            <button
+               onClick={() => {
+                  setCount1(count1 + 1);
+               }}
+            >
+               useState + 1
+            </button>{' '}
+            <button
+               onClick={() => {
+                  setCount1(count1 - 1);
+               }}
+            >
+               useState - 1
+            </button>{' '}
+            <span>{count1}</span>
+         </div>
+
+         <input
+            value={step}
+            onChange={(e) => {
+               setStep(e.target.value);
+            }}
+         />
+
+         <div>
+            <button
+               onClick={() => {
+                  dispatch({ type: 'inc', step: Number(step) });
+               }}
+            >
+               useReducer +
+            </button>{' '}
+            <button
+               onClick={() => {
+                  dispatch({ type: 'dec', step: Number(step) });
+               }}
+            >
+               useReducer -
+            </button>{' '}
+            <span>{count2}</span>
+         </div>
       </>
    );
 }
