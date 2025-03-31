@@ -193,6 +193,28 @@
 -  이런 구조에서는 Context API 또는 전역 상태 관리 도구의 도입을 고려할 수 있음
 
 <br>
+
+## ✅ 고차 컴포넌트 (Higher Order Component, HOC)
+
+-  **기존 컴포넌트를 입력으로 받아**, **특정 기능이 추가된 새로운 컴포넌트를 반환하는 함수**
+-  즉, 컴포넌트를 **재사용 가능하게 확장**하는 패턴
+-  대표적인 예: `React.memo`, `React.forwardRef` 등
+
+### 📘 React.memo 는 어떤 객체인가?
+
+```js
+const MemoizedComponent = React.memo(MyComponent);
+```
+
+-  `React.memo`는 함수 컴포넌트(Function Component)를 인자로 받아,  
+   내부적으로 props가 바뀌지 않으면 리렌더링하지 않도록 최적화한  
+   컴포넌트를 반환하는 고차 컴포넌트(HOC, Higher Order Component)
+
+-  반환값은 **새로운 함수 컴포넌트**
+
+-  따라서 `React.memo` 자체는 **객체가 아니라 함수**이며, **반환된 값은 기억(memoized)된 컴포넌트 객체**
+
+<br>
 <br>
 <br>
 <br>
