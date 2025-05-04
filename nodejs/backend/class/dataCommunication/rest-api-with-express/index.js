@@ -6,7 +6,7 @@ const app = express();
 //get방식의 API를 생성
 app.get('/getTest', function (req, res) {
    //Middleware function
-   res.send('Hello World');
+   res.send('Hello World!');
 });
 
 //Port Number
