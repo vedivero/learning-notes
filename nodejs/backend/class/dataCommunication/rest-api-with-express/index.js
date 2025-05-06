@@ -1,13 +1,16 @@
-//const express = require('express')//예전 방식 => commonjs
-import express from 'express'; //최근 방식 => module
+import express from 'express';
 
 const app = express();
 
-//get방식의 API를 생성
-app.get('/getTest', function (req, res) {
-   //Middleware function
+
+app.get('/boards', function (req, res) {
+   
    res.send('Hello World!');
 });
 
-//Port Number
+app.post('/boards',function(req,res){
+   res.send("POST/boards")
+})
+
+
 app.listen(3000);
