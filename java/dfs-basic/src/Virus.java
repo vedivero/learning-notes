@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class virus_00_03 {
+public class Virus {
 
     static boolean[][] graph;
     static boolean[] visited;
