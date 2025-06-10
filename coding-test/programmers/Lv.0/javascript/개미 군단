@@ -1,0 +1,13 @@
+function solution(hp) {
+
+    let generalAnts = Math.floor(hp/5);
+    hp %= 5;
+    
+    let soldierAnts = Math.floor(hp/3);
+    hp %= 3;
+    
+    let workerAnts = hp;
+    
+    return generalAnts+soldierAnts+workerAnts
+
+}

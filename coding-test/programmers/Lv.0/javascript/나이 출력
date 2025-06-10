@@ -1,0 +1,4 @@
+function solution(age) {
+    let currentYear = new Date().getFullYear() -1;
+    return currentYear - age;
+}
