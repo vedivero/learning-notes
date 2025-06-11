@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>simple_frame</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/0b916ad0df.js"></script>
+    <link th:href="@{/assets/css/style-login.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/parsley-login.css}" rel="stylesheet" />
+    <script th:src="@{/assets/plugins/parsley.min.js}"></script>
+  </head>
+  <body>
+    <!-- 타임리프 form 구성: Spring Security 자동 필터 경로 /login 처리 -->
+    <form
+      th:action="@{/login}"
+      method="post"
+      class="margin-bottom-0"
+      data-parsley-validate=""
+    >
+      <!-- CSRF 토큰 -->
+      <input
+        type="hidden"
+        th:name="${_csrf.parameterName}"
+        th:value="${_csrf.token}"
+      />
+
+      <div id="container">
+        <div id="main">
+          <div class="login-box">
+            <h1>simple frame</h1>
+
+            <label>
+              <span class="login-icon"
+                ><i class="fa-sharp fa-solid fa-user"></i
+              ></span>
+              <input
+                name="username"
+                type="text"
+                placeholder="Username"
+                required
+                data-parsley-required-message="Username field is required"
+              />
+            </label>
+
+            <label>
+              <span class="login-icon"
+                ><i class="fa-sharp fa-solid fa-lock"></i
+              ></span>
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                required
+                autocomplete="off"
+                data-parsley-required-message="Password field is required"
+              />
+            </label>
+
+            <!-- 로그인 실패 시 메시지 표시 -->
+            <div
+              id="errormsg"
+              class="login-msg"
+              th:if="${param.error}"
+              th:text="'사용자 이름 또는 암호가 잘못되었습니다.'"
+            ></div>
+
+            <label for="rememberme" class="remember">
+              <input type="checkbox" name="remember-me" id="rememberme" />
+              Keep me logged in
+            </label>
+
+            <button id="btnLogin" class="btn1" type="submit">Log in</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- 클라이언트 JS (에러파라미터를 JS로 처리하는 방식은 제거됨) -->
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      $(function () {
+        $("#loginForm")
+          .parsley()
+          .on("field:validated", function () {
+            // 유효성 검사 이후 처리 (필요 시 추가)
+          })
+          .on("form:submit", function () {
+            // 전송 후 처리 (필요 시 추가)
+          });
+      });
+      /*]]>*/
+    </script>
+  </body>
+</html>
