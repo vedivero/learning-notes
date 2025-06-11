@@ -1,9 +1,0 @@
-function solution(my_string, n) {
-   let array = [];
-   for (let i = 0; i < my_string.length; i++) {
-      for (let j = 0; j < n; j++) {
-         array.push(my_string[i]);
-      }
-   }
-   return array.join('');
-}
