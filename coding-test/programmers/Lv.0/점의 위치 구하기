@@ -1,8 +1,0 @@
-function solution(dot) {
-
-    let [num1, num2] = dot;
-    let check = num1 * num2 > 0;
-    
-    return num1 > 0 ? (check ? 1 : 4) : (check ? 3: 2);
-    
-}

@@ -1,4 +1,0 @@
-function solution(message) {
-   let width = message.length;
-   return width * 2;
-}

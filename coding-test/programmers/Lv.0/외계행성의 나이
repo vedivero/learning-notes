@@ -1,9 +1,0 @@
-function solution(age) {
-    let alphabet = 'abcdefghijklmnopqrstuvwxyz';
-    let sliceAge = age.toString().slice("");
-    let result = '';
-    for(let i=0; i<sliceAge.length; i++){
-        result += alphabet[sliceAge[i]]    ;
-    }
-    return result;
-}
