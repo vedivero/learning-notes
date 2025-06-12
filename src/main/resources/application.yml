@@ -1,8 +1,24 @@
 spring:
   application:
     name: pms
+
   profiles:
     active: local
+
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+    suffix: .html
+
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
 
   datasource:
     url: jdbc:mysql://192.168.2.150:3306/?allowPublicKeyRetrieval=true&useSSL=false
