@@ -21,14 +21,14 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:mysql://192.168.2.150:3306/?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://192.168.2.150:3306/pms?allowPublicKeyRetrieval=true&useSSL=false
     username: astuser
     password: ast1234^^
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update # create, update, validate, none
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

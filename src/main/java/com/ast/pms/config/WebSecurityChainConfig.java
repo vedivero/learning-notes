@@ -1,7 +1,9 @@
 package com.ast.pms.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,59 +14,59 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityChainConfig {
 
-	private final UserDetailsService userDetailsService;
+	// Employee 기반 사용자 인증 서비스
+	private final UserDetailsService employeeDetailsService;
 
+	// 인증 관리자 Bean 등록
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
 		return authConfiguration.getAuthenticationManager();
 	}
 
+	// 비밀번호 암호화 (BCrypt 사용)
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
+	// 로그인 성공 핸들러
 	public AuthenticationSuccessHandler successHandler() {
 		return new SecurityLoginSuccessHandler();
 	}
 
+	// 로그인 실패 핸들러
 	public AuthenticationFailureHandler failureHandler() {
 		return new SecurityLoginFailureHandler();
 	}
 
+	// 스프링 시큐리티 필터 체인 설정
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(csrf -> csrf
-						.ignoringRequestMatchers("/logout") // CSRF 예외 처리
-				)
+				.csrf(csrf -> csrf.ignoringRequestMatchers("/logout"))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/main/**", "/join/**", "/account/**").authenticated() // 인증 필요
-						.anyRequest().permitAll() // 그 외 모든 요청 허용
-				)
+						.requestMatchers("/main/**", "/account/**").authenticated()
+						.anyRequest().permitAll())
 				.formLogin(login -> login
-						.loginPage("/login") // 사용자 정의 로그인 페이지
-						.defaultSuccessUrl("/main") // 로그인 성공 후 이동할 페이지
-						.successHandler(successHandler()) // 커스텀 성공 핸들러
-						.failureHandler(failureHandler()) // 커스텀 실패 핸들러
-				)
+						.loginPage("/login")
+						.defaultSuccessUrl("/main")
+						.successHandler(successHandler())
+						.failureHandler(failureHandler())
+						.usernameParameter("id")
+						.passwordParameter("password"))
 				.rememberMe(remember -> remember
 						.rememberMeParameter("remember")
-						.tokenValiditySeconds(259200) // 3일
-						.userDetailsService(userDetailsService))
+						.tokenValiditySeconds(259200)
+						.userDetailsService(employeeDetailsService))
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login")
-						.deleteCookies("JSESSIONID", "remember") // 쿠키 정리
-				);
+						.deleteCookies("JSESSIONID", "remember"));
 
 		return http.build();
 	}
-
 }
