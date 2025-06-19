@@ -1,4 +1,4 @@
-package com.ast.pms.controller.employee;
+package com.ast.pms.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

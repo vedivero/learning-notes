@@ -1,7 +1,7 @@
-package com.ast.pms.service.employee;
+package com.ast.pms.config;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.repository.employee.EmployeeRepository;
+import com.ast.pms.repository.EmployeeRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeDetailsServiceImpl implements UserDetailsService {
+public class AuthUserDetailsService implements UserDetailsService {
 
     private final EmployeeRepository employeeRepository;
 

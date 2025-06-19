@@ -1,4 +1,4 @@
-package com.ast.pms.repository.employee;
+package com.ast.pms.repository;
 
 import com.ast.pms.domain.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;

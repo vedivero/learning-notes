@@ -1,4 +1,4 @@
-package com.ast.pms.dto.employee;
+package com.ast.pms.dto;
 
 import lombok.*;
 
