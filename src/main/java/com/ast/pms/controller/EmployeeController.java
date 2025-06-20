@@ -1,7 +1,7 @@
 package com.ast.pms.controller;
 
 import com.ast.pms.dto.EmployeeJoinRequest;
-import com.ast.pms.service.EmployeeJoinService;
+import com.ast.pms.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,15 +14,15 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/join")
-public class EmployeeJoinController {
+@RequestMapping("/employees")
+public class EmployeeController {
 
-    private final EmployeeJoinService employeeJoinService;
+    private final EmployeeService employeeJoinService;
 
     @GetMapping
-    public String showJoinForm(Model model) {
+    public String showRegistrationForm(Model model) {
         model.addAttribute("employeeJoinRequest", new EmployeeJoinRequest());
-        return "join";
+        return "register";
     }
 
     @PostMapping
@@ -30,7 +30,7 @@ public class EmployeeJoinController {
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "join";
+            return "register";
         }
         employeeJoinService.join(employeeJoinRequest);
         return "redirect:/login";

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class EmployeeJoinService {
+public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;

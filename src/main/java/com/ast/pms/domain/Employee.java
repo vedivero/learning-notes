@@ -87,7 +87,7 @@ public class Employee {
 
     // 시큐리티 인증 시 사용할 식별자
     public String getId() {
-        return loginId; // 또는 employeeId.toString() 등으로 변경 가능
+        return loginId;
     }
 
     public boolean isEnabled() {
