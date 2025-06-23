@@ -1,4 +1,4 @@
-package com.ast.pms.dto;
+package com.ast.pms.dto.request.project;
 
 import java.time.LocalDate;
 import java.util.List;

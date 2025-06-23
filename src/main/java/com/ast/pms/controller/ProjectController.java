@@ -1,6 +1,7 @@
 package com.ast.pms.controller;
 
-import com.ast.pms.dto.ProjectCreateRequest;
+import com.ast.pms.dto.request.project.ProjectCreateRequest;
+import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,13 +24,14 @@ public class ProjectController {
     }
 
     @PostMapping
-    public String createProject(@Valid @ModelAttribute ProjectCreateRequest projectCreateRequest,
+    public String submitProjectForm(@Valid @ModelAttribute ProjectCreateRequest projectCreateRequest,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "project/create";
+            return "project/new";
         }
         projectService.createProject(projectCreateRequest);
         return "redirect:/main";
     }
+
 }

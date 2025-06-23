@@ -1,4 +1,4 @@
-package com.ast.pms.dto;
+package com.ast.pms.dto.request.project;
 
 import lombok.*;
 
@@ -21,4 +21,5 @@ public class ProjectSubcontractRequest {
     private LocalDate paymentDate; // 대금지급일자
     private String paymentMethod; // 지급방식
     private Boolean isEvaluated; // 평가여부
+
 }

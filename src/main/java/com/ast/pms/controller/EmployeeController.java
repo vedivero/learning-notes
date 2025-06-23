@@ -1,6 +1,6 @@
 package com.ast.pms.controller;
 
-import com.ast.pms.dto.EmployeeJoinRequest;
+import com.ast.pms.dto.request.project.EmployeeJoinRequest;
 import com.ast.pms.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;

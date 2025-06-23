@@ -2,6 +2,8 @@ package com.ast.pms.service;
 
 import com.ast.pms.domain.*;
 import com.ast.pms.dto.*;
+import com.ast.pms.dto.request.project.ProjectCreateRequest;
+import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -149,5 +151,12 @@ public class ProjectService {
                                                                 .updatedAt(LocalDateTime.now())
                                                                 .build())
                                                 .collect(Collectors.toList()));
+        }
+
+        public ProjectDetailResponse getProjectDetailById(int projectId) {
+                Project project = projectRepository.findById(projectId)
+                                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다. : " + projectId));
+
+                return ProjectDetailResponse.from(project);
         }
 }
