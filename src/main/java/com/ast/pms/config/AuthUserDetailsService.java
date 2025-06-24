@@ -33,6 +33,7 @@ public class AuthUserDetailsService implements UserDetailsService {
         System.out.println("================================================================================");
         System.out.println("■ 로그인 시도: " + account.getLoginId());
         System.out.println("■ 비밀번호(암호화됨): " + account.getPassword());
+        System.out.println("■ 활성화 상태: " + account.isEnabled());
         System.out.println("■ 권한: " + account.getRole());
         System.out.println("================================================================================");
 

@@ -1,4 +1,4 @@
-package com.ast.pms.repository;
+package com.ast.pms.repository.project;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

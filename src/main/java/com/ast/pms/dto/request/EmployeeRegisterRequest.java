@@ -3,10 +3,9 @@ package com.ast.pms.dto.request;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.persistence.Column;
 
 @Getter
 @Setter
@@ -20,10 +19,12 @@ public class EmployeeRegisterRequest {
     private String name;
     private String headquarter;
     private String team;
-    private String license_1;
-    private String license_2;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
     private String position;
     private String role;
+
+    private List<EmployeeLicenseRequest> licenses;
 }

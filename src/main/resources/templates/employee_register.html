@@ -7,12 +7,31 @@
   <input type="text" th:field="*{team}" placeholder="팀" />
   생년월일<input type="date" th:field="*{birthDate}" placeholder="생년월일" />
   <input type="text" th:field="*{position}" placeholder="직급" />
-  <input type="text" th:field="*{license_1}" placeholder="자격증1" />
-  <input type="text" th:field="*{license_2}" placeholder="자격증2" />
   <input type="text" th:field="*{role}" placeholder="역할 (예: ROLE_USER)" />
-  
-  <!-- <input type="hidden" name="status" value="ACTIVE" />
-  <input type="hidden" name="accountEnabled" value="true" /> -->
+
+  <div id="licenseFields">
+    <div th:each="license, iterStat : *{licenses}">
+      <input type="text"
+             th:field="*{licenses[__${iterStat.index}__].name}"
+             placeholder="자격증명" />
+    </div>
+  </div>
+
+  <button type="button" onclick="addLicenseField()">자격증 추가</button>
 
   <button type="submit">등록</button>
 </form>
+
+<script>
+  function addLicenseField() {
+    const container = document.getElementById("licenseFields");
+
+    const index = container.children.length;
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <input type="text" name="licenses[${index}].name" placeholder="자격증명" />
+    `;
+    container.appendChild(div);
+  }
+</script>
