@@ -1,12 +1,11 @@
 package com.ast.pms.service;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.dto.request.project.EmployeeJoinRequest;
+import com.ast.pms.dto.request.EmployeeRegisterRequest;
 import com.ast.pms.repository.EmployeeRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,9 @@ import java.time.LocalDate;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public void join(EmployeeJoinRequest request) {
+    public void register(EmployeeRegisterRequest request) {
         Employee employee = Employee.builder()
-                .loginId(request.getLoginId())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .name(request.getName())
                 .headquarter(request.getHeadquarter())
@@ -33,9 +29,7 @@ public class EmployeeService {
                 .birthDate(request.getBirthDate())
                 .position(request.getPosition())
                 .role(request.getRole())
-                .gender(request.getGender())
                 .status("ACTIVE")
-                .accountEnabled(true)
                 .createdAt(LocalDateTime.now())
                 .build();
 

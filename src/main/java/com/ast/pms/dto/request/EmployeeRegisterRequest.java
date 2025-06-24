@@ -1,4 +1,4 @@
-package com.ast.pms.dto.request.project;
+package com.ast.pms.dto.request;
 
 import lombok.*;
 
@@ -6,43 +6,24 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeJoinRequest {
+public class EmployeeRegisterRequest {
 
-    @NotBlank
-    private String loginId;
-
-    @NotBlank
     private String password;
-
-    @NotBlank
     private String email;
-
-    @NotBlank
     private String name;
-
-    @NotBlank
     private String headquarter;
-
-    @NotBlank
     private String team;
-
+    private String license_1;
+    private String license_2;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
     private LocalDate birthDate;
-
-    @NotBlank
     private String position;
-
-    @NotBlank
     private String role;
-
-    @NotBlank
-    private String gender;
 }

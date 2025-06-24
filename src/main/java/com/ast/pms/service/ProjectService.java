@@ -1,7 +1,6 @@
 package com.ast.pms.service;
 
 import com.ast.pms.domain.*;
-import com.ast.pms.dto.*;
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.repository.*;
@@ -29,7 +28,6 @@ public class ProjectService {
         public void createProject(ProjectCreateRequest request) {
 
                 Project project = Project.builder()
-                                // .projectId(request.getProjectId())
                                 .name(request.getName())
                                 .startDate(request.getStartDate())
                                 .endDate(request.getEndDate())

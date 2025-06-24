@@ -1,7 +1,6 @@
 package com.ast.pms.controller;
 
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
-import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

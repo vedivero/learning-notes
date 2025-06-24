@@ -1,6 +1,6 @@
 package com.ast.pms.controller;
 
-import com.ast.pms.dto.request.project.EmployeeJoinRequest;
+import com.ast.pms.dto.request.EmployeeRegisterRequest;
 import com.ast.pms.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,19 +20,19 @@ public class EmployeeController {
     private final EmployeeService employeeJoinService;
 
     @GetMapping
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("employeeJoinRequest", new EmployeeJoinRequest());
-        return "register";
+    public String showRegistrationEmployeeForm(Model model) {
+        model.addAttribute("employeeRegisterRequest", new EmployeeRegisterRequest());
+        return "employee_register";
     }
 
     @PostMapping
-    public String processJoin(@Valid @ModelAttribute EmployeeJoinRequest employeeJoinRequest,
+    public String processRegister(@Valid @ModelAttribute EmployeeRegisterRequest employeeRegisterRequest,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "employee_register";
         }
-        employeeJoinService.join(employeeJoinRequest);
+        employeeJoinService.register(employeeRegisterRequest);
         return "redirect:/login";
     }
 }
