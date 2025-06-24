@@ -39,11 +39,14 @@ public class Account {
     @Column(name = "password_changed_at")
     private LocalDateTime passwordChangedAt;
 
-    // public String getId() {
-    // return loginId;
-    // }
+    @Column(name = "account_enabled", nullable = false)
+    private boolean accountEnabled;
 
-    // public boolean isEnabled() {
-    // return accountEnabled;
-    // }
+    public String getId() {
+        return loginId;
+    }
+
+    public boolean isEnabled() {
+        return accountEnabled;
+    }
 }

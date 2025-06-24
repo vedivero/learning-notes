@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class WebSecurityChainConfig {
 
 	// Employee 기반 사용자 인증 서비스
-	private final UserDetailsService employeeDetailsService;
+	private final UserDetailsService userDetailsService;
 
 	// 인증 관리자 Bean 등록
 	@Bean
@@ -60,7 +60,7 @@ public class WebSecurityChainConfig {
 				.rememberMe(remember -> remember
 						.rememberMeParameter("remember")
 						.tokenValiditySeconds(259200)
-						.userDetailsService(employeeDetailsService))
+						.userDetailsService(userDetailsService))
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login")

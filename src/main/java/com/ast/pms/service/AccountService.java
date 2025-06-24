@@ -28,6 +28,7 @@ public class AccountService {
                 .userName(request.getUserName())
                 .role(request.getRole())
                 .passwordChangedAt(request.getPasswordChangedAt())
+                .accountEnabled(true)
                 .build();
 
         accountRepository.save(account);
