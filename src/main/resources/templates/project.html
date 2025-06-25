@@ -9,68 +9,121 @@
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <h2>기본 정보</h2>
-    <!-- <input type="text" th:field="*{projectId}" placeholder="프로젝트 ID" /><br/> -->
-    <input type="text" th:field="*{name}" placeholder="프로젝트명" /><br/>
-    <input type="date" th:field="*{startDate}" /><br/>
-    <input type="date" th:field="*{endDate}" /><br/>
-    <input type="text" th:field="*{projectType}" placeholder="프로젝트 유형" /><br/>
-    <input type="text" th:field="*{status}" placeholder="진행 상태" /><br/>
-    <input type="text" th:field="*{technologyType}" placeholder="기술 유형" /><br/>
-    <input type="text" th:field="*{clientType}" placeholder="고객 유형" /><br/>
-    <textarea th:field="*{description}" placeholder="설명"></textarea><br/>
+    프로젝트명<input type="text" th:field="*{name}" placeholder="프로젝트명" /><br/>
+    프로젝트 시작일<input type="date" th:field="*{startDate}" /><br/>
+    프로젝트 종료일<input type="date" th:field="*{endDate}" /><br/>
+    프로젝트 유형<input type="text" th:field="*{projectType}" placeholder="프로젝트 유형" /><br/>
+    진행 상태<input type="text" th:field="*{status}" placeholder="진행 상태" /><br/>
+    기술 유형<input type="text" th:field="*{technologyType}" placeholder="기술 유형" /><br/>
+    고객 유형<input type="text" th:field="*{clientType}" placeholder="고객 유형" /><br/>
+    설명<textarea th:field="*{description}" placeholder="설명"></textarea><br/>
 
-    <h2>예산 (1개)</h2>
-    <input type="number" th:field="*{budgets[0].totalBudget}" placeholder="총 예산" /><br/>
-    <input type="text" th:field="*{budgets[0].paymentPlan}" placeholder="대금 계획" /><br/>
+<hr>
+
+    <h2>예산 정보</h2>
+    총 예산<input type="number" th:field="*{budgets[0].totalBudget}" placeholder="총 예산" /><br/>
+    대금 계획<input type="text" th:field="*{budgets[0].paymentPlan}" placeholder="대금 계획" /><br/>
     <input type="date" th:field="*{budgets[0].paymentDate}" /><br/>
     <input type="text" th:field="*{budgets[0].paymentMethod}" placeholder="지급 방식" /><br/>
 
-    <h2>참여 직원 (1명)</h2>
-    <input type="number" th:field="*{projectEmployees[0].employeeId}" placeholder="사원 번호" /><br/>
-    <input type="text" th:field="*{projectEmployees[0].position}" placeholder="직급" /><br/>
-    <label><input type="checkbox" th:field="*{projectEmployees[0].isMainPm}" /> 주 PM</label><br/>
+<hr>
+    <h2>프로젝트 인력 </h2>
+    <label>담당 PM</label><br/>
+    <input type="number" th:field="*{projectEmployees[0].employeeId}" placeholder="담당 PM" /><br/>
 
-    <h2>클라이언트 (1개)</h2>
-    <input type="text" th:field="*{projectClients[0].organization}" placeholder="기관명" /><br/>
-    <input type="text" th:field="*{projectClients[0].managerName}" placeholder="담당자" /><br/>
-    <input type="text" th:field="*{projectClients[0].department}" placeholder="부서" /><br/>
-    <input type="text" th:field="*{projectClients[0].contactNumber}" placeholder="연락처" /><br/>
+<hr>
+    <label>프로젝트 인력</label><br/>
+    <div id="employee-list">
+        <input type="text" th:field="*{projectEmployees[1].employeeId}" placeholder="인력 1" /><br/>
+        <input type="text" th:field="*{projectEmployees[2].employeeId}" placeholder="인력 2" /><br/>
+        <input type="text" th:field="*{projectEmployees[3].employeeId}" placeholder="인력 3" /><br/>
+        <!-- 나중에 JS로 동적으로 처리 -->
+    </div>
 
-    <h2>하도급 계약 (1건)</h2>
-    <input type="text" th:field="*{projectSubcontracts[0].companyName}" placeholder="회사명" /><br/>
-    <label><input type="checkbox" th:field="*{projectSubcontracts[0].isSubcontracted}" /> 하도급 여부</label><br/>
-    <input type="date" th:field="*{projectSubcontracts[0].contractDate}" /><br/>
-    <input type="date" th:field="*{projectSubcontracts[0].contractStart}" /><br/>
-    <input type="date" th:field="*{projectSubcontracts[0].contractEnd}" /><br/>
-    <input type="number" th:field="*{projectSubcontracts[0].contractCount}" placeholder="건수" /><br/>
-    <input type="number" th:field="*{projectSubcontracts[0].contractAmount}" placeholder="금액" /><br/>
-    <input type="date" th:field="*{projectSubcontracts[0].paymentDate}" /><br/>
-    <input type="text" th:field="*{projectSubcontracts[0].paymentMethod}" placeholder="지급 방식" /><br/>
-    <label><input type="checkbox" th:field="*{projectSubcontracts[0].isEvaluated}" /> 평가 여부</label><br/>
+<hr>
+    <h2>발주처 정보 </h2>
+    기관명<input type="text" th:field="*{projectClients[0].organization}" placeholder="기관명" /><br/>
+    담당자<input type="text" th:field="*{projectClients[0].managerName}" placeholder="담당자" /><br/>
+    부서<input type="text" th:field="*{projectClients[0].department}" placeholder="부서" /><br/>
+    연락처<input type="text" th:field="*{projectClients[0].contactNumber}" placeholder="연락처" /><br/>
 
-    <h2>컨소시엄 (1개)</h2>
-    <input type="text" th:field="*{projectConsortiums[0].companyName}" placeholder="회사명" /><br/>
-    <input type="text" th:field="*{projectConsortiums[0].contractAmount}" placeholder="파트너 유형" /><br/>
-    <label><input type="checkbox" th:field="*{projectConsortiums[0].isJointContract}" /> 공동 계약</label><br/>
-    <label><input type="checkbox" th:field="*{projectConsortiums[0].isMainContract}" /> 주계약</label><br/>
-    <input type="text" th:field="*{projectConsortiums[0].responsibilityRatio}" placeholder="책임비율" /><br/>
-    <input type="text" th:field="*{projectConsortiums[0].roleDescription}" placeholder="역할 설명" /><br/>
+<hr>
+    <h3>하도급 정보</h3>
 
-    <h2>현장 정보 (1개)</h2>
-    <input type="text" th:field="*{projectLocations[0].workType}" placeholder="근무형태" /><br/>
+    <label>하도급 업체</label><br/>
+    <input type="text" th:field="*{projectSubcontracts[0].companyName}" placeholder="하도급 업체" /><br/><br/>
+
+    <label>계약일</label><br/>
+    <input type="date" th:field="*{projectSubcontracts[0].contractDate}" /><br/><br/>
+
+    <label>계약기간</label><br/>
+    <input type="date" th:field="*{projectSubcontracts[0].contractStart}" />
+    <span> - </span>
+    <input type="date" th:field="*{projectSubcontracts[0].contractEnd}" /><br/><br/>
+
+    <label>하도급 비용</label><br/>
+    <input type="text" th:field="*{projectSubcontracts[0].contractAmount}" placeholder="1,000,000(VAT 포함)" /><br/><br/>
+
+    <label>대금 지급 일자</label><br/>
+    <input type="date" th:field="*{projectSubcontracts[0].paymentDate}" /><br/><br/>
+
+    <label>지급 방식</label><br/>
+    <input type="text" th:field="*{projectSubcontracts[0].paymentMethod}" placeholder="현금 (선금)50% 1,000,000" /><br/><br/>
+
+    <label>하도급 평가</label><br/>
+    <label><input type="radio" th:field="*{projectSubcontracts[0].evaluationGrade}" value="S" /> S</label>
+    <label><input type="radio" th:field="*{projectSubcontracts[0].evaluationGrade}" value="A" /> A</label>
+    <label><input type="radio" th:field="*{projectSubcontracts[0].evaluationGrade}" value="B" /> B</label>
+    <label><input type="radio" th:field="*{projectSubcontracts[0].evaluationGrade}" value="C" /> C</label><br/><br/>
+
+
+    <h2>하도급 계약2 </h2>
+    회사명<input type="text" th:field="*{projectSubcontracts[1].companyName}" placeholder="회사명" /><br/>
+    <label><input type="checkbox" th:field="*{projectSubcontracts[1].isSubcontracted}" /> 하도급 여부</label><br/>
+    계약일<input type="date" th:field="*{projectSubcontracts[1].contractDate}" /><br/>
+    계약 시작일<input type="date" th:field="*{projectSubcontracts[1].contractStart}" /><br/>
+    계약 종료일<input type="date" th:field="*{projectSubcontracts[1].contractEnd}" /><br/>
+    건수<input type="number" th:field="*{projectSubcontracts[1].contractCount}" placeholder="건수" /><br/>
+    금액<input type="number" th:field="*{projectSubcontracts[1].contractAmount}" placeholder="금액" /><br/>
+    <input type="date" th:field="*{projectSubcontracts[1].paymentDate}" /><br/>
+    지급 방식<input type="text" th:field="*{projectSubcontracts[1].paymentMethod}" placeholder="지급 방식" /><br/>
+    <label><input type="checkbox" th:field="*{projectSubcontracts[1].isEvaluated}" /> 평가 여부</label><br/>
+
+<hr>
+    <h2>컨소시엄 관리1</h2>
+    회사명<input type="text" th:field="*{projectConsortiums[0].companyName}" placeholder="회사명" /><br/>
+    파트너 유형<input type="text" th:field="*{projectConsortiums[0].contractAmount}" placeholder="파트너 유형" /><br/>
+    공동 계약<label><input type="checkbox" th:field="*{projectConsortiums[0].isJointContract}" /> 공동 계약</label><br/>
+    주계약<label><input type="checkbox" th:field="*{projectConsortiums[0].isMainContract}" /> 주계약</label><br/>
+    책임비율<input type="text" th:field="*{projectConsortiums[0].responsibilityRatio}" placeholder="책임비율" /><br/>
+    역할 설명<input type="text" th:field="*{projectConsortiums[0].roleDescription}" placeholder="역할 설명" /><br/>
+    
+    <h2>컨소시엄 관리2</h2>
+    회사명<input type="text" th:field="*{projectConsortiums[1].companyName}" placeholder="회사명" /><br/>
+    파트너 유형<input type="text" th:field="*{projectConsortiums[1].contractAmount}" placeholder="파트너 유형" /><br/>
+    공동 계약<label><input type="checkbox" th:field="*{projectConsortiums[1].isJointContract}" /> 공동 계약</label><br/>
+    주계약<label><input type="checkbox" th:field="*{projectConsortiums[1].isMainContract}" /> 주계약</label><br/>
+    책임비율<input type="text" th:field="*{projectConsortiums[1].responsibilityRatio}" placeholder="책임비율" /><br/>
+    역할 설명<input type="text" th:field="*{projectConsortiums[1].roleDescription}" placeholder="역할 설명" /><br/>
+
+<hr>
+    <h2>수행 장소</h2>
+    근무형태<input type="text" th:field="*{projectLocations[0].workType}" placeholder="근무형태" /><br/>
     <label><input type="checkbox" th:field="*{projectLocations[0].hasSharedOffice}" /> 합사 사무실</label><br/>
-    <input type="text" th:field="*{projectLocations[0].siteManager}" placeholder="현장 책임자" /><br/>
-    <input type="text" th:field="*{projectLocations[0].managerContact}" placeholder="연락처" /><br/>
+    현장 책임자<input type="text" th:field="*{projectLocations[0].siteManager}" placeholder="현장 책임자" /><br/>
+    연락처<input type="text" th:field="*{projectLocations[0].managerContact}" placeholder="연락처" /><br/>
 
-    <h2>첨부파일 (1개)</h2>
-    <input type="text" th:field="*{projectAttachments[0].fileName}" placeholder="파일명" /><br/>
-    <input type="text" th:field="*{projectAttachments[0].filePath}" placeholder="파일경로" /><br/>
-    <input type="number" th:field="*{projectAttachments[0].fileSize}" placeholder="크기(Byte)" /><br/>
-    <input type="text" th:field="*{projectAttachments[0].fileType}" placeholder="유형" /><br/>
+<hr>
+    <h2>첨부파일</h2>
+    파일명<input type="text" th:field="*{projectAttachments[0].fileName}" placeholder="파일명" /><br/>
+    파일경로<input type="text" th:field="*{projectAttachments[0].filePath}" placeholder="파일경로" /><br/>
+    크기(Byte)<input type="number" th:field="*{projectAttachments[0].fileSize}" placeholder="크기(Byte)" /><br/>
+    유형<input type="text" th:field="*{projectAttachments[0].fileType}" placeholder="유형" /><br/>
 
+<hr>
     <h2>이슈 (1건)</h2>
-    <textarea th:field="*{projectIssues[0].issueNote}" placeholder="이슈 내용"></textarea><br/>
-    <input type="text" th:field="*{projectIssues[0].writerId}" placeholder="작성자 ID" /><br/>
+    이슈 내용<textarea th:field="*{projectIssues[0].issueNote}" placeholder="이슈 내용"></textarea><br/>
+    작성자 ID<input type="text" th:field="*{projectIssues[0].writerId}" placeholder="작성자 ID" /><br/>
 
     <button type="submit">저장</button>
 </form>

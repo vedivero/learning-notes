@@ -1,8 +1,10 @@
 package com.ast.pms.service;
 
 import com.ast.pms.domain.*;
-import com.ast.pms.dto.request.ProjectCreateRequest;
+import com.ast.pms.dto.request.project.ProjectCreateRequest;
+import com.ast.pms.dto.request.project.ProjectEmployeeRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
+import com.ast.pms.repository.EmployeeRepository;
 import com.ast.pms.repository.project.ProjectAttachmentRepository;
 import com.ast.pms.repository.project.ProjectBudgetRepository;
 import com.ast.pms.repository.project.ProjectClientRepository;
@@ -17,7 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,7 @@ public class ProjectService {
         private final ProjectLocationRepository projectLocationRepository;
         private final ProjectAttachmentRepository projectAttachmentRepository;
         private final ProjectIssueRepository projectIssueRepository;
+        private final EmployeeRepository employeeRepository;
 
         public void createProject(ProjectCreateRequest request) {
 
@@ -64,16 +69,29 @@ public class ProjectService {
                                                                 .build())
                                                 .collect(Collectors.toList()));
 
+                List<ProjectEmployeeRequest> employeeRequests = request.getProjectEmployees();
+
                 projectEmployeeRepository.saveAll(
-                                request.getProjectEmployees().stream()
-                                                .map(e -> ProjectEmployee.builder()
-                                                                .project(project)
-                                                                .employeeId(e.getEmployeeId())
-                                                                .position(e.getPosition())
-                                                                .isMainPm(e.getIsMainPm())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
+                                IntStream.range(0, employeeRequests.size())
+                                                .mapToObj(i -> {
+                                                        ProjectEmployeeRequest e = employeeRequests.get(i);
+
+                                                        Employee employee = employeeRepository
+                                                                        .findById(e.getEmployeeId())
+                                                                        .orElseThrow(() -> new IllegalArgumentException(
+                                                                                        "해당 사원이 존재하지 않습니다: " + e
+                                                                                                        .getEmployeeId()));
+
+                                                        return ProjectEmployee.builder()
+                                                                        .project(project)
+                                                                        .employee(employee)
+                                                                        .employeePosition(employee.getPosition())
+                                                                        .employeeRole(employee.getRole())
+                                                                        .isMainPm(i == 0)
+                                                                        .createdAt(LocalDateTime.now())
+                                                                        .updatedAt(LocalDateTime.now())
+                                                                        .build();
+                                                })
                                                 .collect(Collectors.toList()));
 
                 projectClientRepository.saveAll(
@@ -103,6 +121,7 @@ public class ProjectService {
                                                                 .paymentDate(s.getPaymentDate())
                                                                 .paymentMethod(s.getPaymentMethod())
                                                                 .isEvaluated(s.getIsEvaluated())
+                                                                .evaluationGrade(s.getEvaluationGrade())
                                                                 .createdAt(LocalDateTime.now())
                                                                 .updatedAt(LocalDateTime.now())
                                                                 .build())

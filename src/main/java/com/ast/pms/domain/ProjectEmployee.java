@@ -23,11 +23,15 @@ public class ProjectEmployee {
     @JoinColumn(name = "project_id")
     private Project project; // 프로젝트ID
 
-    @Column(name = "employee_id")
-    private Integer employeeId; // 사원번호
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
-    @Column(name = "position")
-    private String position; // 직급
+    @Column(name = "employee_position")
+    private String employeePosition;
+
+    @Column(name = "employee_role")
+    private String employeeRole;
 
     @Column(name = "is_main_pm")
     private Boolean isMainPm; // PM 여부

@@ -21,5 +21,6 @@ public class ProjectSubcontractRequest {
     private LocalDate paymentDate; // 대금지급일자
     private String paymentMethod; // 지급방식
     private Boolean isEvaluated; // 평가여부
+    private String evaluationGrade; // 하도급 평가 (S, A, B, C 중 택1)
 
 }

@@ -28,7 +28,7 @@ public class ProjectSubcontract {
     private String companyName; // 업체명
 
     @Column(name = "is_subcontracted")
-    private Boolean isSubcontracted; // 하도급여부
+    private Boolean isSubcontracted; // 하도급 여부
 
     @Column(name = "contract_date")
     private LocalDate contractDate; // 계약일자
@@ -52,7 +52,10 @@ public class ProjectSubcontract {
     private String paymentMethod; // 지급방식
 
     @Column(name = "is_evaluated")
-    private Boolean isEvaluated; // 평가여부
+    private Boolean isEvaluated; // 평가 여부
+
+    @Column(name = "evaluation_grade", length = 1)
+    private String evaluationGrade; // 하도급 평가 (S, A, B, C 중 하나)
 
     @Column(name = "created_at")
     private LocalDateTime createdAt; // 생성일시
