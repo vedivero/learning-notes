@@ -1,5 +1,7 @@
 package com.ast.pms.dto.response.project;
 
+import com.ast.pms.domain.ProjectEmployee;
+
 import lombok.*;
 
 @Getter
@@ -9,16 +11,19 @@ import lombok.*;
 @Builder
 public class ProjectEmployeeResponse {
 
-    private Long id; // 식별자 (primary key)
-    private Integer employeeId; // 사원번호
-    private String position; // 직급
-    private Boolean isMainPm; // PM 여부
+    private Integer personnelId;
+    private Integer employeeId;
+    private String position;
+    private String role;
+    private Boolean isMainPm;
 
-    public static ProjectEmployeeResponse from(com.ast.pms.domain.ProjectEmployee employee) {
+    public static ProjectEmployeeResponse from(ProjectEmployee entity) {
         return ProjectEmployeeResponse.builder()
-                .employeeId(employee.getEmployeeId())
-                .position(employee.getPosition())
-                .isMainPm(employee.getIsMainPm())
+                .personnelId(entity.getPersonnelId())
+                .employeeId(entity.getEmployee().getEmployeeId())
+                .position(entity.getEmployeePosition())
+                .role(entity.getEmployeeRole())
+                .isMainPm(entity.getIsMainPm())
                 .build();
     }
 }

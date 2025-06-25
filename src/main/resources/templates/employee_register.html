@@ -7,20 +7,13 @@
   팀<input type="text" th:field="*{team}" placeholder="팀" /><br>
   핸드폰 번호<input type="text" th:field="*{phoneNumber}" placeholder="핸드폰 번호"/><br>
   생년월일<input type="date" th:field="*{birthDate}" placeholder="생년월일" /><br>
-  <!-- <input type="text" th:field="*{position}" placeholder="직급" /> -->
   <label>직책</label><br/>
     <label><input type="radio" th:field="*{position}" value="팀장" /> 팀장</label>
     <label><input type="radio" th:field="*{position}" value="파트장" /> 파트장</label>
     <label><input type="radio" th:field="*{position}" value="팀원" /> 팀원</label>
 
-  <!-- <input type="text" th:field="*{role}" placeholder="역할 (예: ROLE_USER)" /> -->
   <label>직무</label><br/>
-  <!-- <label><input type="checkbox" th:field="*{roles}" value="사업관리" /> 사업관리</label>
-  <label><input type="checkbox" th:field="*{roles}" value="기획" /> 기획</label>
-  <label><input type="checkbox" th:field="*{roles}" value="디자인" /> 디자인</label>
-  <label><input type="checkbox" th:field="*{roles}" value="퍼블리셔" /> 퍼블리셔</label>
-  <label><input type="checkbox" th:field="*{roles}" value="개발" /> 개발</label>
-  <label><input type="checkbox" th:field="*{roles}" value="기타" /> 기타</label> -->
+  
   <label>직무</label><br/>
     <label><input type="radio" th:field="*{role}" value="사업관리" /> 사업관리</label>
     <label><input type="radio" th:field="*{role}" value="기획" /> 기획</label>

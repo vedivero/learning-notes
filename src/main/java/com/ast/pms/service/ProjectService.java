@@ -4,6 +4,7 @@ import com.ast.pms.domain.*;
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
 import com.ast.pms.dto.request.project.ProjectEmployeeRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
+import com.ast.pms.dto.response.project.ProjectListResponse;
 import com.ast.pms.repository.EmployeeRepository;
 import com.ast.pms.repository.project.ProjectAttachmentRepository;
 import com.ast.pms.repository.project.ProjectBudgetRepository;
@@ -184,5 +185,9 @@ public class ProjectService {
                                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다. : " + projectId));
 
                 return ProjectDetailResponse.from(project);
+        }
+
+        public List<ProjectListResponse> getAllProjects() {
+                return projectRepository.findAllWithMainPm();
         }
 }
