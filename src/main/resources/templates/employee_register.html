@@ -1,14 +1,35 @@
 <form th:action="@{/employees}" method="post" th:object="${employeeRegisterRequest}">
   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-  <input type="email" th:field="*{email}" placeholder="이메일" />
-  <input type="text" th:field="*{name}" placeholder="이름" />
-  <input type="text" th:field="*{headquarter}" placeholder="본부" />
-  <input type="text" th:field="*{team}" placeholder="팀" />
-  생년월일<input type="date" th:field="*{birthDate}" placeholder="생년월일" />
-  <input type="text" th:field="*{position}" placeholder="직급" />
-  <input type="text" th:field="*{role}" placeholder="역할 (예: ROLE_USER)" />
+  이메일<input type="email" th:field="*{email}" placeholder="이메일" /><br>
+  이름<input type="text" th:field="*{name}" placeholder="이름" /><br>
+  본부<input type="text" th:field="*{headquarter}" placeholder="본부" /><br>
+  팀<input type="text" th:field="*{team}" placeholder="팀" /><br>
+  핸드폰 번호<input type="text" th:field="*{phoneNumber}" placeholder="핸드폰 번호"/><br>
+  생년월일<input type="date" th:field="*{birthDate}" placeholder="생년월일" /><br>
+  <!-- <input type="text" th:field="*{position}" placeholder="직급" /> -->
+  <label>직책</label><br/>
+    <label><input type="radio" th:field="*{position}" value="팀장" /> 팀장</label>
+    <label><input type="radio" th:field="*{position}" value="파트장" /> 파트장</label>
+    <label><input type="radio" th:field="*{position}" value="팀원" /> 팀원</label>
 
+  <!-- <input type="text" th:field="*{role}" placeholder="역할 (예: ROLE_USER)" /> -->
+  <label>직무</label><br/>
+  <!-- <label><input type="checkbox" th:field="*{roles}" value="사업관리" /> 사업관리</label>
+  <label><input type="checkbox" th:field="*{roles}" value="기획" /> 기획</label>
+  <label><input type="checkbox" th:field="*{roles}" value="디자인" /> 디자인</label>
+  <label><input type="checkbox" th:field="*{roles}" value="퍼블리셔" /> 퍼블리셔</label>
+  <label><input type="checkbox" th:field="*{roles}" value="개발" /> 개발</label>
+  <label><input type="checkbox" th:field="*{roles}" value="기타" /> 기타</label> -->
+  <label>직무</label><br/>
+    <label><input type="radio" th:field="*{role}" value="사업관리" /> 사업관리</label>
+    <label><input type="radio" th:field="*{role}" value="기획" /> 기획</label>
+    <label><input type="radio" th:field="*{role}" value="퍼블리셔" /> 디자인,퍼블리셔</label>
+    <label><input type="radio" th:field="*{role}" value="개발" /> 개발</label>
+    <label><input type="radio" th:field="*{role}" value="기타" /> 기타</label>
+<br>
+
+자격증
   <div id="licenseFields">
     <div th:each="license, iterStat : *{licenses}">
       <input type="text"

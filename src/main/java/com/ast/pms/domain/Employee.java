@@ -49,12 +49,6 @@ public class Employee {
     @Column(name = "extension")
     private String extension;
 
-    @Column(name = "license_1")
-    private String license_1;
-
-    @Column(name = "license_2")
-    private String license_2;
-
     @Column(name = "status")
     private String status;
 
