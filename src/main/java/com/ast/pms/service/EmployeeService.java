@@ -3,15 +3,18 @@ package com.ast.pms.service;
 import com.ast.pms.domain.Employee;
 import com.ast.pms.domain.License;
 import com.ast.pms.dto.request.EmployeeRegisterRequest;
+import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.repository.EmployeeRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
 
 @Service
@@ -28,7 +31,7 @@ public class EmployeeService {
                 .headquarter(request.getHeadquarter())
                 .team(request.getTeam())
                 .hireDate(LocalDate.now())
-                .birthDate(request.getBirthDate())
+                .remark(request.getRemark())
                 .position(request.getPosition())
                 .role(request.getRole())
                 .status("ACTIVE")
@@ -47,4 +50,28 @@ public class EmployeeService {
         }
         employeeRepository.save(employee);
     }
+
+    public List<EmployeeListResponse> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(e -> EmployeeListResponse.builder()
+                        .employeeId(e.getEmployeeId())
+                        .name(e.getName())
+                        .position(e.getPosition())
+                        .team(e.getTeam())
+                        .email(e.getEmail())
+                        .phoneNumber(e.getPhoneNumber())
+                        .hireDate(e.getHireDate())
+                        .resignDate(e.getResignDate())
+                        .status(e.getStatus())
+                        .licenseNames(
+                                e.getLicenses()
+                                        .stream()
+                                        .map(License::getName)
+                                        .collect(Collectors.toList()))
+                        .createdAt(e.getCreatedAt())
+                        .updatedAt(e.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }

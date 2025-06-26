@@ -20,10 +20,10 @@ public class License {
     private Long licenseId;
 
     @Column(nullable = false)
-    private String name; // 자격증명 예: 정보처리기사
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Column(name = "created_at")

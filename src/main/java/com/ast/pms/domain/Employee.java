@@ -40,7 +40,7 @@ public class Employee {
     @Column(name = "position")
     private String position;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<License> licenses = new ArrayList<>();
 
     @Column(name = "phone_number")
@@ -55,8 +55,8 @@ public class Employee {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+    @Column(name = "remark")
+    private String remark;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

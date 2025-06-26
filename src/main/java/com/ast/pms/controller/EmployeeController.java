@@ -19,7 +19,7 @@ public class EmployeeController {
 
     private final EmployeeService employeeJoinService;
 
-    @GetMapping
+    @GetMapping("/new")
     public String showRegistrationEmployeeForm(Model model) {
         model.addAttribute("employeeRegisterRequest", new EmployeeRegisterRequest());
         return "employee_register";

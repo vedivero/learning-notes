@@ -21,9 +21,9 @@ public class EmployeeRegisterRequest {
     private String team;
     private String phoneNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
     private String position;
     private String role;
+    private String remark;
 
     private List<EmployeeLicenseRequest> licenses;
 }
