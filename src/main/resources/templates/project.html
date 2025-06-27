@@ -5,7 +5,7 @@
     <title>프로젝트 등록</title>
 </head>
 <body>
-<form th:action="@{/projects}" method="post" th:object="${projectCreateRequest}">
+<form th:action="@{/api/projects}" method="post" th:object="${projectCreateRequest}">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <h2>기본 정보</h2>

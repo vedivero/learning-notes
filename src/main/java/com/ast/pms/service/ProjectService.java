@@ -5,6 +5,7 @@ import com.ast.pms.dto.request.project.ProjectCreateRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.dto.response.project.ProjectListResponse;
 import com.ast.pms.mapper.ProjectCreateRequestMapper;
+import com.ast.pms.mapper.ProjectListResponseMapper;
 import com.ast.pms.repository.EmployeeRepository;
 import com.ast.pms.repository.project.ProjectAttachmentRepository;
 import com.ast.pms.repository.project.ProjectBudgetRepository;
@@ -14,9 +15,13 @@ import com.ast.pms.repository.project.ProjectEmployeeRepository;
 import com.ast.pms.repository.project.ProjectIssueRepository;
 import com.ast.pms.repository.project.ProjectLocationRepository;
 import com.ast.pms.repository.project.ProjectRepository;
+import com.ast.pms.repository.project.ProjectSpecification;
 import com.ast.pms.repository.project.ProjectSubcontractRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -79,5 +84,10 @@ public class ProjectService {
 
         public List<ProjectListResponse> getAllProjects() {
                 return projectRepository.findAllWithMainPm();
+        }
+
+        public Page<ProjectListResponse> searchProjects(String keyword, Pageable pageable) {
+                return projectRepository.findAll(ProjectSpecification.containsKeywordInFields(keyword), pageable)
+                                .map(ProjectListResponseMapper::from);
         }
 }
