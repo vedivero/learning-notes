@@ -16,7 +16,9 @@ public class ProjectSpecification {
             Join<Object, Object> projectEmployeeJoin = root.join("employees", JoinType.LEFT);
             Join<Object, Object> employeeJoin = projectEmployeeJoin.join("employee", JoinType.LEFT);
 
-            query.distinct(true);
+            if (query != null) {
+                query.distinct(true);
+            }
 
             return cb.or(
                     cb.like(cb.lower(root.get("name")), likePattern),

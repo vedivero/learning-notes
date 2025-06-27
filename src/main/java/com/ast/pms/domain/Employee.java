@@ -46,6 +46,7 @@ public class Employee {
     @Column(name = "work_type")
     private String workType;
 
+    @Builder.Default
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<License> licenses = new ArrayList<>();
 

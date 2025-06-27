@@ -53,34 +53,42 @@ public class Project {
     private LocalDateTime updatedAt; // 수정일시
 
     // 프로젠트 인력
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectEmployee> employees = new ArrayList<>();
 
     // 예산
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectBudget> budgets = new ArrayList<>();
 
     // 하도급
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectSubcontract> subcontracts = new ArrayList<>();
 
     // 발주처
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectClient> clients = new ArrayList<>();
 
     // 컨소시움
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectConsortium> consortiums = new ArrayList<>();
 
     // 수행 장소
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectLocation> locations = new ArrayList<>();
 
     // 첨부 파일
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectAttachment> attachments = new ArrayList<>();
 
     // 이슈
+    @Builder.Default
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectIssue> issues = new ArrayList<>();
 
