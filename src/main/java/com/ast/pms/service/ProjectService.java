@@ -2,9 +2,9 @@ package com.ast.pms.service;
 
 import com.ast.pms.domain.*;
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
-import com.ast.pms.dto.request.project.ProjectEmployeeRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.dto.response.project.ProjectListResponse;
+import com.ast.pms.mapper.ProjectCreateRequestMapper;
 import com.ast.pms.repository.EmployeeRepository;
 import com.ast.pms.repository.project.ProjectAttachmentRepository;
 import com.ast.pms.repository.project.ProjectBudgetRepository;
@@ -19,10 +19,7 @@ import com.ast.pms.repository.project.ProjectSubcontractRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -42,142 +39,35 @@ public class ProjectService {
 
         public void createProject(ProjectCreateRequest request) {
 
-                Project project = Project.builder()
-                                .name(request.getName())
-                                .startDate(request.getStartDate())
-                                .endDate(request.getEndDate())
-                                .projectType(request.getProjectType())
-                                .status(request.getStatus())
-                                .technologyType(request.getTechnologyType())
-                                .clientType(request.getClientType())
-                                .description(request.getDescription())
-                                .createdAt(LocalDateTime.now())
-                                .updatedAt(LocalDateTime.now())
-                                .build();
-
+                Project project = ProjectCreateRequestMapper.toProject(request);
                 projectRepository.save(project);
 
-                projectBudgetRepository.saveAll(
-                                request.getBudgets().stream()
-                                                .map(b -> ProjectBudget.builder()
-                                                                .project(project)
-                                                                .totalBudget(b.getTotalBudget())
-                                                                .paymentPlan(b.getPaymentPlan())
-                                                                .paymentDate(b.getPaymentDate())
-                                                                .paymentMethod(b.getPaymentMethod())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
+                List<ProjectBudget> budgets = ProjectCreateRequestMapper.toProjectBudgetList(request, project);
+                projectBudgetRepository.saveAll(budgets);
 
-                List<ProjectEmployeeRequest> employeeRequests = request.getProjectEmployees();
+                List<ProjectEmployee> employees = ProjectCreateRequestMapper.toProjectEmployees(request, project,
+                                employeeRepository);
+                projectEmployeeRepository.saveAll(employees);
 
-                projectEmployeeRepository.saveAll(
-                                IntStream.range(0, employeeRequests.size())
-                                                .mapToObj(i -> {
-                                                        ProjectEmployeeRequest e = employeeRequests.get(i);
+                List<ProjectClient> clients = ProjectCreateRequestMapper.toProjectClients(request, project);
+                projectClientRepository.saveAll(clients);
 
-                                                        Employee employee = employeeRepository
-                                                                        .findById(e.getEmployeeId())
-                                                                        .orElseThrow(() -> new IllegalArgumentException(
-                                                                                        "해당 사원이 존재하지 않습니다: " + e
-                                                                                                        .getEmployeeId()));
+                List<ProjectSubcontract> subcontracts = ProjectCreateRequestMapper.toProjectSubcontracts(request,
+                                project);
+                projectSubcontractRepository.saveAll(subcontracts);
 
-                                                        return ProjectEmployee.builder()
-                                                                        .project(project)
-                                                                        .employee(employee)
-                                                                        .employeePosition(employee.getPosition())
-                                                                        .employeeRole(employee.getRole())
-                                                                        .isMainPm(i == 0)
-                                                                        .createdAt(LocalDateTime.now())
-                                                                        .updatedAt(LocalDateTime.now())
-                                                                        .build();
-                                                })
-                                                .collect(Collectors.toList()));
+                List<ProjectConsortium> consortiums = ProjectCreateRequestMapper.toProjectConsortiums(request, project);
+                projectConsortiumRepository.saveAll(consortiums);
 
-                projectClientRepository.saveAll(
-                                request.getProjectClients().stream()
-                                                .map(c -> ProjectClient.builder()
-                                                                .project(project)
-                                                                .organization(c.getOrganization())
-                                                                .managerName(c.getManagerName())
-                                                                .department(c.getDepartment())
-                                                                .contactNumber(c.getContactNumber())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
+                List<ProjectLocation> locations = ProjectCreateRequestMapper.toProjectLocations(request, project);
+                projectLocationRepository.saveAll(locations);
 
-                projectSubcontractRepository.saveAll(
-                                request.getProjectSubcontracts().stream()
-                                                .map(s -> ProjectSubcontract.builder()
-                                                                .project(project)
-                                                                .companyName(s.getCompanyName())
-                                                                .isSubcontracted(s.getIsSubcontracted())
-                                                                .contractDate(s.getContractDate())
-                                                                .contractStart(s.getContractStart())
-                                                                .contractEnd(s.getContractEnd())
-                                                                .contractCount(s.getContractCount())
-                                                                .contractAmount(s.getContractAmount())
-                                                                .paymentDate(s.getPaymentDate())
-                                                                .paymentMethod(s.getPaymentMethod())
-                                                                .isEvaluated(s.getIsEvaluated())
-                                                                .evaluationGrade(s.getEvaluationGrade())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
+                List<ProjectAttachment> attachments = ProjectCreateRequestMapper.toProjectAttachments(request, project);
+                projectAttachmentRepository.saveAll(attachments);
 
-                projectConsortiumRepository.saveAll(
-                                request.getProjectConsortiums().stream()
-                                                .map(c -> ProjectConsortium.builder()
-                                                                .project(project)
-                                                                .companyName(c.getCompanyName())
-                                                                .contractAmount(c.getContractAmount())
-                                                                .isJointContract(c.getIsJointContract())
-                                                                .isMainContract(c.getIsMainContract())
-                                                                .responsibilityRatio(c.getResponsibilityRatio())
-                                                                .roleDescription(c.getRoleDescription())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
+                List<ProjectIssue> issues = ProjectCreateRequestMapper.toProjectIssues(request, project);
+                projectIssueRepository.saveAll(issues);
 
-                projectLocationRepository.saveAll(
-                                request.getProjectLocations().stream()
-                                                .map(l -> ProjectLocation.builder()
-                                                                .project(project)
-                                                                .workType(l.getWorkType())
-                                                                .hasSharedOffice(l.getHasSharedOffice())
-                                                                .siteManager(l.getSiteManager())
-                                                                .managerContact(l.getManagerContact())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
-
-                projectAttachmentRepository.saveAll(
-                                request.getProjectAttachments().stream()
-                                                .map(a -> ProjectAttachment.builder()
-                                                                .project(project)
-                                                                .fileName(a.getFileName())
-                                                                .filePath(a.getFilePath())
-                                                                .fileSize(a.getFileSize())
-                                                                .fileType(a.getFileType())
-                                                                .uploadedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
-
-                projectIssueRepository.saveAll(
-                                request.getProjectIssues().stream()
-                                                .map(i -> ProjectIssue.builder()
-                                                                .project(project)
-                                                                .issueNote(i.getIssueNote())
-                                                                .writerId(i.getWriterId())
-                                                                .createdAt(LocalDateTime.now())
-                                                                .updatedAt(LocalDateTime.now())
-                                                                .build())
-                                                .collect(Collectors.toList()));
         }
 
         public ProjectDetailResponse getProjectDetailById(int projectId) {

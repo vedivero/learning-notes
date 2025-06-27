@@ -21,6 +21,7 @@ public class EmployeeSpecification {
                     cb.like(cb.lower(root.get("position")), likePattern),
                     cb.like(cb.lower(root.get("level")), likePattern),
                     cb.like(cb.lower(root.get("workType")), likePattern),
+                    cb.like(cb.lower(root.get("role")), likePattern),
                     cb.like(cb.lower(licensesJoin.get("name")), likePattern));
         };
     }
