@@ -3,6 +3,7 @@ package com.ast.pms.service;
 import com.ast.pms.domain.Employee;
 import com.ast.pms.domain.License;
 import com.ast.pms.dto.request.EmployeeRegisterRequest;
+import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.mapper.EmployeeListResponseMapper;
 import com.ast.pms.repository.EmployeeRepository;
@@ -56,6 +57,14 @@ public class EmployeeService {
                 employeeRepository.save(employee);
         }
 
+        public EmployeeDetailResponse getEmployeeDetailById(int employeeId) {
+
+                Employee employee = employeeRepository.findById(employeeId)
+                                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 존재하지 않습니다." + employeeId));
+
+                return EmployeeDetailResponse.from(employee);
+        }
+
         public List<EmployeeListResponse> getAllEmployees() {
                 return employeeRepository.findAll().stream()
                                 .map(EmployeeListResponseMapper::from)
@@ -66,4 +75,5 @@ public class EmployeeService {
                 return employeeRepository.findAll(EmployeeSpecification.containsKeywordInFields(keyword), pageable)
                                 .map(EmployeeListResponseMapper::from);
         }
+
 }
