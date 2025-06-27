@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeService employeeJoinService;
+    private final EmployeeService employeeService;
 
     @GetMapping("/new")
     public String showRegistrationEmployeeForm(Model model) {
@@ -26,13 +26,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public String processRegister(@Valid @ModelAttribute EmployeeRegisterRequest employeeRegisterRequest,
+    public String registerEmployee(@Valid @ModelAttribute EmployeeRegisterRequest employeeRegisterRequest,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
             return "employee_register";
         }
-        employeeJoinService.register(employeeRegisterRequest);
+        employeeService.registerEmployee(employeeRegisterRequest);
         return "redirect:/login";
     }
 }

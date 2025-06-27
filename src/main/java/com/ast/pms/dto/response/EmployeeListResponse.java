@@ -20,6 +20,8 @@ public class EmployeeListResponse {
     private String team; // 팀
     private String position; // 직급
     private String role; // 역할
+    private String level; // 직급
+    private String workType; // 근무 형태
     private String status; // 상태 (재직 / 퇴사 등)
     private String remark; // 비고
 

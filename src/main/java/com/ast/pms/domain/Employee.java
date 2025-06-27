@@ -40,6 +40,12 @@ public class Employee {
     @Column(name = "position")
     private String position;
 
+    @Column(name = "level")
+    private String level;
+
+    @Column(name = "work_type")
+    private String workType;
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<License> licenses = new ArrayList<>();
 

@@ -1,10 +1,7 @@
 package com.ast.pms.dto.request;
 
 import lombok.*;
-
-import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
@@ -21,8 +18,10 @@ public class EmployeeRegisterRequest {
     private String team;
     private String phoneNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String level;
     private String position;
     private String role;
+    private String workType;
     private String remark;
 
     private List<EmployeeLicenseRequest> licenses;
