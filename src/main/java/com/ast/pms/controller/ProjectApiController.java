@@ -1,6 +1,7 @@
 package com.ast.pms.controller;
 
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
+import com.ast.pms.dto.request.project.ProjectUpdateRequest;
 import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.dto.response.project.ProjectListResponse;
 import com.ast.pms.service.ProjectService;
@@ -52,4 +53,18 @@ public class ProjectApiController {
         projectService.createProject(projectCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("프로젝트가 성공적으로 등록되었습니다.");
     }
+
+    @PutMapping("/{projectId}")
+    public ResponseEntity<String> updateProject(
+            @PathVariable("projectId") int projectId,
+            @RequestBody @Valid ProjectUpdateRequest updateRequest) {
+
+        if (projectId != updateRequest.getProjectId()) {
+            return ResponseEntity.badRequest().body("요청한 ID가 일치하지 않습니다.");
+        }
+        projectService.updateProject(updateRequest);
+
+        return ResponseEntity.ok("프로젝트가 성공적으로 수정되었습니다.");
+    }
+
 }

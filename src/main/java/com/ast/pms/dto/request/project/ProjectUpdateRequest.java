@@ -10,8 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectCreateRequest implements ProjectRequestBase {
+public class ProjectUpdateRequest implements ProjectRequestBase {
 
+    private Integer projectId;
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -29,4 +30,5 @@ public class ProjectCreateRequest implements ProjectRequestBase {
     private List<ProjectLocationRequest> projectLocations;
     private List<ProjectAttachmentRequest> projectAttachments;
     private List<ProjectIssueRequest> projectIssues;
+
 }

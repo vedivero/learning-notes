@@ -1,7 +1,6 @@
 package com.ast.pms.dto.response;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.domain.License;
 
 import lombok.*;
 

@@ -1,27 +1,21 @@
 package com.ast.pms.mapper;
 
+import com.ast.pms.domain.*;
+import com.ast.pms.dto.request.project.ProjectRequestBase;
+import com.ast.pms.dto.request.project.ProjectEmployeeRequest;
+import com.ast.pms.repository.EmployeeRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.ast.pms.domain.Employee;
-import com.ast.pms.domain.Project;
-import com.ast.pms.domain.ProjectAttachment;
-import com.ast.pms.domain.ProjectBudget;
-import com.ast.pms.domain.ProjectClient;
-import com.ast.pms.domain.ProjectConsortium;
-import com.ast.pms.domain.ProjectEmployee;
-import com.ast.pms.domain.ProjectIssue;
-import com.ast.pms.domain.ProjectLocation;
-import com.ast.pms.domain.ProjectSubcontract;
-import com.ast.pms.dto.request.project.ProjectCreateRequest;
-import com.ast.pms.dto.request.project.ProjectEmployeeRequest;
-import com.ast.pms.repository.EmployeeRepository;
+public class ProjectRequestMapper {
 
-public class ProjectCreateRequestMapper {
-
-    public static Project toProject(ProjectCreateRequest request) {
+    /**
+     * Project 엔티티 새로 생성
+     */
+    public static Project toProject(ProjectRequestBase request) {
         return Project.builder()
                 .name(request.getName())
                 .startDate(request.getStartDate())
@@ -36,7 +30,10 @@ public class ProjectCreateRequestMapper {
                 .build();
     }
 
-    public static List<ProjectBudget> toProjectBudgetList(ProjectCreateRequest request, Project project) {
+    /**
+     * 예산 리스트 생성
+     */
+    public static List<ProjectBudget> toProjectBudgetList(ProjectRequestBase request, Project project) {
         return request.getBudgets().stream()
                 .map(b -> ProjectBudget.builder()
                         .project(project)
@@ -50,9 +47,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectEmployee> toProjectEmployees(
-            ProjectCreateRequest request,
-            Project project,
+    /**
+     * 인력 리스트 생성
+     */
+    public static List<ProjectEmployee> toProjectEmployees(ProjectRequestBase request, Project project,
             EmployeeRepository employeeRepository) {
         List<ProjectEmployeeRequest> employeeRequests = request.getProjectEmployees();
 
@@ -76,7 +74,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectClient> toProjectClients(ProjectCreateRequest request, Project project) {
+    /**
+     * 발주처 리스트 생성
+     */
+    public static List<ProjectClient> toProjectClients(ProjectRequestBase request, Project project) {
         return request.getProjectClients().stream()
                 .map(c -> ProjectClient.builder()
                         .project(project)
@@ -90,7 +91,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectSubcontract> toProjectSubcontracts(ProjectCreateRequest request, Project project) {
+    /**
+     * 하도급 리스트 생성
+     */
+    public static List<ProjectSubcontract> toProjectSubcontracts(ProjectRequestBase request, Project project) {
         return request.getProjectSubcontracts().stream()
                 .map(s -> ProjectSubcontract.builder()
                         .project(project)
@@ -111,7 +115,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectConsortium> toProjectConsortiums(ProjectCreateRequest request, Project project) {
+    /**
+     * 컨소시움 리스트 생성
+     */
+    public static List<ProjectConsortium> toProjectConsortiums(ProjectRequestBase request, Project project) {
         return request.getProjectConsortiums().stream()
                 .map(c -> ProjectConsortium.builder()
                         .project(project)
@@ -127,7 +134,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectLocation> toProjectLocations(ProjectCreateRequest request, Project project) {
+    /**
+     * 수행 장소 리스트 생성
+     */
+    public static List<ProjectLocation> toProjectLocations(ProjectRequestBase request, Project project) {
         return request.getProjectLocations().stream()
                 .map(l -> ProjectLocation.builder()
                         .project(project)
@@ -141,7 +151,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectAttachment> toProjectAttachments(ProjectCreateRequest request, Project project) {
+    /**
+     * 첨부 파일 리스트 생성
+     */
+    public static List<ProjectAttachment> toProjectAttachments(ProjectRequestBase request, Project project) {
         return request.getProjectAttachments().stream()
                 .map(a -> ProjectAttachment.builder()
                         .project(project)
@@ -154,7 +167,10 @@ public class ProjectCreateRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    public static List<ProjectIssue> toProjectIssues(ProjectCreateRequest request, Project project) {
+    /**
+     * 이슈 리스트 생성
+     */
+    public static List<ProjectIssue> toProjectIssues(ProjectRequestBase request, Project project) {
         return request.getProjectIssues().stream()
                 .map(i -> ProjectIssue.builder()
                         .project(project)

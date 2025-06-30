@@ -17,32 +17,26 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class WebSecurityChainConfig {
 
-	// Employee 기반 사용자 인증 서비스
 	private final UserDetailsService userDetailsService;
 
-	// 인증 관리자 Bean 등록
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
 		return authConfiguration.getAuthenticationManager();
 	}
 
-	// 비밀번호 암호화 (BCrypt 사용)
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	// 로그인 성공 핸들러
 	public AuthenticationSuccessHandler successHandler() {
 		return new SecurityLoginSuccessHandler();
 	}
 
-	// 로그인 실패 핸들러
 	public AuthenticationFailureHandler failureHandler() {
 		return new SecurityLoginFailureHandler();
 	}
 
-	// 스프링 시큐리티 필터 체인 설정
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
