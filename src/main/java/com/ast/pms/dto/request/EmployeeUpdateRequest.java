@@ -1,15 +1,17 @@
 package com.ast.pms.dto.request;
 
-import lombok.*;
 import java.util.List;
+
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmployeeRegisterRequest implements EmployeeRequestBase {
+public class EmployeeUpdateRequest implements EmployeeRequestBase {
 
+    private Integer employeeId;
     private String password;
     private String email;
     private String name;
@@ -23,5 +25,4 @@ public class EmployeeRegisterRequest implements EmployeeRequestBase {
     private String remark;
 
     private List<EmployeeLicenseRequest> licenses;
-
 }

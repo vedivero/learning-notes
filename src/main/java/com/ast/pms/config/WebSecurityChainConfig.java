@@ -40,7 +40,8 @@ public class WebSecurityChainConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(csrf -> csrf.ignoringRequestMatchers("/logout"))
+				// .csrf(csrf -> csrf.ignoringRequestMatchers("/logout"));
+				.csrf().disable()
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/main/**", "/account/**").authenticated()
 						.anyRequest().permitAll())

@@ -18,6 +18,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>, JpaS
             "JOIN ProjectEmployee pe ON pe.project = p " +
             "JOIN Employee e ON pe.employee = e " +
             "WHERE pe.isMainPm = true")
+
     List<ProjectListResponse> findAllWithMainPm();
 
 }

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ast.pms.dto.request.EmployeeRegisterRequest;
+import com.ast.pms.dto.request.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.service.EmployeeService;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,11 +57,15 @@ public class EmployeeApiController {
     public ResponseEntity registerEmployee(@Valid @ModelAttribute EmployeeRegisterRequest employeeRegisterRequest,
             BindingResult bindingResult,
             Model model) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("입력값 검증 실패");
-        }
         employeeService.registerEmployee(employeeRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("직원 정보가 성공적으로 등록되었습니다.");
+    }
+
+    @PutMapping("/{employeeId}")
+    public ResponseEntity updateEmployee(@PathVariable("employeeId") int employeeId,
+            @RequestBody @Valid EmployeeUpdateRequest updateRequest) {
+        employeeService.updateProject(updateRequest);
+        return ResponseEntity.ok("직원 정보가 수정되었습니다.");
     }
 
 }

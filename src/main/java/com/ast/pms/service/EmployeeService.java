@@ -3,9 +3,12 @@ package com.ast.pms.service;
 import com.ast.pms.domain.Employee;
 import com.ast.pms.domain.License;
 import com.ast.pms.dto.request.EmployeeRegisterRequest;
+import com.ast.pms.dto.request.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.mapper.EmployeeListResponseMapper;
+import com.ast.pms.mapper.EmployeeRequestMapper;
+import com.ast.pms.repository.EmployeeLicenseRepository;
 import com.ast.pms.repository.EmployeeRepository;
 import com.ast.pms.repository.EmployeeSpecification;
 
@@ -16,10 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -27,33 +28,13 @@ import java.time.LocalDate;
 public class EmployeeService {
 
         private final EmployeeRepository employeeRepository;
+        private final EmployeeLicenseRepository employeeLicenseRepository;
 
         public void registerEmployee(EmployeeRegisterRequest request) {
-                Employee employee = Employee.builder()
-                                .email(request.getEmail())
-                                .name(request.getName())
-                                .headquarter(request.getHeadquarter())
-                                .team(request.getTeam())
-                                .hireDate(LocalDate.now())
-                                .remark(request.getRemark())
-                                .level(request.getLevel())
-                                .position(request.getPosition())
-                                .role(request.getRole())
-                                .workType(request.getWorkType())
-                                .status("ACTIVE")
-                                .createdAt(LocalDateTime.now())
-                                .build();
+                Employee employee = EmployeeRequestMapper.toNewEmployee(request);
 
-                if (request.getLicenses() != null && !request.getLicenses().isEmpty()) {
-                        List<License> licenses = request.getLicenses().stream()
-                                        .map(dto -> License.builder()
-                                                        .name(dto.getName())
-                                                        .employee(employee)
-                                                        .createdAt(LocalDateTime.now())
-                                                        .build())
-                                        .toList();
-                        employee.setLicenses(licenses);
-                }
+                List<License> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
+                employee.setLicenses(licenses);
                 employeeRepository.save(employee);
         }
 
@@ -76,4 +57,18 @@ public class EmployeeService {
                                 .map(EmployeeListResponseMapper::from);
         }
 
+        public void updateProject(EmployeeUpdateRequest request) {
+
+                Employee employee = employeeRepository.findById(request.getEmployeeId())
+                                .orElseThrow(() -> new IllegalArgumentException("해당 직원이 존재하지 않습니다."));
+
+                EmployeeRequestMapper.updateEmployeeFields(employee, request);
+                employee.getLicenses().size();
+                employee.getLicenses().clear();
+                List<License> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
+                employee.getLicenses().addAll(licenses);
+
+                employeeLicenseRepository.deleteByEmployee(employee);
+
+        }
 }
