@@ -33,7 +33,7 @@ public class EmployeeDetailResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private List<LicenseResponse> licenses;
+    private List<EmployeeLicenseResponse> licenses;
 
     public static EmployeeDetailResponse from(Employee e) {
         return EmployeeDetailResponse.builder()
@@ -56,7 +56,7 @@ public class EmployeeDetailResponse {
                 .updatedAt(e.getUpdatedAt())
                 .licenses(
                         e.getLicenses().stream()
-                                .map(LicenseResponse::from)
+                                .map(EmployeeLicenseResponse::from)
                                 .collect(Collectors.toList()))
                 .build();
     }

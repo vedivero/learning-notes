@@ -34,7 +34,7 @@ public class ProjectApiController {
             return ResponseEntity.ok(projects);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("프로젝트 목록 조회 중 오류가 발생했습니다.");
+                    .body("프로젝트 목록 조회 중 오류가 발생했습니다. : " + e.getMessage());
         }
     }
 
@@ -45,7 +45,7 @@ public class ProjectApiController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("프로젝트 상세 조회 중 오류가 발생했습니다.");
+                    .body("프로젝트 상세 조회 중 오류가 발생했습니다. : " + e.getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ public class ProjectApiController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("프로젝트 검색 중 오류가 발생했습니다.");
+                    .body("프로젝트 검색 중 오류가 발생했습니다. : " + e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class ProjectApiController {
             return ResponseEntity.status(HttpStatus.CREATED).body("프로젝트가 등록되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("프로젝트 등록 중 오류가 발생했습니다.");
+                    .body("프로젝트 등록 중 오류가 발생했습니다. : " + e.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class ProjectApiController {
             return ResponseEntity.ok("프로젝트가 수정되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("프로젝트 수정 중 오류가 발생했습니다.");
+                    .body("프로젝트 수정 중 오류가 발생했습니다. : " + e.getMessage());
         }
     }
 

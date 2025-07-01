@@ -6,11 +6,11 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @Builder
-public class LicenseResponse {
+public class EmployeeLicenseResponse {
     private String name;
 
-    public static LicenseResponse from(EmployeeLicense license) {
-        return LicenseResponse.builder()
+    public static EmployeeLicenseResponse from(EmployeeLicense license) {
+        return EmployeeLicenseResponse.builder()
                 .name(license.getName())
                 .build();
     }
