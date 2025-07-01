@@ -28,35 +28,64 @@ public class ProjectApiController {
     private final ProjectService projectService;
 
     @GetMapping
-    public List<ProjectListResponse> getProjects() {
-        return projectService.getAllProjects();
+    public ResponseEntity<?> getProjects() {
+        try {
+            List<ProjectListResponse> projects = projectService.getAllProjects();
+            return ResponseEntity.ok(projects);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로젝트 목록 조회 중 오류가 발생했습니다.");
+        }
     }
 
     @GetMapping("/{projectId}")
-    public ProjectDetailResponse getProjectDetail(@PathVariable("projectId") int projectId) {
-        return projectService.getProjectDetailById(projectId);
+    public ResponseEntity<?> getProjectDetail(@PathVariable("projectId") int projectId) {
+        try {
+            ProjectDetailResponse response = projectService.getProjectDetailById(projectId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로젝트 상세 조회 중 오류가 발생했습니다.");
+        }
     }
 
     @GetMapping("/search")
-    public Page searchProjects(@RequestParam("keyword") String keyword,
+    public ResponseEntity<?> searchProjects(
+            @RequestParam("keyword") String keyword,
             @PageableDefault(size = 10) Pageable pageable) {
-        return projectService.searchProjects(keyword, pageable);
+        try {
+            Page<ProjectListResponse> result = projectService.searchProjects(keyword, pageable);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로젝트 검색 중 오류가 발생했습니다.");
+        }
     }
 
     @PostMapping
-    public ResponseEntity<String> submitProjectForm(@Valid @ModelAttribute ProjectCreateRequest projectCreateRequest,
+    public ResponseEntity<?> submitProjectForm(@Valid @ModelAttribute ProjectCreateRequest projectCreateRequest,
             BindingResult bindingResult,
             Model model) {
-        projectService.createProject(projectCreateRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("프로젝트가 등록되었습니다.");
+        try {
+            projectService.createProject(projectCreateRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body("프로젝트가 등록되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로젝트 등록 중 오류가 발생했습니다.");
+        }
     }
 
     @PutMapping("/{projectId}")
-    public ResponseEntity<String> updateProject(
+    public ResponseEntity<?> updateProject(
             @PathVariable("projectId") int projectId,
             @RequestBody @Valid ProjectUpdateRequest updateRequest) {
-        projectService.updateProject(updateRequest);
-        return ResponseEntity.ok("프로젝트가 수정되었습니다.");
+        try {
+            projectService.updateProject(updateRequest);
+            return ResponseEntity.ok("프로젝트가 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("프로젝트 수정 중 오류가 발생했습니다.");
+        }
     }
 
 }
