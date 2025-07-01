@@ -1,7 +1,7 @@
 package com.ast.pms.mapper;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.domain.License;
+import com.ast.pms.domain.EmployeeLicense;
 import com.ast.pms.dto.response.EmployeeListResponse;
 
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class EmployeeListResponseMapper {
                 .resignDate(e.getResignDate())
                 .status(e.getStatus())
                 .licenseNames(e.getLicenses().stream()
-                        .map(License::getName)
+                        .map(EmployeeLicense::getName)
                         .collect(Collectors.toList()))
                 .createdAt(e.getCreatedAt())
                 .updatedAt(e.getUpdatedAt())

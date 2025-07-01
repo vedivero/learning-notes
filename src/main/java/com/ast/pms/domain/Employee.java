@@ -48,7 +48,7 @@ public class Employee {
 
     @Builder.Default
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<License> licenses = new ArrayList<>();
+    private List<EmployeeLicense> licenses = new ArrayList<>();
 
     @Column(name = "phone_number")
     private String phoneNumber;

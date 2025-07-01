@@ -6,13 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "license")
+@Table(name = "employee_license")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class License {
+public class EmployeeLicense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

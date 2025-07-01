@@ -1,7 +1,7 @@
 package com.ast.pms.service;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.domain.License;
+import com.ast.pms.domain.EmployeeLicense;
 import com.ast.pms.dto.request.EmployeeRegisterRequest;
 import com.ast.pms.dto.request.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
@@ -33,7 +33,7 @@ public class EmployeeService {
         public void registerEmployee(EmployeeRegisterRequest request) {
                 Employee employee = EmployeeRequestMapper.toNewEmployee(request);
 
-                List<License> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
+                List<EmployeeLicense> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
                 employee.setLicenses(licenses);
                 employeeRepository.save(employee);
         }
@@ -65,7 +65,7 @@ public class EmployeeService {
                 EmployeeRequestMapper.updateEmployeeFields(employee, request);
                 employee.getLicenses().size();
                 employee.getLicenses().clear();
-                List<License> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
+                List<EmployeeLicense> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
                 employee.getLicenses().addAll(licenses);
 
                 employeeLicenseRepository.deleteByEmployee(employee);

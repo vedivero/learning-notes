@@ -1,7 +1,7 @@
 package com.ast.pms.mapper;
 
 import com.ast.pms.domain.Employee;
-import com.ast.pms.domain.License;
+import com.ast.pms.domain.EmployeeLicense;
 import com.ast.pms.dto.request.EmployeeRequestBase;
 
 import java.time.LocalDate;
@@ -41,12 +41,12 @@ public class EmployeeRequestMapper {
         employee.setUpdatedAt(LocalDateTime.now());
     }
 
-    public static List<License> toLicenseList(EmployeeRequestBase request, Employee employee) {
+    public static List<EmployeeLicense> toLicenseList(EmployeeRequestBase request, Employee employee) {
         if (request.getLicenses() == null || request.getLicenses().isEmpty()) {
             return List.of();
         }
         return request.getLicenses().stream()
-                .map(dto -> License.builder()
+                .map(dto -> EmployeeLicense.builder()
                         .name(dto.getName())
                         .employee(employee)
                         .createdAt(LocalDateTime.now())
