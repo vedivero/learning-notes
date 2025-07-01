@@ -22,4 +22,16 @@ public class LicenseService {
         List<License> licenses = licenseRepository.findByLicenseNameContaining(keyword);
         return licenses.stream().map(License::getLicenseName).collect(Collectors.toList());
     }
+
+    public void createLicense(String keyword) {
+
+        boolean exists = licenseRepository.existsByLicenseName(keyword);
+        if (exists) {
+            throw new IllegalArgumentException("이미 존재하는 자격증입니다.");
+        }
+        License license = new License();
+        license.setLicenseName(keyword);
+
+        licenseRepository.save(license);
+    }
 }
