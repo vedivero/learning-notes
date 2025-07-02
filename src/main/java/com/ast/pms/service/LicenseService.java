@@ -34,4 +34,11 @@ public class LicenseService {
 
         licenseRepository.save(license);
     }
+
+    public void deleteLicense(int id) {
+        if (!licenseRepository.existsById(id)) {
+            throw new IllegalArgumentException("해당 자격증이 존재하지 않습니다.");
+        }
+        licenseRepository.deleteById(id);
+    }
 }

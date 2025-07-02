@@ -12,4 +12,5 @@ public interface LicenseRepository extends JpaRepository<License, Integer> {
     List<License> findByLicenseNameContaining(String keyword);
 
     boolean existsByLicenseName(String licenseName);
+
 }
