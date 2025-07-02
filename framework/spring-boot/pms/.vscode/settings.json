@@ -1,0 +1,7 @@
+{
+"spring-boot.ls.java.home": "C:\\Program Files\\Java\\jdk-21",
+"java.compile.nullAnalysis.mode": "automatic",
+"java.configuration.updateBuildConfiguration": "interactive",
+"java.import.gradle.java.home": "C:\\Program Files\\Java\\jdk-21",
+"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+}
