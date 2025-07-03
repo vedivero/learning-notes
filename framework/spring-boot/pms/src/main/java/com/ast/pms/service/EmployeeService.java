@@ -6,7 +6,6 @@ import com.ast.pms.dto.request.EmployeeRegisterRequest;
 import com.ast.pms.dto.request.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
-import com.ast.pms.dto.response.LicenseNameResponse;
 import com.ast.pms.mapper.EmployeeListResponseMapper;
 import com.ast.pms.mapper.EmployeeRequestMapper;
 import com.ast.pms.repository.EmployeeLicenseRepository;
@@ -37,6 +36,7 @@ public class EmployeeService {
                 List<EmployeeLicense> licenses = EmployeeRequestMapper.toLicenseList(request, employee);
                 employee.setLicenses(licenses);
                 employeeRepository.save(employee);
+                employeeRepository.flush();
         }
 
         public EmployeeDetailResponse getEmployeeDetailById(int employeeId) {

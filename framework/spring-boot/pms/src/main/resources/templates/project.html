@@ -37,7 +37,6 @@
         <input type="text" th:field="*{projectEmployees[1].employeeId}" placeholder="인력 1" /><br/>
         <input type="text" th:field="*{projectEmployees[2].employeeId}" placeholder="인력 2" /><br/>
         <input type="text" th:field="*{projectEmployees[3].employeeId}" placeholder="인력 3" /><br/>
-        <!-- 나중에 JS로 동적으로 처리 -->
     </div>
 
 <hr>
@@ -114,12 +113,17 @@
     연락처<input type="text" th:field="*{projectLocations[0].managerContact}" placeholder="연락처" /><br/>
 
 <hr>
-    <h2>첨부파일</h2>
-    파일명<input type="text" th:field="*{projectAttachments[0].fileName}" placeholder="파일명" /><br/>
-    파일경로<input type="text" th:field="*{projectAttachments[0].filePath}" placeholder="파일경로" /><br/>
-    크기(Byte)<input type="number" th:field="*{projectAttachments[0].fileSize}" placeholder="크기(Byte)" /><br/>
-    유형<input type="text" th:field="*{projectAttachments[0].fileType}" placeholder="유형" /><br/>
+ <h2>첨부파일</h2>
 
+    <input type="file" id="fileInput" name="files" multiple style="display: none;" />
+
+    <div id="dropZone"
+         style="width: 300px; height: 100px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        여기로 파일을 드래그 앤 드롭 하거나 클릭해서 선택하세요.
+    </div>
+
+    <div id="fileList"></div>
+    <hr>
 <hr>
     <h2>이슈 (1건)</h2>
     이슈 내용<textarea th:field="*{projectIssues[0].issueNote}" placeholder="이슈 내용"></textarea><br/>
@@ -128,4 +132,64 @@
     <button type="submit">저장</button>
 </form>
 </body>
+</body>
+    <script>
+   const dropZone = document.getElementById('dropZone');
+const fileList = document.getElementById('fileList');
+const uploadBtn = document.getElementById('uploadBtn');
+const fileInput = document.getElementById('fileInput');
+
+let droppedFiles = [];
+
+dropZone.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  dropZone.style.borderColor = 'blue';
+});
+
+dropZone.addEventListener('dragleave', function(e) {
+  e.preventDefault();
+  dropZone.style.borderColor = '#ccc';
+});
+
+dropZone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dropZone.style.borderColor = '#ccc';
+
+  const files = e.dataTransfer.files;
+  droppedFiles = Array.from(files);
+  displayFileNames(droppedFiles);
+});
+
+dropZone.addEventListener('click', function() {
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', function() {
+  droppedFiles = Array.from(fileInput.files);
+  displayFileNames(droppedFiles);
+});
+
+function displayFileNames(files) {
+  fileList.innerHTML = '';
+  files.forEach(file => {
+    const p = document.createElement('p');
+    p.textContent = file.name;
+    fileList.appendChild(p);
+  });
+}
+
+uploadBtn.addEventListener('click', function() {
+  if (droppedFiles.length === 0) {
+    alert('파일을 드래그하거나 선택해 주세요.');
+    return;
+  }
+
+  const formData = new FormData();
+  droppedFiles.forEach(file => {
+    formData.append('files', file);
+  });
+
+});
+
+  </script>
 </html>
