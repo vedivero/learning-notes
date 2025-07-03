@@ -39,10 +39,10 @@ public class ProjectService {
         private final FileStorageService fileStorageService;
 
         public void createProject(ProjectCreateRequest request, MultipartFile[] files) {
-                System.out.println("project.request : " + request);
+
                 Project project = ProjectRequestMapper.toProject(request);
                 projectRepository.save(project);
-                System.out.println(">>> 저장된 projectId = " + project.getProjectId());
+
                 List<ProjectBudget> budgets = ProjectRequestMapper.toProjectBudgetList(request, project);
                 projectBudgetRepository.saveAll(budgets);
 
@@ -53,8 +53,7 @@ public class ProjectService {
                 List<ProjectClient> clients = ProjectRequestMapper.toProjectClients(request, project);
                 projectClientRepository.saveAll(clients);
 
-                List<ProjectSubcontract> subcontracts = ProjectRequestMapper.toProjectSubcontracts(request,
-                                project);
+                List<ProjectSubcontract> subcontracts = ProjectRequestMapper.toProjectSubcontracts(request, project);
                 projectSubcontractRepository.saveAll(subcontracts);
 
                 List<ProjectConsortium> consortiums = ProjectRequestMapper.toProjectConsortiums(request, project);
@@ -115,8 +114,7 @@ public class ProjectService {
                 projectClientRepository.saveAll(clients);
 
                 projectSubcontractRepository.deleteByProject(project);
-                List<ProjectSubcontract> subcontracts = ProjectRequestMapper.toProjectSubcontracts(request,
-                                project);
+                List<ProjectSubcontract> subcontracts = ProjectRequestMapper.toProjectSubcontracts(request, project);
                 projectSubcontractRepository.saveAll(subcontracts);
 
                 projectConsortiumRepository.deleteByProject(project);
