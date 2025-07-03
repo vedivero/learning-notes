@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,11 +66,17 @@ public class ProjectApiController {
     @PostMapping
     public ResponseEntity<?> submitProjectForm(@Valid @ModelAttribute ProjectCreateRequest projectCreateRequest,
             BindingResult bindingResult,
+            @RequestParam("files") MultipartFile[] files,
             Model model) {
+
+        for (MultipartFile multipartFile : files) {
+            System.out.println("files : " + multipartFile);
+        }
         try {
-            projectService.createProject(projectCreateRequest);
+            projectService.createProject(projectCreateRequest, files);
             return ResponseEntity.status(HttpStatus.CREATED).body("프로젝트가 등록되었습니다.");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("프로젝트 등록 중 오류가 발생했습니다. : " + e.getMessage());
         }

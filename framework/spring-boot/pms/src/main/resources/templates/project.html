@@ -5,7 +5,7 @@
     <title>프로젝트 등록</title>
 </head>
 <body>
-<form th:action="@{/api/projects}" method="post" th:object="${projectCreateRequest}">
+<form th:action="@{/api/projects}" method="post" th:object="${projectCreateRequest}" enctype="multipart/form-data">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
     <h2>기본 정보</h2>
@@ -134,10 +134,10 @@
 </body>
 </body>
     <script>
-   const dropZone = document.getElementById('dropZone');
-const fileList = document.getElementById('fileList');
-const uploadBtn = document.getElementById('uploadBtn');
-const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
 
 let droppedFiles = [];
 
@@ -157,6 +157,7 @@ dropZone.addEventListener('drop', function(e) {
 
   const files = e.dataTransfer.files;
   droppedFiles = Array.from(files);
+  fileInput.files = files;
   displayFileNames(droppedFiles);
 });
 

@@ -2,6 +2,11 @@ spring:
   application:
     name: pms
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/
