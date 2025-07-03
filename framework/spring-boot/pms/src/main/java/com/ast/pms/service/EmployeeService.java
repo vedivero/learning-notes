@@ -2,15 +2,15 @@ package com.ast.pms.service;
 
 import com.ast.pms.domain.Employee;
 import com.ast.pms.domain.EmployeeLicense;
-import com.ast.pms.dto.request.EmployeeRegisterRequest;
-import com.ast.pms.dto.request.EmployeeUpdateRequest;
+import com.ast.pms.dto.request.employee.EmployeeRegisterRequest;
+import com.ast.pms.dto.request.employee.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.mapper.EmployeeListResponseMapper;
 import com.ast.pms.mapper.EmployeeRequestMapper;
-import com.ast.pms.repository.EmployeeLicenseRepository;
-import com.ast.pms.repository.EmployeeRepository;
-import com.ast.pms.repository.EmployeeSpecification;
+import com.ast.pms.repository.employee.EmployeeLicenseRepository;
+import com.ast.pms.repository.employee.EmployeeRepository;
+import com.ast.pms.repository.employee.EmployeeSpecification;
 
 import lombok.RequiredArgsConstructor;
 

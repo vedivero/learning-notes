@@ -1,10 +1,10 @@
-package com.ast.pms.controller;
+package com.ast.pms.controller.api;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ast.pms.dto.request.EmployeeRegisterRequest;
-import com.ast.pms.dto.request.EmployeeUpdateRequest;
+import com.ast.pms.dto.request.employee.EmployeeRegisterRequest;
+import com.ast.pms.dto.request.employee.EmployeeUpdateRequest;
 import com.ast.pms.dto.response.EmployeeDetailResponse;
 import com.ast.pms.dto.response.EmployeeListResponse;
 import com.ast.pms.service.EmployeeService;

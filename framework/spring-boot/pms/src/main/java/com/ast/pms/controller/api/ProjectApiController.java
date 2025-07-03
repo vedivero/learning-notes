@@ -1,4 +1,4 @@
-package com.ast.pms.controller;
+package com.ast.pms.controller.api;
 
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
 import com.ast.pms.dto.request.project.ProjectUpdateRequest;
