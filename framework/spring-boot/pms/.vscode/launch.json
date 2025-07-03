@@ -7,7 +7,7 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.ast.pms.PmsApplication",
             "projectName": "pms",
-            "args": "--spring.profiles.active=dev",
+            "args": "--spring.profiles.active=local",
             "envFile": "${workspaceFolder}/.env"
         }
     ]
