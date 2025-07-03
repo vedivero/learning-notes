@@ -27,7 +27,10 @@ public class FileStorageService {
             if (!file.isEmpty()) {
                 try {
                     String originalName = file.getOriginalFilename();
-                    String safeName = originalName.replaceAll("[\\\\/:*?\"<>|]", "_");
+                    if (originalName == null || originalName.isBlank()) {
+                        originalName = "unknown";
+                    }
+                    String safeName = originalName.replaceAll("[\\\\/:*?\"<>|]", "_").replaceAll("\\s+", "_");
                     String uuid = UUID.randomUUID().toString();
                     String storedName = uuid + "-" + safeName;
 
