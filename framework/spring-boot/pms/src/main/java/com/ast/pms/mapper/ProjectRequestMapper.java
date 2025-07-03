@@ -64,7 +64,7 @@ public class ProjectRequestMapper {
                                                         .employee(employee)
                                                         .employeePosition(employee.getPosition())
                                                         .employeeRole(employee.getRole())
-                                                        .isMainPm(i == 0) // 첫 번째 인덱스면 PM으로 설정
+                                                        .isMainPm(i == 0)
                                                         .createdAt(LocalDateTime.now())
                                                         .updatedAt(LocalDateTime.now())
                                                         .build();
@@ -153,6 +153,9 @@ public class ProjectRequestMapper {
          * 첨부 파일 리스트 생성
          */
         public static List<ProjectAttachment> toProjectAttachments(ProjectRequestBase request, Project project) {
+                if (request.getProjectAttachments() == null) {
+                        return List.of();
+                }
                 return request.getProjectAttachments().stream()
                                 .map(a -> ProjectAttachment.builder()
                                                 .project(project)

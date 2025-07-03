@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,12 +36,13 @@ public class ProjectService {
         private final ProjectAttachmentRepository projectAttachmentRepository;
         private final ProjectIssueRepository projectIssueRepository;
         private final EmployeeRepository employeeRepository;
+        private final FileStorageService fileStorageService;
 
-        public void createProject(ProjectCreateRequest request) {
-
+        public void createProject(ProjectCreateRequest request, MultipartFile[] files) {
+                System.out.println("project.request : " + request);
                 Project project = ProjectRequestMapper.toProject(request);
                 projectRepository.save(project);
-
+                System.out.println(">>> 저장된 projectId = " + project.getProjectId());
                 List<ProjectBudget> budgets = ProjectRequestMapper.toProjectBudgetList(request, project);
                 projectBudgetRepository.saveAll(budgets);
 
@@ -61,7 +63,7 @@ public class ProjectService {
                 List<ProjectLocation> locations = ProjectRequestMapper.toProjectLocations(request, project);
                 projectLocationRepository.saveAll(locations);
 
-                List<ProjectAttachment> attachments = ProjectRequestMapper.toProjectAttachments(request, project);
+                List<ProjectAttachment> attachments = fileStorageService.storeProejctFiles(project, files);
                 projectAttachmentRepository.saveAll(attachments);
 
                 List<ProjectIssue> issues = ProjectRequestMapper.toProjectIssues(request, project);
