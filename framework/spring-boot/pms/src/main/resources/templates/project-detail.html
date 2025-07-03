@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>프로젝트 상세</title>
+</head>
+<body>
+<h1>프로젝트 상세 정보</h1>
+
+<h2>기본 정보</h2>
+<label>프로젝트명</label>
+<input type="text" th:value="${project.name}" readonly /><br/>
+
+<label>프로젝트 시작일</label>
+<input type="date" th:value="${project.startDate}" readonly /><br/>
+
+<label>프로젝트 종료일</label>
+<input type="date" th:value="${project.endDate}" readonly /><br/>
+
+<label>프로젝트 유형</label>
+<input type="text" th:value="${project.projectType}" readonly /><br/>
+
+<label>진행 상태</label>
+<input type="text" th:value="${project.status}" readonly /><br/>
+
+<label>기술 유형</label>
+<input type="text" th:value="${project.technologyType}" readonly /><br/>
+
+<label>고객 유형</label>
+<input type="text" th:value="${project.clientType}" readonly /><br/>
+
+<label>설명</label><br/>
+<textarea readonly th:text="${project.description}"></textarea>
+
+<hr/>
+
+<h2>예산 정보</h2>
+<div th:each="budget : ${project.budgets}">
+  <label>총 예산</label>
+  <input type="number" th:value="${budget.totalBudget}" readonly /><br/>
+
+  <label>대금 계획</label>
+  <input type="text" th:value="${budget.paymentPlan}" readonly /><br/>
+
+  <label>대금일자</label>
+  <input type="date" th:value="${budget.paymentDate}" readonly /><br/>
+
+  <label>지급 방식</label>
+  <input type="text" th:value="${budget.paymentMethod}" readonly /><br/>
+</div>
+
+<hr/>
+
+<h2>프로젝트 인력</h2>
+<div th:each="emp : ${project.employees}">
+  <label>사번</label>
+  <input type="number" th:value="${emp.employee.employeeId}" readonly /><br/>
+  <label>직급</label>
+  <input type="text" th:value="${emp.employeePosition}" readonly /><br/>
+  <label>역할</label>
+  <input type="text" th:value="${emp.employeeRole}" readonly /><br/>
+  <label>PM 여부</label>
+  <input type="checkbox" th:checked="${emp.isMainPm}" disabled /><br/>
+</div>
+
+<hr/>
+
+<h2>발주처 정보</h2>
+<div th:each="client : ${project.clients}">
+  <label>기관명</label>
+  <input type="text" th:value="${client.organization}" readonly /><br/>
+  <label>담당자</label>
+  <input type="text" th:value="${client.managerName}" readonly /><br/>
+  <label>부서</label>
+  <input type="text" th:value="${client.department}" readonly /><br/>
+  <label>연락처</label>
+  <input type="text" th:value="${client.contactNumber}" readonly /><br/>
+</div>
+
+<hr/>
+
+<h2>하도급 정보</h2>
+<div th:each="sub : ${project.subcontracts}">
+  <label>하도급 업체</label>
+  <input type="text" th:value="${sub.companyName}" readonly /><br/>
+  <label>계약일</label>
+  <input type="date" th:value="${sub.contractDate}" readonly /><br/>
+  <label>계약 시작일</label>
+  <input type="date" th:value="${sub.contractStart}" readonly /><br/>
+  <label>계약 종료일</label>
+  <input type="date" th:value="${sub.contractEnd}" readonly /><br/>
+  <label>하도급 비용</label>
+  <input type="number" th:value="${sub.contractAmount}" readonly /><br/>
+  <label>대금 지급 일자</label>
+  <input type="date" th:value="${sub.paymentDate}" readonly /><br/>
+  <label>지급 방식</label>
+  <input type="text" th:value="${sub.paymentMethod}" readonly /><br/>
+  <label>평가</label>
+  <input type="text" th:value="${sub.evaluationGrade}" readonly /><br/>
+</div>
+
+<hr/>
+
+<h2>컨소시엄</h2>
+<div th:each="c : ${project.consortiums}">
+  <label>회사명</label>
+  <input type="text" th:value="${c.companyName}" readonly /><br/>
+  <label>계약 금액</label>
+  <input type="text" th:value="${c.contractAmount}" readonly /><br/>
+  <label>공동 계약</label>
+  <input type="checkbox" th:checked="${c.isJointContract}" disabled /><br/>
+  <label>주계약</label>
+  <input type="checkbox" th:checked="${c.isMainContract}" disabled /><br/>
+  <label>책임 비율</label>
+  <input type="text" th:value="${c.responsibilityRatio}" readonly /><br/>
+  <label>역할 설명</label>
+  <input type="text" th:value="${c.roleDescription}" readonly /><br/>
+</div>
+
+<hr/>
+
+<h2>수행 장소</h2>
+<div th:each="l : ${project.locations}">
+  <label>근무형태</label>
+  <input type="text" th:value="${l.workType}" readonly /><br/>
+  <label>합사 사무실</label>
+  <input type="checkbox" th:checked="${l.hasSharedOffice}" disabled /><br/>
+  <label>현장 책임자</label>
+  <input type="text" th:value="${l.siteManager}" readonly /><br/>
+  <label>연락처</label>
+  <input type="text" th:value="${l.managerContact}" readonly /><br/>
+</div>
+
+<hr/>
+
+<h2>첨부파일</h2>
+<ul>
+  <li th:each="a : ${project.attachments}">
+    <a th:href="@{'/download/' + ${a.attachmentId}}" th:text="${a.fileName}"></a>
+  </li>
+</ul>
+
+<hr/>
+
+<h2>이슈</h2>
+<div th:each="i : ${project.issues}">
+  <label>이슈 내용</label>
+  <textarea readonly th:text="${i.issueNote}"></textarea><br/>
+  <label>작성자 ID</label>
+  <input type="text" th:value="${i.writerId}" readonly /><br/>
+</div>
+
+</body>
+</html>
