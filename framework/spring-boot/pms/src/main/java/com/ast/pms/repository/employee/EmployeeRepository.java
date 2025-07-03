@@ -1,4 +1,4 @@
-package com.ast.pms.repository;
+package com.ast.pms.repository.employee;
 
 import com.ast.pms.domain.Employee;
 

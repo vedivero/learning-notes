@@ -1,11 +1,12 @@
-package com.ast.pms.controller;
-
-import com.ast.pms.dto.request.EmployeeRegisterRequest;
+package com.ast.pms.controller.web;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import com.ast.pms.dto.request.employee.EmployeeRegisterRequest;
+
 import org.springframework.ui.Model;
 
 @Controller

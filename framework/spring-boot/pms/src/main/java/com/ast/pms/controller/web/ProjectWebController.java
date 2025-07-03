@@ -1,4 +1,4 @@
-package com.ast.pms.controller;
+package com.ast.pms.controller.web;
 
 import com.ast.pms.dto.request.project.ProjectCreateRequest;
 import lombok.RequiredArgsConstructor;

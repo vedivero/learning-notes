@@ -2,7 +2,7 @@ package com.ast.pms.mapper;
 
 import com.ast.pms.domain.Employee;
 import com.ast.pms.domain.EmployeeLicense;
-import com.ast.pms.dto.request.EmployeeRequestBase;
+import com.ast.pms.dto.request.employee.EmployeeRequestBase;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

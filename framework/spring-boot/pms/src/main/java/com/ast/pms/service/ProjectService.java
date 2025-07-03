@@ -7,7 +7,7 @@ import com.ast.pms.dto.response.project.ProjectDetailResponse;
 import com.ast.pms.dto.response.project.ProjectListResponse;
 import com.ast.pms.mapper.ProjectListResponseMapper;
 import com.ast.pms.mapper.ProjectRequestMapper;
-import com.ast.pms.repository.EmployeeRepository;
+import com.ast.pms.repository.employee.EmployeeRepository;
 import com.ast.pms.repository.project.*;
 
 import lombok.RequiredArgsConstructor;

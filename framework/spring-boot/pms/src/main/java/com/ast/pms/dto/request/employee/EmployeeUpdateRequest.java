@@ -1,4 +1,4 @@
-package com.ast.pms.dto.request;
+package com.ast.pms.dto.request.employee;
 
 import java.util.List;
 
