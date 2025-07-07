@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,7 +15,12 @@ public class ProjectWebController {
     @GetMapping("/new")
     public String showProjectCreateForm(Model model) {
         model.addAttribute("projectCreateRequest", new ProjectCreateRequest());
-        return "project";
+        return "project-register";
+    }
+
+    @GetMapping("/list")
+    public String getProjectList() {
+        return "project-list";
     }
 
 }
