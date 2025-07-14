@@ -41,3 +41,15 @@ class Solution {
 //my_string의 i번째 문자와 비교하여 true/false를 판별
 //moum이 아니다. 즉, isMoum=false면,
 //StringBuilder에 해당 문자를 append
+
+
+
+// 다른 풀이 방법
+class Solution {
+    public String solution(String my_string) {
+        String answer = my_string.replaceAll("[aeiou]", "");
+        return answer;
+    }
+}
+//replaceAll 메서드는 첫번째 인자로 정규표현식을 받아서 해당되는 모든 문자를 두 번째 지정한 문자로 치환
+//대괄호[]안에 알파벳을 넣으면, 그 안의 문자 중 하나와 일치하는 문자들을 대상으로 환
