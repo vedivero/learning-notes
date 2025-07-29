@@ -1,6 +1,7 @@
 package collection.array;
 import java.util.Arrays;
 
+// 제네릭으로 처리
 public class MyArrayListV4<E> {
     private static final int DEFAULT_CAPACITY = 5;
     private Object[] elementData;
