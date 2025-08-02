@@ -1,13 +1,14 @@
 package collection.list;
 import java.util.Arrays;
-public class MyArrayList<E> implements MyList<E> {
+
+public class ArrayList<E> implements MyList<E> {
     private static final int DEFAULT_CAPACITY = 5;
     private Object[] elementData;
     private int size = 0;
-    public MyArrayList() {
+    public ArrayList() {
         elementData = new Object[DEFAULT_CAPACITY];
     }
-    public MyArrayList(int initialCapacity) {
+    public ArrayList(int initialCapacity) {
         elementData = new Object[initialCapacity];
     }
     @Override
