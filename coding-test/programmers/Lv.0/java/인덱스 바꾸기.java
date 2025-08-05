@@ -19,3 +19,21 @@ class Solution {
         return new String(chars);
     }
 }
+// 문자열의 각 문자의 위치를 바꾸기 위해 캐릭터 형태의 배열에 문자열을 담음
+// 임시 변수를 생성해서 num1에 해당하는 문자를 담고
+// num2에 해당하는 문자를 num1에 담고
+// 다시 temp에 임시로 보관했던 문자를 num2에 담아서 결과를 도출
+
+class Solution {
+    public String solution(String my_string, int num1, int num2) {
+
+        char[] chars = my_string.toCharArray();
+
+        chars[num1] = my_string.charAt(num2);
+        chars[num2] = my_string.charAt(num1);
+
+        return String.valueOf(chars);
+
+    }
+}
+// 이 풀이는
