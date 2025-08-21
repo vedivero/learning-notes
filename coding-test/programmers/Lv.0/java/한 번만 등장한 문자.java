@@ -9,10 +9,32 @@
 // "abcabcadc"	"d"
 // "abdc"	    "abcd"
 // "hello"	    "eho"
+import java.util.*;
 
 class Solution {
     public String solution(String s) {
-        String answer = "";
-        return answer;
+        HashMap<String,Integer> hashMap = new HashMap<>();
+        String[] strArr = s.split("");
+
+        for (String st : strArr) {
+            hashMap.put(st, hashMap.getOrDefault(st,0)+1);
+        }
+
+        List<String> list = new ArrayList();
+        for(Map.Entry<String,Integer> entry : hashMap.entrySet()){
+            if(entry.getValue() == 1){
+                list.add(entry.getKey());
+            }
+        }
+
+        Collections.sort(list);
+
+        StringBuilder sb = new StringBuilder();
+
+        for(String text : list){
+            sb.append(text);
+        }
+
+        return sb.toString();
     }
 }
