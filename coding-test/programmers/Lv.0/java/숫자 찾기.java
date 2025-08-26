@@ -27,3 +27,16 @@ class Solution {
 // String 클래스의 indexOf 연산 결과는 찾는 값이 없으면 -1을 반환
 // answer변수에 -1이 담겨있으면 동일하게 -1을 반환
 // -1아닌 검색 결과가 answer 변수에 담기면 answer변수 값에 +1을 더한 값을 반환
+
+---
+
+class Solution {
+    public int solution(int num, int k) {
+        return ("-" + num).indexOf(String.valueOf(k));
+    }
+}
+
+// 자바의 indexOf는 0번째 index부터 값을 반환
+// 문제가 요구하는 답은 1번째부터 시작하는 자리 수를 요구
+// num이라는 정수형 값에 "-"를 붙이면 정수형이 문자열이 됨과 동시에
+// 0번째 인덱스에 대한 계산을 하지 않아도 됨
