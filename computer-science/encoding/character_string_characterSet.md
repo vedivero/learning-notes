@@ -65,7 +65,7 @@
 
 - 선행 바이트(첫 바이트)에 글자 길이 표시
 
-    - `0xxx xxxx` : 1 Byte
+    - `10xx xxxx` : 1 Byte
     - `110x xxxx` : 2 Byte
     - `1110 xxxx` : 3 Byte (1110(2) = 0xE)
     - `1111 0xxx` : 4 Byte (최대크기)
