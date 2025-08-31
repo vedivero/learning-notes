@@ -1,4 +1,4 @@
-package operator.test;
+package operator.v1;
 
 public class Exchange {
     public static void main(String[] args) {
