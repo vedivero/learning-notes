@@ -3,17 +3,19 @@ package vedivero.board.article.api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
-import vedivero.board.article.service.request.ArticleCreateRequest;
 import vedivero.board.article.service.response.ArticlePageResponse;
 import vedivero.board.article.service.response.ArticleResponse;
+
+import java.util.List;
 
 public class ArticleApiTest {
     RestClient restClient = RestClient.create("http://localhost:9000");
 
     @Test
     void createTest() {
-        ArticleResponse response = create(new ArticleCreateRequest("hi", "my content", 1L, 1L));
+        ArticleResponse response = create(new ArticleCreateRequest("hi22", "my content22", 1L, 1L));
         System.out.println("response = " + response);
     }
 
@@ -69,6 +71,31 @@ public class ArticleApiTest {
         System.out.println("response.getArticleCount() = " + response.getArticleCount());
         for (ArticleResponse article : response.getArticles()) {
             System.out.println("article id = " + article.getArticleId());
+        }
+    }
+
+    @Test
+    void readAllInfiniteScrollTest() {
+        List<ArticleResponse> articles1 = restClient.get()
+                .uri("/v1/articles/infinite-scroll?boardId=1&pageSize=5")
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
+                });
+        System.out.println("firstPage");
+        for (ArticleResponse articleResponse : articles1) {
+            System.out.println("articleResponse.getArticleId() = " + articleResponse.getArticleId());
+        }
+
+        Long lastArticleId = articles1.getLast().getArticleId();
+        List<ArticleResponse> articles2 = restClient.get()
+                .uri("/v1/articles/infinite-scroll?boardId=1&pageSize=5&lastArticleId=%s".formatted(lastArticleId))
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
+                });
+
+        System.out.println("secondPage");
+        for (ArticleResponse articleResponse : articles2) {
+            System.out.println("articleResponse.getArticleId() = " + articleResponse.getArticleId());
         }
     }
 
