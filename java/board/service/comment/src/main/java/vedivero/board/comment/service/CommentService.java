@@ -40,7 +40,7 @@ public class CommentService {
         }
         return commentRepository.findById(parentCommentId)
                 .filter(not(Comment::getDeleted))
-                .filter(Comment::isRoot); //댓글 = 최대 2 depth이기 때문에 상위 댓글은 root여야 함.
+                .filter(Comment::isRoot) //댓글 = 최대 2 depth이기 때문에 상위 댓글은 root여야 함.
                 .orElseThrow();
     }
 
@@ -52,6 +52,7 @@ public class CommentService {
 
     @Transactional
     public void delete(Long commentId) {
+        System.out.println("commentId = " + commentId);
         commentRepository.findById(commentId)
                 .filter(not(Comment::getDeleted)) //삭제되지 않았음을 체크
                 .ifPresent(comment -> {

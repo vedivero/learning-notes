@@ -10,7 +10,7 @@ import vedivero.board.comment.service.request.CommentResponse;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @GetMapping("/v1/comments/{commentId}")
     public CommentResponse read(
