@@ -10,9 +10,13 @@ import java.util.List;
 @Service
 public class BoardService {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    public List<Board> getBoardss(int page, int size) {
+    public BoardService(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
+
+    public List<Board> getBoards(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Board> pageOfBoard = boardRepository.findByOrderByCreatedAtDesc(pageable);
         return pageOfBoard.getContent();
