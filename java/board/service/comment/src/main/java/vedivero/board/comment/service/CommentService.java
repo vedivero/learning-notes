@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import vedivero.board.comment.entity.Comment;
 import vedivero.board.comment.repository.CommentRepository;
 import vedivero.board.comment.service.request.CommentCreateRequest;
-import vedivero.board.comment.service.request.CommentResponse;
+import vedivero.board.comment.service.response.CommentResponse;
+import vedivero.board.comment.service.response.CommentPageResponse;
 import vedivero.board.common.snowflake.Snowflake;
+
+import java.util.List;
 
 import static java.util.function.Predicate.not;
 
@@ -81,4 +84,23 @@ public class CommentService {
                     .ifPresent(this::delete); //상위 댓글 삭제
         }
     }
+
+    public CommentPageResponse readAll(Long articleId, Long page, Long pageSize) {
+        return CommentPageResponse.of(
+                commentRepository.findAll(
+                        articleId, (page - 1) * pageSize, pageSize).stream()
+                        .map(CommentResponse::from).toList(),
+                commentRepository.count(
+                        articleId, PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)));
+    }
+
+    public List<CommentResponse> readAll(Long articleId, Long lastParentCommentId, Long lastCommentId, Long limit) {
+        List<Comment> comments = lastParentCommentId == null || lastCommentId == null ?
+                commentRepository.findAllInfiniteScroll(articleId, limit) :
+                commentRepository.findAllInfiniteScroll(articleId, lastParentCommentId, lastCommentId, limit);
+        return comments.stream()
+                .map(CommentResponse::from)
+                .toList();
+    }
+
 }

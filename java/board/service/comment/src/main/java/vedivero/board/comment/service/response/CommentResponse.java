@@ -1,4 +1,4 @@
-package vedivero.board.comment.service.request;
+package vedivero.board.comment.service.response;
 
 import lombok.Getter;
 import lombok.ToString;
