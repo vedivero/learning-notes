@@ -2,7 +2,7 @@
 
 레디스(Redis)는 Remote Dictionary Server의 약자.
 
-“키-값” 구조의 비정형 데이터를 저장하고 관리하기 위한 오픈 소스 기반의 비관계형 데이터베이스 관리 시스템(DBMS)
+“키-값” 구조의 비정형 데이터를 저장하고 관리하기 위한, 오픈 소스 기반의 비관계형 데이터베이스 관리 시스템(DBMS)
 
 > Redis는 데이터 처리 속도가 엄청 빠른 NoSQL 데이터베이스
 
@@ -290,3 +290,428 @@ SQL 자체가 비효율적으로 작성됐다면 아무리 시스템적으로 �
 하지만 SQL 튜닝을 통해 기본적으로 성능을 향상시킨다면, 시스템적인 성능 개선이 필요없거나 훨씬 간단한 개선으로 큰 성능 개선 효과를 얻을 수 있다.
 
 > DB 성능 개선 방법들 중 가장 가성비가 좋은 방법이 SQL 튜닝.
+
+
+---
+
+<br>
+<br>
+
+# 📍 Docker Compose로 Redis, Spring Boot 가동하기
+
+## 1. Dockerfile 만들기
+
+
+파일 명 : project/`Dockerfile`
+```
+FROM openjdk:17-jdk
+
+COPY build/libs/*SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+---
+
+## 2. compose.yml 만들기
+
+파일 명 : project/`compose.yml`
+
+```
+services:
+    api-server:
+        build: .           # Dockerfile 파일로 빌드
+        ports:
+            - 8080:8080    # Port끼리 Mapping
+        depends_on:
+            cache-server:
+                condition: service_healthy     # Redis가동 후, Spring Boot Server 가동
+    cache-server:
+        image: redis        # Image로 Redis 사용
+        ports:
+            - 6379:6379     # Redis 기본 Port
+    healthcheck:            # Redis가 잘 가동된다는 조건
+        test: [ "CMD", "redis-cli", "ping" ]
+        interval: 5s
+        retries: 10
+ ```
+
+ ---
+
+ ### Local 환경에서 Docker Compose 실행 TEST
+
+ - Test를 위한 기존 Redis, Spring Boot 종료
+
+#### Redis 종료 명령어
+
+    brew services stop redis
+
+
+#### Redis 종료 확인 명령어
+
+    brew services info redis
+
+#### Spring Boot Server 종료 확인 명령어
+
+    lsof -i:8080
+
+
+---
+
+## 3. application.yml 수정
+
+```
+# local 환경
+spring:
+    profiles:
+        default: local
+    datasource:
+        # 스프링 부트가 가동되는 컨테이너 안에서의 주소(해당 컨테이너에는 MySQL이 미설치)
+        # url: jdbc:mysql://localhost:3306/mydb 
+        url: jdbc:mysql://host.docker.internal:3306/mydb 
+        username: root
+        password: password
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+       hibernate:
+            ddl-auto: update
+        show-sql: true
+    data:
+        redis:
+            # Redis도 마찬가지
+            # host: localhost
+            host: cache-server  # compose.yml에서 정의한 Redis Name과 일치
+            port: 6379
+logging:
+    level:
+    org.springframework.cache: trace
+---
+# prod 환경
+spring:
+    config:
+    activate:
+    on-profile: prod
+    datasource:
+        url: jdbc:mysql://instagram-db.coseefawhrzc.ap-northeast-2.rds.amazonaws.com:3306/mydb
+    username: admin
+    password: password
+```
+
+---
+
+## 4. Build
+
+- server build
+
+    ```
+    ./gradlew clean build -x test
+    ```
+
+- docker build
+
+    ```
+    docker compose up --build -d
+    ```
+
+#### Redis 생성 ➡️ Redis 체크 ➡️ Spring Boot Server 가동
+    
+    
+
+---
+
+### docker compose
+
+- 실시간 로그 출력 설정 명령어
+
+    ```
+    docker compose logs -f
+    ```
+
+
+<br>
+<br>
+<br>
+
+# AWS EC2에서 Docker Compose로 Redis, Spring Boot 가동하기
+
+## production에서 사용할 설정 파일 분리
+
+<br>
+
+파일 명 : project/`Dockerfile-prod` 
+
+```
+FROM openjdk:17-jdk
+
+COPY build/libs/*SNAPSHOT.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/app.jar"]
+```
+
+<br>
+
+파일 명 : project/`compose-prod.yml`
+
+```
+services:
+    api-server:
+        build:
+        context: .  # 현재 경로를 의미
+        dockerfile: ./Dockerfile-prod   # 파일이름을 의미
+        ports:
+            - 8080:8080
+        depends_on:
+            cache-server:
+             condition: service_healthy
+    cache-server:
+        image: redis
+        ports:
+            - 6379:6379
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            interval: 5s
+            retries: 10
+```
+
+---
+
+<br>
+
+## Github에 소스 코드 Push
+
+```
+git add .
+git commit -m "docker"
+git push origin main
+
+```
+
+
+---
+<br>
+
+## EC2에서 소스 코드 Pull
+
+```
+git pull origin main
+```
+
+---
+
+<br>
+
+## EC2에 Docker Compose 설치하기
+
+- Docker Compose 설치 명령어
+    ```
+    $ sudo apt-get update && \
+    sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+    sudo apt-key fingerprint 0EBFCD88 && \
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update && \
+    sudo apt-get install -y docker-ce && \
+    sudo usermod -aG docker ubuntu && \
+    newgrp docker && \
+    sudo curl -L "https://github.com/docker/compose/releases/download/2.27.1/docker-compose-$(uname -s)-$(unam
+    sudo chmod +x /usr/local/bin/docker-compose && \
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    ```
+
+
+- Docker 버전 확인 명령어
+    ```
+    $ docker -v
+
+    Docker version xx.x.x, build xxxxxxx
+    ```
+
+- Docker Compose 버전 확인 명령어
+    ```
+    $ docker compose version
+
+    Docker Compose version vx.xx.x
+    ```
+
+---
+
+- Redis 중지 명령어
+
+    ```
+    sudo systemctl stop redis
+
+
+    ```
+
+- Redis 상태 확인 명령어
+
+    ```
+    sudo systemctl status redis
+
+    # 실행 중
+    ...
+    Active : active
+    ...
+
+    # 중지
+    ...
+    Active : inactive (dead)
+    ...
+    ```
+
+---
+
+- Spring Boot 가동 여부 확인
+
+    ```
+    sudo lsof -i:8080
+    ```
+
+- Spring Boot 정지 명령어
+
+    ```
+    kil <PID Number>
+    ```
+
+---
+
+## Spring Boot 가동하기
+
+- 빌드
+
+    ```
+    ./gradlew clean build -x test
+    ```
+
+## Docker Compose
+
+- 빌드
+    ```
+    docker compose -f compose-prod.yml up --build -d
+    ```
+
+- Docker 가동 체크
+
+    ```
+    docker ps
+    ```
+
+- Dokcer Compose 종료
+
+    ```
+    docker compose down
+    ```
+
+---
+
+## API호출 테스트
+
+```
+xx.xxx.xxx.xxx:xxxx/boards
+```
+
+<br>
+<br>
+<br>
+
+# 📍 ElastiCache
+
+## 현업에서 EC2에 Redis말고, ElastiCache를 쓰는 이유
+
+- Redis 
+
+    일일이 Redis를 설치하고 셋팅하고 관리하면서 확장까지 하려면 신경쓸 게 생각보다 많다.
+
+- ElastiCache
+
+    쉬운 세팅, 쉬운 확장, 모니터링 기능 기본 제공, 장애 발생 가능성도 훨씬 적다.
+
+> 사용은 쉽게 가능하나, 작동 원리를 이해하는 것이 중요.
+
+
+<br>
+<br>
+<br>
+
+## ElastiCache
+
+### 기존 아키텍처
+    
+![alt text](image-1.png)
+
+### ElastCache 아키텍처
+
+![alt text](image-2.png)
+
+- 사용자가 스프링에 API요청
+- 데이터 베이스 조회 전, 캐시 서버를 체크
+- 캐시 서버에 데이터가 있으면 데이터를 응답
+- 캐시 서버에 데이터가 없으면 데이터 베이스에서 조회
+- 데이터베이스에서 응답한 데이터를 ElastiCache에 저장
+
+    > Cache Aside
+
+<br>
+<br>
+<br>
+
+## Spring Boot, ElastiCache 연결
+
+- ElastiCache 연결하기 위한 옵션 수정
+
+    - application.yml
+        - 캐시 정보 변경하기
+        ```
+        spring:
+            config:
+                activate:
+                    on-profile: prod
+            datasource:
+                url: jdbc:mysql://coseefawhrzc.ap-northeast-2.rds.amazonaws.com:3306/mydb
+                username: admin
+                password: password
+            data:
+                redis:
+                    # AWS ElastiCache 기본 엔드포인트 URL
+                    host: s8nyjv.ng.0001.apn2.cache.amazonaws.com
+                    port: 6379
+        ```
+
+
+- git push
+
+- EC2에서 git pull
+
+- EC2에서 Build
+
+    ```
+    ./gradlew clean build -x test
+    ```
+
+- EC2에서 Spring Boot 가동
+
+    - 빌드된 jar 파일 위치로 이동 
+
+    - jar 파일 싱행
+        ```
+        java -jar -Dspring.profiles.active=prod redis-in-spring-0.0.1-SNAPSHOT.jar
+        ```
+
+---
+
+## ElastiCache Server로 요청
+
+xx.xxx.xxx.xxx:xxx/boards
+
+---
+
+## ElastiCache에 Cache가 저장되고 있는지 체크
+
+- EC2(ubuntu)
+    ```
+    redis-cli -h <엔드포인트 URL>
+
+    keys *
+
+    get getBoards::boards:page:1:size:10
+    ```
