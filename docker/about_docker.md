@@ -70,3 +70,45 @@
 
 - 이미지(Image)는 프로그램을 실행하는 데 필요한 설치 과정, 설정, 버전 정보 등을 포함
 - 즉, 프로그램을 실행하는 데 필요한 모든 것을 포함
+
+
+---
+
+<br>
+
+## Nginx 설치하기
+
+docker에서 Nginx 설치 명령어
+
+```
+docker pull nginx
+```
+
+![alt text](image.png)
+
+
+### Nginx Image가 다운되었는지 확인
+
+```
+docker image ls
+```
+
+### Nginx 실행
+
+```
+docker run --name webserver -d -p 80:80 nginx
+```
+
+#### Nginx 접속하기
+
+`localhost:80`
+![alt text](image-1.png)
+
+#### Nginx 종료하기
+
+```
+docker stop webserver
+```
+
+
+
