@@ -170,4 +170,29 @@ docker stop webserver
     docker image rm -f $(docker images -q)
     ```
 
-    
+<br>
+
+## 컨테이너 생성
+
+- 이미지를 토대로 컨테이너를 생성
+
+    - 미니 컴퓨터를 생성
+        ```
+        docker create nginx
+        ```
+
+    - 컨테이너를 실행
+
+        ```
+        docker start <CONTAINER ID> 
+
+        # docker ps -a로 container id를 확인 가능
+        ```
+
+- 이미지를 다운 받지 않아도 docker hub에서 자동 다운 & 설치가능
+
+    - mysql image가 없는 상황에서의 명령어
+
+        ```
+        docker create mysql
+        ```
