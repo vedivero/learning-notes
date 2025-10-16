@@ -196,3 +196,102 @@ docker stop webserver
         ```
         docker create mysql
         ```
+
+---
+
+## 컨테이너 삭제
+
+    - docker ps -a 명령어를 통해 CONTAINER ID를 확인
+
+        ```
+        docker rm <CONTAINER ID>
+
+        # CONTAINER ID의 일부만 입력해도 삭제 가능
+        ```
+
+    - 동시 삭제도 가능
+
+        ```
+        docker rm 07e 156 78e
+        ```
+
+---
+
+## docker create와 docker start는 docker run 명령어로 한 번에 실행 가능
+
+```
+docker run nginx
+```
+
+---
+
+## foreground
+
+- 내가 실행 시킨 프로그램의 내용이 화면에서 출력되는 상태
+- 실시간으로 실행 중인 프로그램의 상태를 확인하는 장점
+- 다른 프로그램을 실행할 수 없는 단점
+
+## background
+
+- 내가 실행 시킨 프로그램의 내용이 컴퓨터 내부적으로 실행되는 상태
+
+---
+
+## docker run nginx를 백그라운드에서 실행하기
+
+- d옵션으로 실행
+
+    ```
+    docker run -d nginx
+    ```
+
+- 이 상태에서 다른 명령어 실행 가능
+
+## 컨테이터 이름을 붙여서 생성하기
+
+ - `my-web-server` 라는 이름을 붙여서 nginx 생성하기
+
+    ```
+    docker run -d --name my-web-server nginx
+    ```
+
+## 컨테이너의 특징
+
+- local에서 nginx접속해보기
+
+    ```
+    localhost:80
+    ```
+
+    - 연결되지 않음
+
+        ![alt text](image-2.png)
+
+---
+
+<br>
+<br>
+<br>
+
+### 이유
+
+![alt text](image-3.png)
+
+- 컨테이너 특징 : 독립적 ➡️ `호스트 컴퓨터의 네트워크`와 `컨테이터 컴퓨터 네트워크`가 분리
+- 외부에서 컨테이너 네트워크에 접근 불가
+- 포트를 연결해야 함.
+
+    ```
+    docker run -d -p 4000:80 nginx
+
+    docker ps -a
+
+    # PORTS
+    # 0.0.0.:4000->80/tcp
+    ```
+
+    1. 사용자가 4000번 PORT로 요청을 보내면, 80번 PORT와 연결시킨다는 뜻
+
+- localhost:4000으로 연결 요청
+
+    ![alt text](image-1.png)
