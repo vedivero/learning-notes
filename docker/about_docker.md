@@ -293,5 +293,3 @@ docker run nginx
     1. 사용자가 4000번 PORT로 요청을 보내면, 80번 PORT와 연결시킨다는 뜻
 
 - localhost:4000으로 연결 요청
-
-    ![alt text](image-1.png)
