@@ -297,3 +297,205 @@ docker run nginx
     1. 사용자가 4000번 PORT로 요청을 보내면, 80번 PORT와 연결시킨다는 뜻
 
 - 웹 브라우저에서 localhost:4000으로 연결 요청 TEST
+
+
+<br>
+<br>
+<br>
+
+## 실행 중인 컨테이너 조회 명령어
+
+```
+docker ps
+```
+
+## 모든 컨테이너 조회 명령어
+
+```
+docker ps -a
+```
+
+## 컨테이너 종료 명령어 1
+
+```
+docker stop <CONTAINER ID>
+```
+
+- 시스템 종료 버튼과 같은 명령어
+
+## 컨테이너 종료 명령어 2
+
+```
+docker kill <CONTAINER ID>
+```
+- 전원 플러그 뽑아 버리는 것과 같은 명령어
+- 파일 손상 가능성이 높음
+
+## 컨테이너 삭제 명령어
+
+```
+docker rm <CONTAINER ID>
+```
+
+- 컨테이너가 실행 중일 때는, 컨테이너를 삭제할 수 없기 때문에, 중지 후 삭제 시도
+
+
+## 중지되어 있는 모든 컨테이너 삭제 명령어
+
+```
+docker rm $(docker ps -qa)
+```
+
+
+## 실행되어 있는 컨테이너 삭제 명령어
+
+```
+docker rm -f <CONTAINER ID>
+```
+
+
+<br>
+<br>
+<br>
+
+## 컨테이너 로그 조회
+
+- 에러 발생 시, 로그를 확인하며 디버깅
+
+> `docker run nginx` 명렁어를 통해 foreground로 실행시키면, 다른 작업을 할 수 없음.
+
+- background로 실행하기
+
+    ```
+    docker run -d nginx
+    ```
+
+<br>
+
+- log 명령어
+
+    ```
+    docker logs <CONTIANER ID>
+    ```
+
+<br>
+
+- 마지막 10줄말 출력하기
+
+    ```
+    docker logs --tail 10 <CONTAINER ID>
+    ```
+
+<br>
+
+- 실시간으로 생성되는 로그 확인 명령어
+
+    ```
+    docker logs -f <CONTAINER ID>
+    ```
+
+    
+<br>
+
+- 명령어 실행 시점부터 실시간으로 생성되는 로그 확인 명령어 (기존 log는 미출력)
+
+    ```
+    docker logs --tail 0 -f <CONTAINER ID>
+    ```
+
+
+<br>
+<br>
+<br>
+
+## 실행 중인 컨테이너 내부에 접속하기 (exec -it)
+
+- `컨테이너` = `미니 컴퓨터`
+
+### 1. nginx를 background에서 실행하기
+
+```
+docker run -d nginx
+```
+
+### 2. nginx가 실행 중인 컨테이너 접속하기
+```
+docker exec -it <CONTAINER ID> or <NAMES> bash
+```
+
+### 3. 다시 HOST 컴퓨터로 빠져나오기
+```
+exit
+```
+
+
+<br>
+<br>
+<br>
+
+## Docker 전체 흐름 정리
+
+> "NGINX를 docker에서 실행시킬거야"
+
+### 1. NGINX 이미지 다운
+
+```
+docker pull nginx
+```
+
+- docker run 명렁어는 이미지가 없으면 자동으로 이미지를 다운로드하기 때문에 pull 명령어는 생략해도 되는 명령어
+
+### 2. 다운 받은 이미지를 컨테이너에 올리기
+```
+docker run --name webserver -d -p 80:80 nginx
+```
+- `--name` : 이름 부여
+- `-d` : background 실행
+- `-p 80:80` : port mapping
+
+
+
+<br>
+<br>
+<br>
+
+## Docker로 Redis 실행하기
+
+### 1. Redis 이미지 다운과 실행을 동시에 하기
+
+```
+docker run -d -p 6379:6379 redis
+```
+
+### 2. 이미지가 설치됐는지 확인
+```
+docker iamge ls
+```
+
+### 3. Redis가 실행되고 있는 컨테이너에 접속
+```
+docker exet -it <CONTAINER ID> or <NAMES> bash
+```
+- `bash` : bash 환경에서 실행
+
+### 4. Redis 프로그램 실행
+```
+redis-cli
+```
+
+### 5. Redis 이미지가 설치된 컨테이너 삭제
+```
+docker rm -f <CONTAINER ID> or <NAMES>
+```
+
+### 6. Redis 이미지 삭제
+```
+docker image rm <IMAGE ID> or <REPOSITORY>
+```
+
+<br>
+<br>
+<br>
+
+
+
