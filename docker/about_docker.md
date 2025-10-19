@@ -820,7 +820,7 @@ docker run -p 3306:3306 -d mysql
 - 다시 MySQL 설치하기
 
     ```
-    $ docker run -e MYSQL_ROOT_PASSWORD=123 -p 123:123 -v "/Users/vediv/Documents/docker-mysql:/var/lib/mysql" -d mysql
+    $ docker run -e MYSQL_ROOT_PASSWORD=123 -p 3306:3306 -v "/Users/vediv/Documents/docker-mysql:/var/lib/mysql" -d mysql
     ```
 - MySQL 컨테이너 접속
 
@@ -843,3 +843,42 @@ docker run -p 3306:3306 -d mysql
 > 데이터가 남아있음
 
 - ✅ Volume 정보의 초기 비밀번호 값은 `docker-mysql` 폴더에 생성된 설정 파일에 저장되어 있기에 비밀번호를 변경하려면 해당 파일을 삭제하고 설치하면 됨.
+
+---
+
+### Volume을 활용해 PostgreSQL 띄우기
+
+- postgresql 설치
+    ```
+    $ docker run -e POSTGRES_PASSWORD=root -p 5432:5432 -v "/Users/vediv/Documents/docker-postgres/postgresql_data:/var/lib/postgresql/data " -d postgres 
+    ```
+
+- postgresql 접속
+
+    ```
+    docker exec -it <NAMES> psql -U postgres
+    ```
+
+    ```
+    docker exec -it names<> bash
+    psql -U postgres
+    ```
+
+    - `-v` : HOST 경로를 컨테이너 내부 경로에 마운트하는 옵션
+
+---
+
+### Volume을 활용해 MongoDB 띄우기
+
+- MongoDB 설치
+    ```
+    $ docker run -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -p 27017:27017 -v "/Users/vediv/Documents/docker-mongodb/data:/data/db" -d mongo 
+    ```
+
+- MongoDB 접속
+
+    ```
+    docker exec -it mongodb bash
+
+    mongosh -u root -p root
+    ```
