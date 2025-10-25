@@ -1,6 +1,9 @@
 services:
-  my-web-server:
-    container_name: web-server
-    image: nginx
+  my-db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql_data:/var/lib/mysql
     ports:
-      - 80:80   
+      - 3306:3306
