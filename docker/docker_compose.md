@@ -783,3 +783,448 @@ services:
     ```
 
     ![alt text](image-57.png)
+
+
+<br>
+<br>
+<br>
+
+## MySQL, Redis 컨테이너 동시에 띄워보기
+
+- compose 파일 작성하기
+
+`compose.yml`
+
+```
+services:
+ my-db:
+    image: mysql
+    environment:
+    MYSQL_ROOT_PASSWORD: pwd1234
+    volumes:
+        - ./mysql_data:/var/lib/mysql
+    ports:
+    - 3306:3306
+ my-cache-server:
+    image: redis
+    ports:
+        - 6379:6379
+ ```
+
+- YAML 문법에서는 들여쓰기가 중요하다.
+
+<br>
+
+- compose 파일 실행시키기
+    ```
+    $ docker compose up -d
+    ```
+
+    ![alt text](image-58.png)
+
+<br>
+
+- compose 실행 현황 보기
+
+    ```
+    $ docker compose ps
+    $ docker ps
+    ```
+
+    ![alt text](image-59.png)
+
+- compose로 실행된 컨테이너 삭제
+
+    ```
+    $ docker compose down
+    ```
+
+    ![alt text](image-60.png)
+
+
+<br>
+<br>
+<br>
+
+## Spring Boot, MySQL 컨테이너 동시에 띄워보기
+
+- Spring Boot 프로젝트 셋팅
+
+`start.spring.io`
+
+https://start.spring.io/
+
+- Java 17 버전
+- Dependencies
+    - Spring Boot DevTools
+    - Spring Web
+    - Spring Data JPA
+    - MySQL Driver
+
+- 간단한 코드 작성
+
+    `AppController`
+
+    ```
+    @RestController
+    public class AppController {
+        @GetMapping("/")
+        public String home() {
+            return "Hello, World!";
+        }
+    }
+    ```
+
+- application.yml에 DB 연결을 위한 정보 작성하기
+
+    resources/`application.yml`
+    ```
+    spring:
+    datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: pwd1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    ```
+
+
+- Dockerfile 작성하기
+
+    `Dockerfile`
+    ```
+    FROM openjdk:17-jdk
+    COPY build/libs/*SNAPSHOT.jar /app.jar
+    ENTRYPOINT ["java", "-jar", "/app.jar"]
+    ```
+
+- compose.yml 파일 작성하기
+
+    `compose.yml`
+
+    ```
+    services:
+        my-server:
+            build: .
+            ports:
+            - 8080:8080
+
+            # my-db의 컨테이너가 생성되고 healthy 하다고 판단 될 때, 해당 컨테이너를 생성한다.
+            depends_on:
+                my-db:
+                    condition: service_healthy
+        my-db:
+            image: mysql
+            environment:
+                MYSQL_ROOT_PASSWORD: pwd1234
+                MYSQL_DATABASE: mydb # MySQL 최초 실행 시 mydb라는 데이터베이스를 생성해준다.
+            volumes:
+                - ./mysql_data:/var/lib/mysql
+            ports:
+                - 3306:3306
+            healthcheck:
+                # MySQL이 healthy 한 지 판단할 수 있는 명령어
+                test: [ "CMD", "mysqladmin", "ping" ] 
+                interval: 5s # 5초 간격으로 체크
+                retries: 10 # 10번까지 재시도
+    ```
+
+- Spring Boot 프로젝트 빌드하기
+
+    ```
+    $ ./gradlew clean build
+    ```
+
+- compose 파일 실행시키기
+
+    ```
+    $ docker compose up -d --build
+    ```
+
+- compose 실행 현황 보기
+
+    ```
+    $ docker compose ps
+    $ docker ps
+    $ docker logs [Container ID]
+    ```
+
+- Spring Boot 컨테이너의 로그를 열어보면 아래와 같이 에러 메시지가 떠있다. 
+- 아래 에러 메시지는 DB와 연결이 제대로 이루어지지 않았을 때 발생하는 에러이다.
+
+    ![alt text](image-61.png)
+
+
+<br>
+<br>
+<br>
+
+## 컨테이너로 실행시킨 Spring Boot가 MySQL에 연결이 안 되는 이유
+
+
+각각의 컨테이너는 자신만의 네트워크망과 IP 주소를 가지고 있다.
+
+호스트 컴퓨터 입장에서 localhost는 호스트 컴퓨터를 가리키지만
+
+Spring Boot 컨테이너 입장에서 localhost는 Spring Boot 컨테이너를 가리킨다.
+
+![alt text](image-63.png)
+
+그런데 Spring Boot의 코드를 작성할 때 DB 정보를 아래와 같이 입력했었다. 
+
+Spring Boot가 실행되는 환경인 컨테이너 입장에서 localhost:3306라는 주소는
+
+Spring Boot 컨테이너 내부에 있는 3306번 포트와 연결을 시도하게 된다.
+
+하지만 Spirng Boot가 실행되는 컨테이너 내부의 3306번 포트에는 아무것도 실행되고 있지 않다.
+
+이러한 구조상의 문제 때문에 Spring Boot가 MySQL에 연결이 안 되고 있었던 것이다.
+
+<br>
+
+`application.yml`
+
+```
+spring:
+    datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: pwd1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+```
+
+그럼 어떻게 Spring Boot의 컨테이너에서 다른 컨테이너에 존재하는 MySQL에 연결을 할 수 있을까?
+
+<br>
+
+compose.yml에서 정의한 Service 이름으로 서로 통신할 수 있다. 바로 예시로 알아보자.
+
+- Spring Boot의 DB 정보를 아래와 같이 수정한 뒤 시도해보기
+
+    `application.ym`
+
+    ```
+    spring:
+        datasource:
+        url: jdbc:mysql://my-db:3306/mydb
+        username: root
+        password: pwd1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    ```
+
+- 위 코드에서 my-db는 도대체 어디서 나온 값일까?
+
+<br>
+
+이전에 작성했던 compose.yml 을 보면 각 컨테이너에 service 이름( my-server , my-db )을 작성했었다.
+
+`compose.yml`
+
+```
+services:
+    my-server:
+        build: .
+        ports:
+            - 8080:8080
+        depends_on:
+        my-db:
+        condition: service_healthy
+    my-db:
+        image: mysql
+        environment:
+        MYSQL_ROOT_PASSWORD: pwd1234
+        MYSQL_DATABASE: mydb
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+        healthcheck:
+        test: [ "CMD", "mysqladmin", "ping" ]
+        interval: 5s
+        retries: 10
+```
+
+이 service 이름이 컨테이너의 주소를 뜻한다.
+
+해당 컨테이너의 IP 주소와 같은 역할을 한다.
+
+위와 같이 코드를 수정한 뒤에 다시 한 번 컨테이너를 실행시켜보자.
+
+```
+$ ./gradlew clean build
+$ docker compose down
+$ docker compose up --build -d
+$ docker ps # 정상적으로 Spring Boot, MySQL이 실행된 걸 확인할 수 있다. 
+```
+
+![alt text](image-62.png)
+
+
+<br>
+<br>
+<br>
+
+## Spring Boot, MySQL, Redis 컨테이너 동시에 띄워보기
+
+`build.gradle`
+
+```
+...
+dependencies {
+...
+implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+}
+```
+
+<br>
+
+`application.yml`
+
+```
+spring:
+    datasource:
+        url: jdbc:mysql://my-db:3306/mydb
+        username: root
+        password: pwd1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+ data:
+    redis:
+        host: localhost
+        port: 6379
+```
+
+<br>
+
+`RedisConfig`
+
+```
+@Configuration
+    public class RedisConfig {
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+    return template;
+    }
+}
+```
+
+<br>
+
+`AppController`
+
+```
+@RestController
+public class AppController {
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    
+    @GetMapping("/")
+    public String home() {
+        redisTemplate.opsForValue().set("abc", "def");
+    return "Hello, World!";
+    }
+}
+```
+
+<br>
+
+`compose.yml`
+
+```
+services:
+    my-server:
+        build: .
+        ports:
+            - 8080:8080
+        depends_on:
+        my-db:
+            condition: service_healthy
+        my-cache-server:
+            condition: service_healthy
+    my-db:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: pwd1234
+            MYSQL_DATABASE: mydb
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+        healthcheck:
+        test: [ "CMD", "mysqladmin", "ping" ]
+        interval: 5s
+        retries: 10
+    my-cache-server:
+        image: redis
+        ports:
+            - 6379:6379
+        healthcheck:
+        test: [ "CMD", "redis-cli", "ping" ]
+        interval: 5s
+        retries: 10
+```
+
+- Docker 컨테이너로 띄워보기
+
+    ```
+    $ ./gradlew clean build
+    $ docker compose down
+    $ docker compose up --build -d
+    ```
+
+    ![alt text](image-65.png)
+
+위 명령어를 통해 컨테이너를 띄운 뒤에 localhost:8080으로 요청을 해보면 아래와 같은 에러가 발생한다.
+
+![alt text](image-66.png)
+
+Connection refused 에러가 발생한 이유는 Redis와 연결이 잘 안 됐기 때문이다.
+
+![alt text](image-67.png)
+
+왜 안됐는 지 application.yml 파일을 다시 한 번 살펴보자.
+
+<br>
+
+`application.yml`
+
+```
+spring:
+    datasource:
+        url: jdbc:mysql://my-db:3306/mydb
+        username: root
+        password: pwd1234
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    data:
+        redis:
+            host: localhost
+            host: my-cache-server
+            port: 6379
+```
+
+각 컨테이너는 각자의 네트워크를 가지고 있기 때문에, localhost가 아니라 Redis가 실행되고 있는 컨테이너로 통신을 해야 한다.
+
+Redis가 실행되고 있는 컨테이너의 주소는 service 이름으로 표현한다고 했다.
+
+compose.yml 에서 Redis가 실행되고 있는 컨테이너의 service 이름을 my-cache-server 라고 이름 붙였다.
+
+위와 같이 코드를 수정한 뒤에 다시 한 번 실행시켜보자.
+
+<br>
+
+```
+$ ./gradlew clean build
+$ docker compose down
+$ docker compose up --build -d
+```
+
+![alt text](image-68.png)
+
+<br>
+
+![alt text](image-64.png)
+
+- docker compose가 컨테이너 간 통신을 할 수 있도록 설정해 놓음
+- `compose.yml` 파일의 `services` 명칭으로 통신을 시도 함
