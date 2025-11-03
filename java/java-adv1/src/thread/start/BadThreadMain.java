@@ -1,18 +1,24 @@
 package thread.start;
 
-public class HelloThreadMain {
+public class BadThreadMain {
     public static void main(String[] args) {
 
-        // main Thread가 main Method를 실행하는 것 = Java가 만들어주는 기본 Thread
-        // 이 코드를 실행하는 Thread가 객체로 출력된다.
         System.out.println(Thread.currentThread().getName() + " : main() start");   // main이 실행
 
         HelloThread helloThread = new HelloThread();
 
         System.out.println(Thread.currentThread().getName() + " : start() 호출 전");   // main이 실행
 
-        // main Thread가 Thread-0에게 일을 하라고 시키고 main Thread는 다음 일을 한다. = 기다리지 않는다.
-        helloThread.start();    // Thread-0가 실행
+        //helloThread.start();
+
+        helloThread.run();  // run() 직접 실행
+        // 이 Thread는 누가 실행할까?
+        // main Thread가 실행한다.
+        // main Thread가 순서 대로 모든 것을 처리
+        // main Thread가 main Thread 자기 자신을 호출한 꼴
+        // = 객체 덩어리일 뿐
+
+        // ** start()로 호출해야 스택 영역에 프레임이 생성되고 별도의 Thread가 실행되는 System Call이 된다.
 
         System.out.println(Thread.currentThread().getName() + " : start() 호출 후");   // main이 실행
 
