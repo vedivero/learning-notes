@@ -10,6 +10,10 @@ public class HelloRunnable implements Runnable {
 
     @Override
     public void run() {
+        // 불편한 것
+        // 스레드 이름을 알아보는 코드가 너무 길다.
+        // 실행 시간을 확인하고 싶음
+        // 실무에서는 로거로 해결
         System.out.println(Thread.currentThread().getName());
      }
 }
