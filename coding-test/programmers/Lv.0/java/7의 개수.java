@@ -8,8 +8,11 @@ class Solution {
             // 숫자형 데이터 num을 문자열로 형 변환
             String s = String.valueOf(num);
 
+            // 문자열의 각 문자를 순회
             for (char c : s.toCharArray()) {
+                // 문자가 문자 7과 일치하는지 체크
                 if (c == '7')
+                    // 일치할 경우, answer의 값을 1 증가
                     answer++;
             }
 
