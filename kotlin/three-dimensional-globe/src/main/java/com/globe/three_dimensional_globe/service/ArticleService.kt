@@ -14,6 +14,8 @@ class ArticleService(
 ) {
     fun createArticle(articleRequest: ArticleRequest): ArticleResponse {
         val modelEntity = modelRepository.findById(articleRequest.modelId)
+            .orElseThrow { IllegalArgumentException("Model not found. id=${articleRequest.modelId}") }
+
         val articleEntity = ArticleEntity(
             title = articleRequest.title,
             content = articleRequest.content,
@@ -28,7 +30,7 @@ class ArticleService(
     }
 
     fun findAll(): List<ArticleResponse> {
-        articleRepository.findAll().map{
+        return articleRepository.findAll().map{
             ArticleResponse(it)
         }
     }

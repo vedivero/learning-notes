@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
@@ -23,9 +24,9 @@ class ModelController (
     @PostMapping
     fun createModel(
         @RequestPart("file")file: MultipartFile,
-        @RequestPart("latitude")latitude: Double,
-        @RequestPart("longitude")longitude: Double,
-        @RequestPart("height")height: Int,
+        @RequestParam("latitude")latitude: Double,
+        @RequestParam("longitude")longitude: Double,
+        @RequestParam("height")height: Int,
     ) : ModelDto {
         return modelService.createModel(file, latitude, longitude, height)
     }

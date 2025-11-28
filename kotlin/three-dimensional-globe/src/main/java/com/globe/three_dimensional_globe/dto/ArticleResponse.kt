@@ -3,12 +3,14 @@ package com.globe.three_dimensional_globe.dto
 import com.globe.three_dimensional_globe.entity.ArticleEntity
 
 data class ArticleResponse(
+    val id:Long,
     val title: String,
-    val content:String,
-    val imgUrl:String,
+    val content: String,
+    val imgUrl: String,
     val modelDto: ModelDto
-){
-    constructor(articleEntity: ArticleEntity):this(
+) {
+    constructor(articleEntity: ArticleEntity) : this(
+        articleEntity.id!!,
         articleEntity.title,
         articleEntity.content,
         articleEntity.imgUrl,
