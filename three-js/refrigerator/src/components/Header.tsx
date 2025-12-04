@@ -1,0 +1,14 @@
+function Header() {                                                                                                                                                                                                         
+    return (                                                                                                                                                                                                                  
+      <header style={{                                                                                                                                                                                                        
+        height: 56, padding: '0 16px',                                                                                                                                                                                        
+        display: 'flex', alignItems: 'center',                                                                                                                                                                                
+        background: '#181818', color: '#eaeaea',                                                                                                                                                                              
+        borderBottom: '1px solid #242424'                                                                                                                                                                                     
+      }}>                                                                                                                                                                                                                     
+        <strong>GLB Viewer</strong>                                                                                                                                                                                           
+        <span style={{ marginLeft: 12, color: '#8a8a8a' }}>fridge.glb</span>                                                                                                                                                  
+      </header>                                                                                                                                                                                                               
+    );                                                                                                                                                                                                                        
+  }                                                                                                                                                                                                                           
+  export default Header;     
