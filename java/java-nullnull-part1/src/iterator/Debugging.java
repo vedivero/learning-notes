@@ -1,4 +1,4 @@
-package control;
+package iterator;
 
 import java.util.Scanner;
 

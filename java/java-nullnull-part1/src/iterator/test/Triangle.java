@@ -1,4 +1,4 @@
-package control.test;
+package iterator.test;
 
 public class Triangle {
     public static void main(String[] args) {

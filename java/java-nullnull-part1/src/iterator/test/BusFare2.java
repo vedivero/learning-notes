@@ -1,4 +1,4 @@
-package control.test;
+package iterator.test;
 
 import java.util.Scanner;
 
